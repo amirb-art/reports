@@ -2,19 +2,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temper City - Strategic Music Analysis Report</title>
+    <title>Temper City - Strategic Music Analysis - 2026-05-17</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0d0d0d;
             color: white;
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
-            line-height: 1.6;
         }
         .container {
             max-width: 900px;
-            margin: 20px auto;
+            margin: auto;
             background-color: #1a1a1a;
             padding: 30px;
             border-radius: 8px;
@@ -29,21 +29,29 @@
         p {
             margin-bottom: 10px;
         }
-        .metric-value {
+        .metric-highlight {
             color: #1DB954;
             font-weight: bold;
-            font-size: 1.1em;
         }
-        .list-item {
+        .positive-trend {
+            color: #1DB954;
+            font-weight: bold;
+        }
+        .negative-trend {
+            color: #FF6347;
+            font-weight: bold;
+        }
+        .neutral-trend {
+            color: #FFD700;
+            font-weight: bold;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
             margin-bottom: 5px;
-        }
-        .positive {
-            color: #1DB954;
-            font-weight: bold;
-        }
-        .negative {
-            color: #FF4500; /* Orange-red for negative momentum */
-            font-weight: bold;
         }
         a {
             color: #1DB954;
@@ -52,47 +60,51 @@
         a:hover {
             text-decoration: underline;
         }
-        .dashboard-link {
-            display: block;
-            margin-bottom: 20px;
-            font-size: 1.1em;
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #aaaaaa;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="dashboard-link">Back to Dashboard</a>
-
-        <h1>Strategic Music Analysis: Temper City</h1>
-        <p><strong>Date of Analysis:</strong> 2026-05-16</p>
+        <h1>Strategic Music Analysis: Temper City - 2026-05-17</h1>
+        <p><a href="index.html">Back to Dashboard</a></p>
 
         <h2>Global Performance Overview</h2>
-        <p>Temper City's track 'Self Aware' has achieved a significant milestone, securing a Global Spotify Rank of <span class="metric-value">#62</span>. This firmly places the band within the highly competitive Top 100 club, demonstrating substantial global reach and listener engagement. The trajectory towards higher tiers, such as the Top 40 and Top 30, represents the next major milestones in expanding global influence.</p>
+        <p>On 2026-05-17, Temper City's track 'Self Aware' achieved a Global Spotify Rank of <span class="metric-highlight">#53</span>. This represents a significant upward movement of 9 positions from the previous day's rank of #62, firmly solidifying the band's presence within the Top 100 club. This trajectory indicates robust global engagement, moving closer to the critical Top 40 milestone.</p>
 
-        <h2>City Shifts: Evolving Listener Landscape</h2>
-        <p>An analysis of the top 5 listener cities reveals a dynamic shift in Temper City's core audience hubs:</p>
+        <h2>City Listener Shifts (Top 5)</h2>
+        <p>An analysis of the top 5 listener cities reveals dynamic shifts in audience concentration between 2026-05-04 and 2026-05-17:</p>
         <ul>
-            <li class="list-item"><strong>Current Top 5 (2026-05-16):</strong> London (208024), São Paulo (153534), Sydney (153401), Warsaw (134906), Melbourne (131182)</li>
-            <li class="list-item"><strong>Previous Top 5 (2026-05-03):</strong> London (153888), Warsaw (116334), Berlin (104114), Frankfurt am Main (101789), São Paulo (98012)</li>
+            <li><span class="metric-highlight">London</span> maintained its leading position, demonstrating substantial growth from 158,875 to <span class="positive-trend">209,791</span> listeners. This 32% increase underscores a deepening engagement within this key market.</li>
+            <li><span class="metric-highlight">Sydney</span> emerged as a new entrant in the Top 5, securing the second position with <span class="positive-trend">157,438</span> listeners. This highlights a significant surge in the Australian market's contribution.</li>
+            <li><span class="metric-highlight">São Paulo</span> also entered the Top 5, ranking third with <span class="positive-trend">156,259</span> listeners, up from 102,041 on 2026-05-04. This substantial growth of over 53% signifies a powerful expansion in Latin American listenership.</li>
+            <li><span class="metric-highlight">Warsaw</span> retained its presence in the Top 5, increasing its listener base from 118,492 to <span class="positive-trend">135,918</span>. This consistent growth reflects sustained interest in Poland.</li>
+            <li><span class="metric-highlight">Melbourne</span> is another new addition to the Top 5, registering <span class="positive-trend">134,788</span> listeners, further emphasizing the strong performance in Australia.</li>
         </ul>
-        <p>London and São Paulo have not only maintained their positions but have also experienced substantial growth in listener numbers, indicating sustained strong engagement in these key metropolitan areas. Notably, Sydney and Melbourne have emerged as new entries in the top 5, displacing Berlin and Frankfurt am Main. This highlights a significant expansion of Temper City's listener base into Oceania, suggesting a broadening geographical appeal and successful penetration into new markets.</p>
+        <p>The emergence of Sydney and Melbourne, alongside the significant growth in São Paulo, indicates a broadening and strengthening of Temper City's global listener base, particularly in the APAC and Latin American regions.</p>
 
-        <h2>Momentum Radar: Global Trends and Timezone Canaries</h2>
-        <p>As of 2026-05-16, a Saturday, a typical weekend deceleration in momentum is observed across several Western markets. This is reflected in negative momentum percentages for countries such as France (<span class="negative">-0.4%</span>), Portugal (<span class="negative">-0.3%</span>), Denmark (<span class="negative">-2.5%</span>), Norway (<span class="negative">-0.2%</span>), Sweden (<span class="negative">-0.4%</span>), and Switzerland (<span class="negative">-0.1%</span>). This pattern is a natural consequence of weekend listening habits.</p>
-        <p>However, a closer look at key timezone indicators reveals interesting divergences. Israel (<span class="positive">0.4%</span>) and New Zealand (<span class="positive">1.3%</span>) are exhibiting positive momentum, which is a notable counter-trend to the general weekend dip observed in many Western markets. While Australia (<span class="negative">-1.5%</span>) shows a slight deceleration, the sustained positive momentum in Israel and New Zealand provides an insightful perspective on early week engagement patterns, given their advanced workweek cycles.</p>
-        <p>Further positive momentum is observed in South Korea (<span class="positive">5.3%</span>), Lithuania (<span class="positive">10.6%</span>), Latvia (<span class="positive">3.6%</span>), United Arab Emirates (<span class="positive">7.4%</span>), Kazakhstan (<span class="positive">5.5%</span>), Luxembourg (<span class="positive">12.3%</span>), Belarus (<span class="positive">5.3%</span>), Finland (<span class="positive">10.8%</span>), Romania (<span class="positive">4.8%</span>), Hungary (<span class="positive">2.3%</span>), United States (<span class="positive">2.5%</span>), Germany (<span class="positive">1.0%</span>), Poland (<span class="positive">4.2%</span>), United Kingdom (<span class="positive">4.2%</span>), Canada (<span class="positive">4.9%</span>), Italy (<span class="positive">11.4%</span>), Czech Republic (<span class="positive">8.1%</span>), and Ireland (<span class="positive">3.4%</span>), indicating robust growth in these diverse regions.</p>
-
-        <h2>Acceleration Score: Sustained Growth</h2>
-        <p>The Acceleration Score for Temper City stands at <span class="positive">1.9%</span>. This positive percentage indicates an accelerating rate of growth in total streams. Specifically, the daily stream increase has risen from +2,464,406.0 yesterday to +2,511,892.0 today. This signifies that not only are streams increasing, but the pace at which they are increasing is also gaining momentum, reflecting a healthy expansion of the band's audience engagement.</p>
-
-        <h2>New Chart Entries Detected!</h2>
-        <p>We are thrilled to report a <span class="positive">NEW CHART ENTRY DETECTED</span> for 'Self Aware' on 2026-05-16!</p>
+        <h2>Momentum Radar Analysis</h2>
+        <p>The Momentum Radar for 2026-05-17 presents a mixed landscape, largely reflecting typical weekend deceleration across many markets. However, several regions exhibit notable positive momentum:</p>
         <ul>
-            <li class="list-item"><strong>Iceland:</strong> Entered the Spotify chart at <span class="metric-value">#197</span>.</li>
+            <li><span class="positive-trend">Italy (IT)</span> shows strong acceleration at <span class="positive-trend">11.3%</span>, indicating a significant surge in listener engagement.</li>
+            <li><span class="positive-trend">United Arab Emirates (AE)</span> maintains positive momentum at <span class="positive-trend">5.3%</span>, suggesting consistent growth in the Middle East.</li>
+            <li><span class="positive-trend">Ireland (IE)</span> registers a positive trend of <span class="positive-trend">1.9%</span>, demonstrating continued engagement.</li>
         </ul>
-        <p>This new entry in Iceland signifies expanding reach into new territories and demonstrates the track's ability to resonate with diverse audiences globally.</p>
+        <p>Conversely, many markets, including New Zealand (-7.8%), Australia (-8.8%), and Israel (-21.0%), along with major Western markets like the US (-2.6%), Germany (-4.0%), and the UK (-1.0%), show negative momentum. This widespread deceleration is a characteristic pattern observed during weekend periods, where daily streaming activity typically dips before recovering during the workweek.</p>
 
-        <p>Best regards from Amir, your No.1 fan</p>
+        <h2>Acceleration Score Interpretation</h2>
+        <p>The Acceleration Score for 2026-05-17 stands at <span class="negative-trend">-4.9%</span>. This negative percentage signifies a natural deceleration in the rate of growth, rather than a loss of listeners. It is a common pattern observed during weekend cycles, where the pace of new stream accumulation typically slows compared to weekdays. The band's total streams continue to increase, as evidenced by the positive delta in total streams (+2,387,790.0 today), indicating sustained, albeit decelerated, overall growth.</p>
+
+        <h2>New Chart Entries</h2>
+        <p>No new chart entries were detected for 'Self Aware' on 2026-05-17 across the monitored platforms and countries. The focus remains on solidifying and improving existing chart positions.</p>
+
+        <div class="footer">
+            <p>Best regards from Amir, your No.1 fan</p>
+        </div>
     </div>
 </body>
 </html>
