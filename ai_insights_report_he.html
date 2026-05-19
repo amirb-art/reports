@@ -1,28 +1,42 @@
-<!DOCTYPE html>
 <html lang='he' dir='rtl'>
 <head>
-    <title>טמפר סיטי - ניתוח מוזיקלי אסטרטגי - 18-05-2026</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טמפר סיטי - ניתוח מוזיקלי אסטרטגי - 2026-05-19</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0d0d0d;
-            color: #ffffff;
-            margin: 20px;
+            color: white;
+            margin: 0;
+            padding: 20px;
             line-height: 1.6;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: auto;
-            padding: 20px;
             background-color: #1a1a1a;
+            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         h1, h2, h3 {
             color: #1DB954;
             border-bottom: 2px solid #1DB954;
-            padding-bottom: 5px;
-            margin-top: 25px;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        h2 {
+            font-size: 1.8em;
+        }
+        h3 {
+            font-size: 1.4em;
         }
         p {
             margin-bottom: 10px;
@@ -31,20 +45,50 @@
             color: #1DB954;
             font-weight: bold;
         }
-        .metric-value {
-            font-weight: bold;
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .metric-card strong {
             color: #1DB954;
         }
-        .negative-trend {
-            color: #ff6b6b; /* A red-like color for negative trends */
+        .momentum-list {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
         }
-        .positive-trend {
-            color: #1DB954; /* Green for positive trends */
+        .momentum-list li {
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        ul {
-            list-style-type: disc;
-            margin-left: 20px;
-            margin-bottom: 10px;
+        .momentum-list li .country {
+            font-weight: bold;
+        }
+        .momentum-list li .value {
+            color: #1DB954;
+            font-weight: bold;
+        }
+        .momentum-list li.negative .value {
+            color: #ff4d4d; /* Red for negative momentum */
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-size: 0.9em;
+            color: #aaa;
         }
         a {
             color: #1DB954;
@@ -53,49 +97,147 @@
         a:hover {
             text-decoration: underline;
         }
-        .footer {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid #333;
-            font-size: 0.9em;
-            text-align: center;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: right; /* Changed to right for RTL */
+        }
+        th {
+            background-color: #1DB954;
+            color: #0d0d0d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ניתוח מוזיקלי אסטרטגי לטמפר סיטי</h1>
-        <p><strong>תאריך הניתוח:</strong> 18-05-2026</p>
-        <p><a href="index.html">חזרה ללוח המחוונים</a></p>
+        <h1>ניתוח מוזיקלי אסטרטגי: טמפר סיטי</h1>
+        <p style="text-align: center; font-size: 1.1em; color: #aaa;">תאריך הניתוח: 19.05.2026</p>
+        <p style="text-align: center;"><a href="index.html">חזרה ללוח הבקרה</a></p>
 
         <h2>סקירת ביצועים גלובלית</h2>
-        <p>טמפר סיטי הגיעה לאבן דרך משמעותית, כשהבטיחה לעצמה <span class="highlight">דירוג עולמי בספוטיפיי של #46</span>. זה ממקם את הלהקה באופן יציב במועדון ה-50 המובילים התחרותי ביותר, עדות למעורבות עקבית של מאזינים גלובליים ולהתרחבות טווח ההגעה שלה. זה מייצג שיפור ניכר מהדירוג של אתמול (#53), ומעיד על מסלול חיובי בנראות הגלובלית.</p>
-
-        <h2>שינויים גאוגרפיים בהרגלי ההאזנה</h2>
-        <p>בחינת 5 הערים המובילות בהאזנה חושפת שינויים דינמיים במעוזים הגיאוגרפיים של טמפר סיטי:</p>
-        <ul>
-            <li><strong>5 המובילות הנוכחיות (18-05-2026):</strong> לונדון (213,016), סידני (160,612), סאו פאולו (158,522), מלבורן (137,544), ורשה (137,064)</li>
-            <li><strong>5 המובילות הקודמות (05-05-2026):</strong> לונדון (163,922), ורשה (120,643), ברלין (109,349), סאו פאולו (108,779), פרנקפורט על המיין (106,862)</li>
-        </ul>
-        <p>לונדון ממשיכה להוביל עם עלייה משמעותית במספר המאזינים, ומחזקת את מעמדה כמרכז ראשי. סאו פאולו גם מציגה צמיחה איתנה, ושומרת על נוכחותה בשכבה העליונה. יש לציין כי סידני ומלבורן נכנסו כמובילות חדשות ל-5 המובילות, והחליפו את ברלין ופרנקפורט על המיין, שהיו נוכחות בתקופה הקודמת. זה מצביע על עלייה משמעותית במעורבות המאזינים ברחבי אוסטרליה, ומדגיש הרחבה של בסיס הקהל המרכזי של הלהקה לשווקי מפתח חדשים.</p>
-
-        <h2>רדאר המומנטום: ניתוח קצב צמיחה ברמת המדינה</h2>
-        <p>רדאר המומנטום מספק תצוגה מפורטת של שינויים בקצב הצמיחה ברחבי טריטוריות שונות. בתאריך 18-05-2026, יום שני, שווקים מערביים רבים מציגים האטה בקצבי הצמיחה שלהם, דפוס טבעי הנצפה לעיתים קרובות לאחר הרגלי האזנה של סוף השבוע. עם זאת, אזורים מסוימים מציגים חריגות בולטות:</p>
-        <ul>
-            <li><span class="positive-trend">צרפת (FR): +2.2%</span> - מפגינה מומנטום חיובי, המעיד על קצב צמיחה מואץ.</li>
-            <li><span class="positive-trend">ישראל (IL): +1.7%</span> - מציגה מומנטום חיובי. בהתחשב בכך ששבוע העבודה בישראל מתחיל ביום ראשון, מגמה חיובית זו משמשת אינדיקטור מוקדם למעורבות מחודשת עם תחילת שבוע העבודה הגלובלי.</li>
-            <li><span class="negative-trend">אוסטרליה (AU): -7.2%</span> ו-<span class="negative-trend">ניו זילנד (NZ): -1.7%</span> - למרות שהם מקדימים באזורי זמן ומתחילים את שבוע העבודה מוקדם יותר, שווקים אלו מראים כרגע האטה בקצב הצמיחה. זה מצביע על כך שההתאוששות האופיינית של יום שני עשויה להתעכב או להיות פחות מורגשת באזורים ספציפיים אלה לתקופה זו.</li>
-            <li>שווקים אחרים, כולל ארה"ב (-9.9%), גרמניה (-8.3%), בריטניה (-5.2%), קנדה (-10.0%), ורבים אחרים, מציגים מומנטום שלילי, המשקף האטה בקצבי הצמיחה שלהם. זוהי תצפית נפוצה כאשר דפוסי ההאזנה מתייצבים לאחר פעילות שיא של סוף השבוע.</li>
-        </ul>
+        <p>נכון ל-19.05.2026, השיר "Self Aware" של טמפר סיטי ממשיך להפגין טווח הגעה ומעורבות גלובליים משמעותיים.</p>
+        <div class="metric-card">
+            <span>דירוג גלובלי בספוטיפיי:</span> <strong>#36</strong>
+        </div>
+        <p>הלהקה ביססה את נוכחותה ב<span class="highlight">מועדון 40 הגדולים (ליבת המיינסטרים)</span> בספוטיפיי העולמי, ומחזיקה כרגע במקום ה-36. זוהי אבן דרך קריטית, המעידה על משיכה עקבית למיינסטרים ובסיס איתן להמשך טיפוס לשכבת ה-30 המובילים.</p>
+        <div class="metric-card">
+            <span>סה"כ השמעות:</span> <strong>116,943,952</strong>
+        </div>
+        <div class="metric-card">
+            <span>השמעות יומיות (19.05.2026):</span> <strong>2,644,707</strong>
+        </div>
+        <div class="metric-card">
+            <span>מאזינים חודשיים:</span> <strong>15,773,979</strong>
+        </div>
+        <div class="metric-card">
+            <span>עוקבים:</span> <strong>95,275</strong>
+        </div>
 
         <h2>ציון האצה</h2>
-        <p>ציון ההאצה הכולל של טמפר סיטי עומד על <span class="negative-trend">-4.5%</span>. נתון זה מייצג האטה בקצב הצמיחה, כלומר העלייה בסך ה<span class="metric-value">השמעות</span> מאתמול להיום הייתה מעט נמוכה יותר מהעלייה מהשלשום לאתמול. חשוב להבין שאחוז האצה שלילי אינו מסמל אובדן מאזינים או ירידה בסך ה<span class="metric-value">השמעות</span>; אלא, הוא מצביע על התמתנות טבעית בקצב הצמיחה, הנצפית לעיתים קרובות כאשר דפוסי ההאזנה משתנים, במיוחד סביב מעברי סוף שבוע.</p>
+        <p>ציון ההאצה עבור השיר "Self Aware" עומד על <span class="highlight">16.0%</span>. אחוז חיובי זה מצביע על קצב גדילה מואץ בהשמעות היומיות, ומשקף מומנטום גובר במעורבות ורכישת מאזינים. הגידול בהשמעות היומיות מ-+2,280,320 אתמול ל-+2,644,707 היום מדגיש מגמה חיובית זו.</p>
 
-        <h2>כניסות חדשות למצעדים</h2>
-        <p>לא זוהו כניסות חדשות למצעדים עבור טמפר סיטי בתאריך 18-05-2026. הלהקה ממשיכה לבסס את מיקומיה במצעדים הקיימים.</p>
+        <h2>כניסות חדשות למצעדים זוהו</h2>
+        <p>הישג משמעותי היום הוא זיהוי של <span class="highlight">כניסה חדשה למצעדים</span> עבור השיר "Self Aware" ב<span class="highlight">דרום אפריקה</span>! זה מסמן התרחבות מוצלחת לשוק חדש ותוסס, המעידה על משיכה בינלאומית גוברת ועל יכולתו של השיר להתחבר לקהלים מגוונים.</p>
+
+        <h2>שינויים מרכזיים בבסיס המאזינים בערים</h2>
+        <p>ניתוח של 5 הערים המובילות לפי מספר מאזינים חושף שינויים דינמיים וצמיחה מרוכזת במרכזים עירוניים מרכזיים:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>דירוג</th>
+                    <th>נוכחי (19.05.2026)</th>
+                    <th>מאזינים (נוכחי)</th>
+                    <th>קודם (06.05.2026)</th>
+                    <th>מאזינים (קודם)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>London</td>
+                    <td>216,539</td>
+                    <td>London</td>
+                    <td>169,856</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Sydney</td>
+                    <td>163,620</td>
+                    <td>Warsaw</td>
+                    <td>122,602</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>São Paulo</td>
+                    <td>162,257</td>
+                    <td>São Paulo</td>
+                    <td>115,299</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Melbourne</td>
+                    <td>140,197</td>
+                    <td>Berlin</td>
+                    <td>112,201</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Warsaw</td>
+                    <td>138,537</td>
+                    <td>Sydney</td>
+                    <td>111,745</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>לונדון שומרת על מעמדה המוביל עם עלייה משמעותית במספר המאזינים, מה שמדגים מעורבות חזקה בבריטניה. סידני עלתה באופן ניכר, עברה מהמקום החמישי לשני, מה שמעיד על צמיחה חזקה באוסטרליה. סאו פאולו גם מציגה צמיחה מרשימה, ומבססת את מקומה השלישי. ראוי לציין שמלבורן נכנסה לחמישייה המובילה, והדיחה את ברלין, מה שמדגיש בסיס מאזינים מתרחב באוסטרליה ושינוי בערים אירופאיות בולטות. ורשה, על אף גידול במספר המאזינים שלה, חוותה שינוי יחסי בדירוג שלה בחמישייה המובילה, מה שמשקף את הצמיחה המהירה בערים מרכזיות אחרות.</p>
+
+        <h2>רדאר המומנטום: מגמות ספציפיות למדינות</h2>
+        <p>רדאר המומנטום מספק מבט מפורט על שינויים יומיים באחוז המעורבות ברחבי מדינות שונות:</p>
+        <ul class="momentum-list">
+            <li class="positive"><span class="country">צרפת (FR):</span> <span class="value">11.0%</span></li>
+            <li class="positive"><span class="country">לוקסמבורג (LU):</span> <span class="value">10.6%</span></li>
+            <li class="positive"><span class="country">הולנד (NL):</span> <span class="value">9.3%</span></li>
+            <li class="positive"><span class="country">צ'כיה (CZ):</span> <span class="value">7.8%</span></li>
+            <li class="positive"><span class="country">רומניה (RO):</span> <span class="value">7.3%</span></li>
+            <li class="positive"><span class="country">איטליה (IT):</span> <span class="value">7.3%</span></li>
+            <li class="positive"><span class="country">אוסטריה (AT):</span> <span class="value">7.2%</span></li>
+            <li class="positive"><span class="country">פורטוגל (PT):</span> <span class="value">6.9%</span></li>
+            <li class="positive"><span class="country">דרום קוריאה (SK):</span> <span class="value">6.8%</span></li>
+            <li class="positive"><span class="country">גרמניה (DE):</span> <span class="value">6.7%</span></li>
+            <li class="positive"><span class="country">שוויץ (CH):</span> <span class="value">5.3%</span></li>
+            <li class="positive"><span class="country">סינגפור (SG):</span> <span class="value">5.0%</span></li>
+            <li class="positive"><span class="country">פולין (PL):</span> <span class="value">4.6%</span></li>
+            <li class="positive"><span class="country">הממלכה המאוחדת (GB):</span> <span class="value">4.4%</span></li>
+            <li class="positive"><span class="country">הונגריה (HU):</span> <span class="value">3.7%</span></li>
+            <li class="positive"><span class="country">בלגיה (BE):</span> <span class="value">3.8%</span></li>
+            <li class="positive"><span class="country">שוודיה (SE):</span> <span class="value">3.2%</span></li>
+            <li class="positive"><span class="country">דנמרק (DK):</span> <span class="value">3.0%</span></li>
+            <li class="positive"><span class="country">ניו זילנד (NZ):</span> <span class="value">2.9%</span></li>
+            <li class="positive"><span class="country">לטביה (LV):</span> <span class="value">2.4%</span></li>
+            <li class="positive"><span class="country">ארצות הברית (US):</span> <span class="value">1.9%</span></li>
+            <li class="positive"><span class="country">אוקראינה (UA):</span> <span class="value">1.3%</span></li>
+            <li class="positive"><span class="country">בלארוס (BY):</span> <span class="value">1.2%</span></li>
+            <li class="positive"><span class="country">קזחסטן (KZ):</span> <span class="value">1.0%</span></li>
+            <li class="positive"><span class="country">איחוד האמירויות הערביות (AE):</span> <span class="value">0.7%</span></li>
+            <li class="negative"><span class="country">ישראל (IL):</span> <span class="value">-1.3%</span></li>
+            <li class="negative"><span class="country">ערב הסעודית (SA):</span> <span class="value">-1.4%</span></li>
+            <li class="negative"><span class="country">אוסטרליה (AU):</span> <span class="value">-1.8%</span></li>
+            <li class="negative"><span class="country">ליטא (LT):</span> <span class="value">-2.2%</span></li>
+            <li class="negative"><span class="country">קנדה (CA):</span> <span class="value">-6.8%</span></li>
+            <li class="negative"><span class="country">אירלנד (IE):</span> <span class="value">-7.1%</span></li>
+            <li class="negative"><span class="country">פינלנד (FI):</span> <span class="value">-7.2%</span></li>
+            <li class="negative"><span class="country">נורווגיה (NO):</span> <span class="value">-15.2%</span></li>
+            <li class="negative"><span class="country">ניקרגואה (NI):</span> <span class="value">-15.2%</span></li>
+        </ul>
+        <p>נתוני המומנטום של היום, שנצפו ב-19.05.2026, חושפים מגמה חיובית דומיננטית ברחבי שווקים רבים, במיוחד באירופה עם עליות חזקות בצרפת, לוקסמבורג והולנד. בעוד שניו זילנד מציגה מומנטום חיובי, ישראל ואוסטרליה מגלות האטה קלה בקצבי הצמיחה שלהן. זוהי תנודה טבעית במעורבות המאזינים ואינה מעידה על אובדן מאזינים, אלא על האטה זמנית בקצב שבו מתווספת מעורבות חדשה. מספר שווקים מערביים, כולל בריטניה, גרמניה, איטליה וארה"ב, מציגים מומנטום חיובי ובריא, התורם לצמיחה הגלובלית המואצת הכוללת.</p>
 
         <div class="footer">
-            <p>בברכה ממעריץ מספר 1 - אמיר</p>
+            בברכה ממעריץ מספר 1 - אמיר.
         </div>
     </div>
 </body>
