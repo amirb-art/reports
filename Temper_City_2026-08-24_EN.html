@@ -1,135 +1,285 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Temper City Data Report</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212;
             color: #E0E0E0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            background-color: #1E1E1E;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
         h1, h2, h3 {
             color: #1DB954;
-            border-bottom: 2px solid #1DB954;
-            padding-bottom: 10px;
-            margin-top: 30px;
+            border-bottom: 1px solid #282828;
+            padding-bottom: 5px;
         }
         h1 {
-            font-size: 2.2em;
-            text-align: center;
-            border-bottom: 3px solid #1DB954;
+            font-size: 24px;
         }
         h2 {
-            font-size: 1.8em;
+            font-size: 20px;
+            margin-top: 30px;
         }
         h3 {
-            font-size: 1.4em;
-            border-bottom: 1px solid #333;
+            font-size: 16px;
+            border-bottom: none;
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
-        p, ul, ol {
-            margin-bottom: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #282828;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #181818;
+            color: #1DB954;
+        }
+        tr:nth-child(even) {
+            background-color: #161616;
         }
         ul {
-            list-style-type: none;
-            padding-left: 0;
+            margin-top: 5px;
+            padding-left: 20px;
         }
-        ul li {
-            background-color: #282828;
-            margin-bottom: 8px;
-            padding: 12px 15px;
-            border-radius: 5px;
-            border-left: 3px solid #1DB954;
+        li {
+            margin-bottom: 3px;
         }
-        .metric {
-            font-weight: bold;
-            color: #1DB954;
+        p {
+            margin: 8px 0;
         }
-        .delta-positive {
-            color: #1DB954;
-        }
-        .delta-negative {
-            color: #FF6B6B; /* A subtle red for negative changes */
-        }
-        .summary {
-            background-color: #282828;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #1DB954;
-            margin-top: 40px;
-        }
-        .summary h2 {
-            color: #1DB954;
-            border-bottom: 1px solid #1DB954;
-            padding-bottom: 5px;
+        .context-note {
+            background-color: #1a2e1e;
+            border-left: 4px solid #1DB954;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Temper City Data Report</h1>
-        <p><strong>Reporting Date:</strong> 2026-08-24</p>
 
-        <h2>Band Insights</h2>
-        <ul>
-            <li>Followers: <span class="metric">247,489</span>. A 24-hour increase of <span class="delta-positive">1,640</span>, representing a <span class="delta-positive">0.67%</span> rise.</li>
-            <li>Monthly Listeners: <span class="metric">31,289,459</span>. A 24-hour increase of <span class="delta-positive">136,830</span>, representing a <span class="delta-positive">0.44%</span> rise.</li>
-            <li>Global Artist Rank: Currently ranked <span class="metric">204</span>. This compares the band to all 11 million artists globally on Spotify, placing them in the top <span class="metric">0.001%</span>. This represents an improvement from yesterday's rank of 206 and last week's rank of 220. This rank of 204 is a new all-time peak record.</li>
-        </ul>
+    <h1>Temper City Data Report</h1>
+    <p><strong>Data Date:</strong> 2026-08-24</p>
 
-        <h2>Geographic Footprint</h2>
-        <h3>Top 5 Cities Analysis</h3>
-        <ul>
-            <li><strong>S\u00e3o Paulo, South America:</strong> Current listeners <span class="metric">342,468</span>. A 3-day increase of <span class="delta-positive">2,790</span> (<span class="delta-positive">0.82%</span>) and a 14-day increase of <span class="delta-positive">29,124</span> (<span class="delta-positive">9.29%</span>). This is an all-time peak for the city, ranking 1st historically over 108 measured days.</li>
-            <li><strong>London, Europe:</strong> Current listeners <span class="metric">325,725</span>. A 3-day increase of <span class="delta-positive">5,208</span> (<span class="delta-positive">1.63%</span>) and a 14-day increase of <span class="delta-positive">27,170</span> (<span class="delta-positive">9.09%</span>). This is an all-time peak for the city, ranking 1st historically over 151 measured days.</li>
-            <li><strong>Mexico City, North America:</strong> Current listeners <span class="metric">295,162</span>. A 3-day increase of <span class="delta-positive">1,504</span> (<span class="delta-positive">0.51%</span>) and a 14-day increase of <span class="delta-positive">28,427</span> (<span class="delta-positive">10.66%</span>). The all-time peak for this city is 332,233, with the current rank at 39th over 92 measured days.</li>
-            <li><strong>Sydney, Oceania:</strong> Current listeners <span class="metric">287,884</span>. A 3-day increase of <span class="delta-positive">4,865</span> (<span class="delta-positive">1.72%</span>) and a 14-day increase of <span class="delta-positive">27,900</span> (<span class="delta-positive">10.73%</span>). This is an all-time peak for the city, ranking 1st historically over 120 measured days.</li>
-            <li><strong>Melbourne, Oceania:</strong> Current listeners <span class="metric">244,324</span>. A 3-day increase of <span class="delta-positive">4,566</span> (<span class="delta-positive">1.90%</span>) and a 14-day increase of <span class="delta-positive">26,517</span> (<span class="delta-positive">12.17%</span>). This is an all-time peak for the city, ranking 1st historically over 48 measured days.</li>
-        </ul>
-        <h3>City Turnover</h3>
-        <ul>
-            <li>Dropped Cities: No cities dropped from the top measured list.</li>
-            <li>Entered Cities: No new cities entered the top measured list.</li>
-        </ul>
-        <h3>Geographic Strategic Shifts</h3>
-        <ul>
-            <li>No strategic shifts reported.</li>
-        </ul>
-
-        <h2>Track Performance</h2>
-        <ul>
-            <li>
-                <h3>Self Aware</h3>
-                Track age: 188 days. Latest daily streams: <span class="metric">3,047,132</span>, current daily rank: 65. Highest daily streams ever: 3,550,611. Current daily streams are <span class="delta-negative">14.2%</span> below the highest daily streams ever.
-                <br>Weekly Floors: Current cycle average: <span class="metric">3,323,146</span>. This is <span class="delta-positive">0.60%</span> above the all-time high floor average of 3,303,516 and <span class="delta-positive">0.74%</span> above the previous week's floor average of 3,298,797.
-            </li>
-            <li>
-                <h3>Self Aware-LUM!X</h3>
-                Track age: 30 days. Latest daily streams: <span class="metric">475,733</span>, current daily rank: 26. Highest daily streams ever: 989,537. Current daily streams are <span class="delta-negative">51.92%</span> below the highest daily streams ever.
-                <br>Weekly Floors: Current cycle average: <span class="metric">552,890</span>. This is <span class="delta-negative">9.31%</span> below the all-time high floor average of 609,407 and <span class="delta-positive">4.26%</span> above the previous week's floor average of 530,313.
-            </li>
-            <li>
-                <h3>Self Aware-Ian Asher</h3>
-                Track age: 30 days. Latest daily streams: <span class="metric">535,225</span>, current daily rank: 28. Highest daily streams ever: 1,215,752. Current daily streams are <span class="delta-negative">55.99%</span> below the highest daily streams ever.
-                <br>Weekly Floors: Current cycle average: <span class="metric">616,710</span>. This is <span class="delta-negative">17.28%</span> below the all-time high floor average of 745,493 and <span class="delta-positive">3.15%</span> above the previous week's floor average of 597,894.
-            </li>
-        </ul>
-
-        <div class="summary">
-            <h2>Summary</h2>
-            <p>Temper City's data for 2026-08-24 indicates increases in both followers and monthly listeners. The band has achieved a new all-time peak global artist rank of 204, placing them in the top 0.001% of all artists on Spotify. Multiple top cities, including S\u00e3o Paulo, London, Sydney, and Melbourne, have reached new all-time listener peaks. Track performance shows varying daily stream levels relative to historical peaks, with weekly floor averages demonstrating both increases and decreases across different versions of "Self Aware." The licensed remixes (Self Aware-LUM!X and Self Aware-Ian Asher) contributed a combined 1,010,958 daily streams today. This represents a 33.2% addition to the original track's daily streams.</p>
-        </div>
+    <div class="context-note">
+        <strong>Timezone Canary Analysis:</strong> Today is Monday. Drops in Western markets today are normal 'weekend dips'. The workweek in Israel/Middle East starts Sunday. Australia/Asia start Monday early. Because Israel shows positive momentum in the Regional Momentum Radar while Western markets register contractions, this serves as a predictive indicator for a global Tuesday recovery.
     </div>
+
+    <h2>Band Overview</h2>
+    <p><strong>Followers:</strong> 247,489 (Delta 24h: +1,640)</p>
+    <p><strong>Monthly Listeners:</strong> 31,289,459 (Delta 24h: +136,830)</p>
+    <p><strong>Global Artist Rank:</strong> Current rank #204 (Yesterday: #206, Last week: #220, Peak: #204). This compares the artist to all 11 million artists globally on Spotify.</p>
+
+    <h2>Top 5 Cities Analysis</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>City Name</th>
+                <th>Continent</th>
+                <th>Current Listeners</th>
+                <th>Short Term Diff (3d)</th>
+                <th>Long Term Diff (14d)</th>
+                <th>All Time Peak</th>
+                <th>Total Measured Days</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>São Paulo</td>
+                <td>South America</td>
+                <td>342,468</td>
+                <td>+2,790</td>
+                <td>+29,124</td>
+                <td>342,468</td>
+                <td>108</td>
+            </tr>
+            <tr>
+                <td>London</td>
+                <td>Europe</td>
+                <td>325,725</td>
+                <td>+5,208</td>
+                <td>+27,170</td>
+                <td>325,725</td>
+                <td>151</td>
+            </tr>
+            <tr>
+                <td>Mexico City</td>
+                <td>North America</td>
+                <td>295,162</td>
+                <td>+1,504</td>
+                <td>+28,427</td>
+                <td>332,233</td>
+                <td>92</td>
+            </tr>
+            <tr>
+                <td>Sydney</td>
+                <td>Oceania</td>
+                <td>287,884</td>
+                <td>+4,865</td>
+                <td>+27,900</td>
+                <td>287,884</td>
+                <td>120</td>
+            </tr>
+            <tr>
+                <td>Melbourne</td>
+                <td>Oceania</td>
+                <td>244,324</td>
+                <td>+4,566</td>
+                <td>+26,517</td>
+                <td>244,324</td>
+                <td>48</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Track Metrics</h2>
+
+    <h2>Self Aware</h2>
+    <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+    <p>Global Momentum is currently at 0.7%, with an Acceleration of -1.4%. This indicates the track is in a Decelerating Expansion phase.</p>
+    
+    <h3>Chart Status</h3>
+    <p>In Global, the track maintains an impressive Rank of #5. This position has been held for 7 consecutive days. Out of 145 tracked chart days, the track has spent 82 days in the Top 20 and 36 days in the Top 10. It is currently on a 18-day streak inside the Top 10.</p>
+    <ul>
+        <li>Switzerland: Rank #2 (Up 2 spots)</li>
+        <li>Austria: Rank #4 (Up 3 spots)</li>
+        <li>Germany: Rank #6 (No change)</li>
+        <li>Belgium: Rank #8 (No change)</li>
+        <li>Luxembourg: Rank #8 (No change)</li>
+        <li>Latvia: Rank #8 (Down 1 spots)</li>
+        <li>Canada: Rank #9 (Up 4 spots)</li>
+        <li>Lithuania: Rank #10 (Up 7 spots)</li>
+        <li>Slovakia: Rank #10 (Up 2 spots)</li>
+    </ul>
+
+    <p><strong>Track Age:</strong> 188 days</p>
+    <p><strong>Latest Daily Streams:</strong> 3,047,132 (Delta vs Yesterday: -175,630)</p>
+    <p><strong>Highest Daily Streams Ever:</strong> 3,550,611</p>
+    <p><strong>Weekly Floor Analysis:</strong> The new weekly floor has locked at 3,323,146. This is higher than the all-time high floor of 3,303,516 and higher than the previous week's floor of 3,298,797.</p>
+
+    <h3>Strong Growth</h3>
+    <ul>
+        <li>Israel: 6.0%</li>
+    </ul>
+    <h3>Moderate Growth</h3>
+    <ul>
+        <li>Bulgaria: 2.2%</li>
+    </ul>
+    <h3>Approaching Plateau</h3>
+    <ul>
+        <li>South Africa: -0.6%</li>
+        <li>Australia: -0.7%</li>
+        <li>Malaysia: -1.4%</li>
+        <li>Panama: -2.0%</li>
+    </ul>
+    <h3>Contraction Phase</h3>
+    <ul>
+        <li>Belarus: -2.4%</li>
+        <li>New Zealand: -2.5%</li>
+        <li>Hungary: -3.4%</li>
+        <li>Greece: -3.7%</li>
+        <li>Saudi Arabia: -3.9%</li>
+        <li>Italy: -4.7%</li>
+        <li>Czech Republic: -5.6%</li>
+        <li>Ukraine: -5.9%</li>
+        <li>Kazakhstan: -6.1%</li>
+        <li>Estonia: -6.5%</li>
+        <li>Slovakia: -6.7%</li>
+        <li>Hong Kong: -6.7%</li>
+        <li>France: -6.9%</li>
+        <li>Lithuania: -7.1%</li>
+        <li>Denmark: -7.2%</li>
+        <li>Romania: -7.2%</li>
+        <li>Switzerland: -7.3%</li>
+        <li>Germany: -7.6%</li>
+        <li>Singapore: -7.8%</li>
+        <li>Belgium: -8.2%</li>
+        <li>Austria: -8.6%</li>
+        <li>United Kingdom: -8.6%</li>
+        <li>United States: -8.7%</li>
+        <li>United Arab Emirates: -8.8%</li>
+        <li>Global: -8.8%</li>
+        <li>Taiwan: -9.5%</li>
+        <li>Ireland: -9.6%</li>
+        <li>Netherlands: -10.4%</li>
+        <li>Canada: -10.6%</li>
+        <li>Norway: -10.8%</li>
+        <li>NI: -10.8%</li>
+        <li>Sweden: -11.1%</li>
+        <li>Luxembourg: -11.9%</li>
+        <li>Portugal: -12.2%</li>
+        <li>Finland: -12.5%</li>
+        <li>Poland: -13.6%</li>
+        <li>Latvia: -16.9%</li>
+        <li>Brazil: -23.4%</li>
+    </ul>
+
+    <h2>Self Aware-LUM!X</h2>
+    <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+    <p>Global Momentum is currently at 4.3%, with an Acceleration of 3.4%. This indicates the track is in a Accelerating Expansion phase.</p>
+    <p><strong>Track Age:</strong> 30 days</p>
+    <p><strong>Latest Daily Streams:</strong> 475,733 (Delta vs Yesterday: -69,660)</p>
+    <p><strong>Highest Daily Streams Ever:</strong> 989,537</p>
+    <p><strong>Weekly Floor Analysis:</strong> The new weekly floor has locked at 552,890. This is lower than the all-time high floor of 609,407 and higher than the previous week's floor of 530,313.</p>
+
+    <h3>Strong Growth</h3>
+    <ul>
+        <li>None recorded</li>
+    </ul>
+    <h3>Moderate Growth</h3>
+    <ul>
+        <li>None recorded</li>
+    </ul>
+    <h3>Approaching Plateau</h3>
+    <ul>
+        <li>None recorded</li>
+    </ul>
+    <h3>Contraction Phase</h3>
+    <ul>
+        <li>Germany: -10.3%</li>
+        <li>Switzerland: -11.9%</li>
+        <li>Austria: -13.1%</li>
+    </ul>
+
+    <h2>Self Aware-Ian Asher</h2>
+    <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+    <p>Global Momentum is currently at 3.1%, with an Acceleration of 10.9%. This indicates the track is in a Accelerating Expansion phase.</p>
+    <p><strong>Track Age:</strong> 30 days</p>
+    <p><strong>Latest Daily Streams:</strong> 535,225 (Delta vs Yesterday: -68,963)</p>
+    <p><strong>Highest Daily Streams Ever:</strong> 1,215,752</p>
+    <p><strong>Weekly Floor Analysis:</strong> The new weekly floor has locked at 616,710. This is lower than the all-time high floor of 745,493 and higher than the previous week's floor of 597,894.</p>
+
+    <h3>Strong Growth</h3>
+    <ul>
+        <li>None recorded</li>
+    </ul>
+    <h3>Moderate Growth</h3>
+    <ul>
+        <li>None recorded</li>
+    </ul>
+    <h3>Approaching Plateau</h3>
+    <ul>
+        <li>None recorded</li>
+    </ul>
+    <h3>Contraction Phase</h3>
+    <ul>
+        <li>Germany: -9.8%</li>
+        <li>Austria: -15.0%</li>
+    </ul>
+
+    <h2>Summary</h2>
+    <p>The licensed remixes (Self Aware-LUM!X and Self Aware-Ian Asher) contributed a combined 1,010,958 daily streams today. This represents a 33.2% addition to the original track's daily streams.</p>
+
 </body>
 </html>
