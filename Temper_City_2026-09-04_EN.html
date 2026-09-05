@@ -1,308 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Temper City Data Report - Late-Week Analysis</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2, h3 {
-            color: #1DB954;
-        }
-        h1 {
-            border-bottom: 2px solid #1DB954;
-            padding-bottom: 10px;
-        }
-        h2 {
-            margin-top: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #181818;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #282828;
-        }
-        th {
-            background-color: #282828;
-            color: #1DB954;
-        }
-        ul {
-            margin: 5px 0 15px 20px;
-        }
-        li {
-            margin-bottom: 4px;
-        }
-        .section-box {
-            background-color: #181818;
-            border: 1px solid #282828;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-        .summary-box {
-            background-color: #181818;
-            border-left: 4px solid #1DB954;
-            padding: 15px;
-            margin-top: 30px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Temper City - Performance Report</title>
+<style>
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 40px;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2 {
+        margin-top: 40px;
+        border-bottom: 1px solid #333333;
+        padding-bottom: 5px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    th, td {
+        border: 1px solid #333333;
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #181818;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #161616;
+    }
+    ul {
+        margin-top: 5px;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 4px;
+        color: #CCCCCC;
+    }
+    .metrics-section, .summary-section {
+        background-color: #181818;
+        border: 1px solid #282828;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+</style>
 </head>
 <body>
 
-    <h1>Temper City Data Report</h1>
-    <p><strong>Data Date:</strong> 2026-09-04 (Late-Week Analysis - Friday)</p>
+<h1>Temper City - Late-Week Data Report</h1>
+<p><strong>Data Date:</strong> 2026-09-04 (Friday)</p>
 
-    <h2>Band Overview</h2>
-    <div class="section-box">
-        <p><strong>Followers:</strong> 266,917 (+1,819)</p>
-        <p><strong>Monthly Listeners:</strong> 32,102,318 (-20,484)</p>
-        <p>Global Artist Rank: #197 (Yesterday: #196, Last Week: #197, All-Time Peak: #196). This compares the artist to all 11 million artists globally on Spotify.</p>
-    </div>
+<h2>Band Overview</h2>
+<div class="metrics-section">
+    <p><strong>Followers:</strong> 266,917 (24h Delta: +1,819)</p>
+    <p><strong>Monthly Listeners:</strong> 32,102,318 (24h Delta: -20,484)</p>
+    <p>Global Artist Rank: #[197] (Yesterday: #[196], Last Week: #[197], All-Time Peak: #[196]). This compares the artist to all 11 million artists globally on Spotify.</p>
+</div>
 
-    <h2>Top 5 Cities Analysis</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>City Name</th>
-                <th>Continent</th>
-                <th>Current Listeners</th>
-                <th>Short Term Diff (3d)</th>
-                <th>Long Term Diff (14d)</th>
-                <th>All-Time Peak</th>
-                <th>Total Measured Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>São Paulo</td>
-                <td>South America</td>
-                <td>344,555</td>
-                <td>+25</td>
-                <td>+3,546</td>
-                <td>345,916</td>
-                <td>119</td>
-            </tr>
-            <tr>
-                <td>London</td>
-                <td>Europe</td>
-                <td>332,922</td>
-                <td>+1,334</td>
-                <td>+10,610</td>
-                <td>334,140</td>
-                <td>162</td>
-            </tr>
-            <tr>
-                <td>Mexico City</td>
-                <td>North America</td>
-                <td>298,070</td>
-                <td>+903</td>
-                <td>+4,390</td>
-                <td>332,233</td>
-                <td>103</td>
-            </tr>
-            <tr>
-                <td>Sydney</td>
-                <td>Oceania</td>
-                <td>297,466</td>
-                <td>+922</td>
-                <td>+12,584</td>
-                <td>298,050</td>
-                <td>131</td>
-            </tr>
-            <tr>
-                <td>Melbourne</td>
-                <td>Oceania</td>
-                <td>254,804</td>
-                <td>+1,664</td>
-                <td>+13,562</td>
-                <td>254,804</td>
-                <td>59</td>
-            </tr>
-        </tbody>
-    </table>
+<h2>Top 5 Cities Analysis</h2>
+<table>
+    <thead>
+        <tr>
+            <th>City Name</th>
+            <th>Continent</th>
+            <th>Current Listeners</th>
+            <th>Short Term Diff (3d)</th>
+            <th>Long Term Diff (14d)</th>
+            <th>All-Time Peak</th>
+            <th>Total Measured Days</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>São Paulo</td>
+            <td>South America</td>
+            <td>344,555</td>
+            <td>+25</td>
+            <td>+3,546</td>
+            <td>345,916</td>
+            <td>119</td>
+        </tr>
+        <tr>
+            <td>London</td>
+            <td>Europe</td>
+            <td>332,922</td>
+            <td>+1,334</td>
+            <td>+10,610</td>
+            <td>334,140</td>
+            <td>162</td>
+        </tr>
+        <tr>
+            <td>Mexico City</td>
+            <td>North America</td>
+            <td>298,070</td>
+            <td>+903</td>
+            <td>+4,390</td>
+            <td>332,233</td>
+            <td>103</td>
+        </tr>
+        <tr>
+            <td>Sydney</td>
+            <td>Oceania</td>
+            <td>297,466</td>
+            <td>+922</td>
+            <td>+12,584</td>
+            <td>298,050</td>
+            <td>131</td>
+        </tr>
+        <tr>
+            <td>Melbourne</td>
+            <td>Oceania</td>
+            <td>254,804</td>
+            <td>+1,664</td>
+            <td>+13,562</td>
+            <td>254,804</td>
+            <td>59</td>
+        </tr>
+    </tbody>
+</table>
 
-    <h2>Track Metrics</h2>
+<h2>Track Metrics</h2>
 
-    <!-- Track 1 -->
-    <h2>Self Aware</h2>
-    <div class="section-box">
-        <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
-        <p>Global Momentum is currently at -0.4%, with an Acceleration of -0.6%. This indicates the track is in a Accelerating Contraction phase.</p>
-        
-        <h3>Chart Status</h3>
-        <p>In Global, the track maintains an impressive Rank of #8. This position has been held for 2 consecutive days. Out of 156 tracked chart days, the track has spent 93 days in the Top 20 and 47 days in the Top 10. It is currently on a 29-day streak inside the Top 10.</p>
-        <ul>
-            <li>Switzerland: Rank #2 (No change)</li>
-            <li>Austria: Rank #4 (No change)</li>
-            <li>Belgium: Rank #6 (No change)</li>
-            <li>Germany: Rank #7 (No change)</li>
-            <li>Latvia: Rank #8 (No change)</li>
-            <li>Canada: Rank #9 (Up 1 spots)</li>
-            <li>Luxembourg: Rank #9 (Down 1 spots)</li>
-        </ul>
+<h2>Self Aware</h2>
+<p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p><strong>Kinematic Acceleration:</strong> Global Momentum is currently at -0.4%, with an Acceleration of -0.6%. This indicates the track is in a Accelerating Contraction phase.</p>
+<p><strong>Chart Status:</strong></p>
+<p>In Global, the track maintains an impressive Rank of #8. This position has been held for 2 consecutive days. Out of 156 tracked chart days, the track has spent 93 days in the Top 20 and 47 days in the Top 10. It is currently on a 29-day streak inside the Top 10.</p>
+<ul>
+    <li>Switzerland: Rank #2 (No change)</li>
+    <li>Austria: Rank #4 (No change)</li>
+    <li>Belgium: Rank #6 (No change)</li>
+    <li>Germany: Rank #7 (No change)</li>
+    <li>Latvia: Rank #8 (No change)</li>
+    <li>Canada: Rank #9 (Up 1 spots)</li>
+    <li>Luxembourg: Rank #9 (Down 1 spots)</li>
+</ul>
+<p><strong>Track Age:</strong> 199 days</p>
+<p>Latest Daily Streams: 3,141,837 (Delta: -17,578)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 3,550,611</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 3,164,399. This is lower than the all-time high floor of 3,323,146 and lower than the previous week's floor of 3,251,236.</p>
+<p><strong>Regional Momentum Radar:</strong></p>
+<h3>Strong Growth</h3>
+<ul>
+    <li>Saudi Arabia: 8.0%</li>
+    <li>Israel: 7.3%</li>
+    <li>Portugal: 5.9%</li>
+</ul>
+<h3>Moderate Growth</h3>
+<ul>
+    <li>Kazakhstan: 4.1%</li>
+    <li>United Arab Emirates: 3.8%</li>
+    <li>Finland: 3.3%</li>
+    <li>Greece: 2.7%</li>
+    <li>Denmark: 2.5%</li>
+    <li>New Zealand: 2.2%</li>
+    <li>Italy: 1.8%</li>
+    <li>Nicaragua: 1.8%</li>
+    <li>Norway: 1.8%</li>
+    <li>Netherlands: 1.6%</li>
+    <li>Malaysia: 1.2%</li>
+    <li>Austria: 1.1%</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+    <li>Czech Republic: 0.8%</li>
+    <li>Romania: 0.7%</li>
+    <li>Singapore: 0.7%</li>
+    <li>Bulgaria: 0.5%</li>
+    <li>Sweden: 0.5%</li>
+    <li>Brazil: -0.7%</li>
+    <li>Belarus: -0.9%</li>
+    <li>South Korea: -0.9%</li>
+    <li>Latvia: -0.9%</li>
+    <li>Australia: -1.2%</li>
+    <li>United Kingdom: -1.2%</li>
+    <li>Hungary: -1.3%</li>
+    <li>Ukraine: -1.5%</li>
+    <li>Ireland: -1.7%</li>
+    <li>Luxembourg: -2.0%</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul>
+    <li>Lithuania: -2.3%</li>
+    <li>Poland: -2.3%</li>
+    <li>Morocco: -2.5%</li>
+    <li>United States: -2.7%</li>
+    <li>Hong Kong: -2.8%</li>
+    <li>Estonia: -2.9%</li>
+    <li>Belgium: -4.0%</li>
+    <li>France: -7.1%</li>
+</ul>
 
-        <p><strong>Track Age:</strong> 199 days</p>
-        <p>Latest Daily Streams: 3,141,837 (Delta: -17,578)</p>
-        <p><strong>Highest Daily Streams Ever:</strong> 3,550,611</p>
-        
-        <p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 3,164,399. This is lower than the all-time high floor of 3,323,146 and lower than the previous week's floor of 3,251,236.</p>
+<h2>Self Aware-LUM!X</h2>
+<p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p><strong>Kinematic Acceleration:</strong> Global Momentum is currently at -0.5%, with an Acceleration of 1.0%. This indicates the track is in a Decelerating Contraction phase.</p>
+<p><strong>Track Age:</strong> 40 days</p>
+<p>Latest Daily Streams: 579,290 (Delta: +5,475)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 773,367</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 570,011. This is lower than the all-time high floor of 609,407 and higher than the previous week's floor of 558,659.</p>
+<p><strong>Regional Momentum Radar:</strong></p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul>
+    <li>Switzerland: 1.3%</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+    <li>Germany: -0.6%</li>
+    <li>Austria: -0.9%</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
 
-        <h3>Strong Growth</h3>
-        <ul>
-            <li>Saudi Arabia: 8.0%</li>
-            <li>Israel: 7.3%</li>
-            <li>Portugal: 5.9%</li>
-        </ul>
+<h2>Self Aware-Ian Asher</h2>
+<p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p><strong>Kinematic Acceleration:</strong> Global Momentum is currently at -3.4%, with an Acceleration of 1.3%. This indicates the track is in a Decelerating Contraction phase.</p>
+<p><strong>Track Age:</strong> 40 days</p>
+<p>Latest Daily Streams: 588,734 (Delta: +7,555)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 951,713</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 593,677. This is lower than the all-time high floor of 745,493 and lower than the previous week's floor of 604,956.</p>
+<p><strong>Regional Momentum Radar:</strong></p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul>
+    <li>Austria: -2.8%</li>
+    <li>Germany: -3.5%</li>
+</ul>
 
-        <h3>Moderate Growth</h3>
-        <ul>
-            <li>Kazakhstan: 4.1%</li>
-            <li>United Arab Emirates: 3.8%</li>
-            <li>Finland: 3.3%</li>
-            <li>Greece: 2.7%</li>
-            <li>Denmark: 2.5%</li>
-            <li>New Zealand: 2.2%</li>
-            <li>Taiwan: 2.0%</li>
-            <li>Italy: 1.8%</li>
-            <li>Nicaragua: 1.8%</li>
-            <li>Norway: 1.8%</li>
-            <li>Netherlands: 1.6%</li>
-            <li>Malaysia: 1.2%</li>
-            <li>Austria: 1.1%</li>
-        </ul>
+<h2>Reverse Psychology</h2>
+<p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p><strong>Kinematic Acceleration:</strong> Global Momentum is currently at 4.4%, with an Acceleration of 11.2%. This indicates the track is in a Accelerating Expansion phase.</p>
+<p><strong>Track Age:</strong> 8 days</p>
+<p>Latest Daily Streams: 108,026 (Delta: +10,839)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 173,199</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 94,245. This is higher than the all-time high floor of 86,857 and higher than the previous week's floor of 86,857.</p>
+<p><strong>Regional Momentum Radar:</strong></p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
 
-        <h3>Approaching Plateau</h3>
-        <ul>
-            <li>Czech Republic: 0.8%</li>
-            <li>Romania: 0.7%</li>
-            <li>Singapore: 0.7%</li>
-            <li>Bulgaria: 0.5%</li>
-            <li>Sweden: 0.5%</li>
-            <li>Brazil: -0.7%</li>
-            <li>Belarus: -0.9%</li>
-            <li>South Korea: -0.9%</li>
-            <li>Latvia: -0.9%</li>
-            <li>Australia: -1.2%</li>
-            <li>United Kingdom: -1.2%</li>
-            <li>Hungary: -1.3%</li>
-            <li>Ukraine: -1.5%</li>
-            <li>Ireland: -1.7%</li>
-            <li>Luxembourg: -2.0%</li>
-        </ul>
-
-        <h3>Contraction Phase</h3>
-        <ul>
-            <li>Lithuania: -2.3%</li>
-            <li>Poland: -2.3%</li>
-            <li>Morocco: -2.5%</li>
-            <li>United States: -2.7%</li>
-            <li>Hong Kong: -2.8%</li>
-            <li>Estonia: -2.9%</li>
-            <li>Belgium: -4.0%</li>
-            <li>France: -7.1%</li>
-        </ul>
-    </div>
-
-    <!-- Track 2 -->
-    <h2>Self Aware-LUM!X</h2>
-    <div class="section-box">
-        <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
-        <p>Global Momentum is currently at -0.5%, with an Acceleration of 1.0%. This indicates the track is in a Decelerating Contraction phase.</p>
-
-        <p><strong>Track Age:</strong> 40 days</p>
-        <p>Latest Daily Streams: 579,290 (Delta: +5,475)</p>
-        <p><strong>Highest Daily Streams Ever:</strong> 773,367</p>
-        
-        <p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 570,011. This is lower than the all-time high floor of 609,407 and higher than the previous week's floor of 558,659.</p>
-
-        <h3>Strong Growth</h3>
-        <ul></ul>
-
-        <h3>Moderate Growth</h3>
-        <ul>
-            <li>Switzerland: 1.3%</li>
-        </ul>
-
-        <h3>Approaching Plateau</h3>
-        <ul>
-            <li>Germany: -0.6%</li>
-            <li>Austria: -0.9%</li>
-        </ul>
-
-        <h3>Contraction Phase</h3>
-        <ul></ul>
-    </div>
-
-    <!-- Track 3 -->
-    <h2>Self Aware-Ian Asher</h2>
-    <div class="section-box">
-        <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
-        <p>Global Momentum is currently at -3.4%, with an Acceleration of 1.3%. This indicates the track is in a Decelerating Contraction phase.</p>
-
-        <p><strong>Track Age:</strong> 40 days</p>
-        <p>Latest Daily Streams: 588,734 (Delta: +7,555)</p>
-        <p><strong>Highest Daily Streams Ever:</strong> 951,713</p>
-        
-        <p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 593,677. This is lower than the all-time high floor of 745,493 and lower than the previous week's floor of 604,956.</p>
-
-        <h3>Strong Growth</h3>
-        <ul></ul>
-
-        <h3>Moderate Growth</h3>
-        <ul></ul>
-
-        <h3>Approaching Plateau</h3>
-        <ul></ul>
-
-        <h3>Contraction Phase</h3>
-        <ul>
-            <li>Austria: -2.8%</li>
-            <li>Germany: -3.5%</li>
-        </ul>
-    </div>
-
-    <!-- Track 4 -->
-    <h2>Reverse Psychology</h2>
-    <div class="section-box">
-        <p><strong>Data Integrity & Plausibility:</strong> Confidence: HIGH. The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
-        <p>Global Momentum is currently at 4.4%, with an Acceleration of 11.2%. This indicates the track is in a Accelerating Expansion phase.</p>
-
-        <p><strong>Track Age:</strong> 8 days</p>
-        <p>Latest Daily Streams: 108,026 (Delta: +10,839)</p>
-        <p><strong>Highest Daily Streams Ever:</strong> 173,199</p>
-        
-        <p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 94,245. This is higher than the all-time high floor of 86,857 and higher than the previous week's floor of 86,857.</p>
-
-        <h3>Strong Growth</h3>
-        <ul></ul>
-
-        <h3>Moderate Growth</h3>
-        <ul></ul>
-
-        <h3>Approaching Plateau</h3>
-        <ul></ul>
-
-        <h3>Contraction Phase</h3>
-        <ul></ul>
-    </div>
-
-    <div class="summary-box">
-        <h3>Summary</h3>
-        <p>The licensed remixes for 'Self Aware' (LUM!X and Ian Asher) contributed a combined 1,168,024 daily streams today. This represents a 37.2% addition to the original track's daily streams.</p>
-    </div>
+<div class="summary-section">
+    <h3>Summary</h3>
+    <p>The licensed remixes for 'Self Aware' (LUM!X and Ian Asher) contributed a combined 1,168,024 daily streams today. This represents a 37.2% addition to the original track's daily streams.</p>
+</div>
 
 </body>
 </html>
