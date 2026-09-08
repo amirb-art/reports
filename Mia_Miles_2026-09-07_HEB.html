@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+
+<html dir="rtl" lang="he">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8"/>
 <title>Mia Miles - דוח מדדי ביצועים</title>
+
 <style>
+    html {
+        scroll-behavior: smooth;
+    }
     body {
         background-color: #121212;
         color: #FFFFFF;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Hebrew", "Alef", sans-serif;
         line-height: 1.6;
         padding: 20px;
         max-width: 1200px;
@@ -22,11 +27,15 @@
         border-bottom: 2px solid #1DB954;
         padding-bottom: 10px;
     }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
     table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
         background-color: #181818;
+        direction: rtl;
     }
     th, td {
         padding: 12px;
@@ -62,6 +71,7 @@
     }
     .restaurant-bill {
         margin: 20px 0;
+        direction: rtl;
     }
     .bill-table {
         width: 100%;
@@ -119,383 +129,450 @@
         color: #1DB954;
         font-size: 18px;
     }
-</style>
-</head>
+
+    /* Hybrid Navigation & Accordion UI Styles (Hebrew / RTL) */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        direction: rtl;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        direction: rtl;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+        direction: rtl;
+    }
+</style></head>
 <body dir="rtl">
 <h1>Mia Miles - דוח מדדי ביצועים</h1>
 <p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
 <p><strong>תאריך הנתונים:</strong> 2026-09-07 (יום שני)</p>
 <p><em>הערה תפעולית: היום הוא יום שני. ירידות בשווקים המערביים היום הן בגדר 'ירידות סוף שבוע' רגילות. שבוע העבודה בישראל / המזרח התיכון מתחיל ביום ראשון. אוסטרליה/אסיה מתחילות מוקדם ביום שני. מאחר ש"כלבני השמירה" של אזורי הזמן הללו מציגים מדדי מומנטום חיוביים, הדבר ממוסגר במפורש כמדד ניבויי להתאוששות גלובלית ביום שלישי.</em></p>
-<h2>סקירת להקה</h2>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">סקירת להקה</a>
+<a href="#top-cities">5 הערים המובילות</a>
+<a href="#track-metrics">מדדי שירים</a>
+<a href="#summary">סיכום</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">פתח הכל</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">סגור הכל</button>
+</div>
+</nav><h2 id="band-overview">סקירת להקה</h2>
 <p><strong>עוקבים:</strong> 3,511 (+5)</p>
 <p><strong>מאזינים חודשיים:</strong> 290,772 (+3,800)</p>
 <p>האומן עדיין לא מדורג.</p>
-
 <div class="restaurant-bill">
-  <h3>סיכום השמעות וצפיות לקטלוג (5 שירים ורמיקסים)</h3>
-  <table class="bill-table">
-    <tr>
-      <td class="platform">Spotify</td>
-      <td class="counter">1,809,734</td>
-      <td class="unit">השמעות</td>
-    </tr>
-    <tr>
-      <td class="platform">YouTube</td>
-      <td class="counter">228,435</td>
-      <td class="unit">צפיות והשמעות</td>
-    </tr>
-    <tr>
-      <td class="platform">SoundCloud</td>
-      <td class="counter">21,643</td>
-      <td class="unit">השמעות</td>
-    </tr>
-    <tr>
-      <td class="platform">Apple Music, Amazon Music, iTunes, Deezer</td>
-      <td colspan="2" style="color: #888; font-size: 13px;">אינם מפרסמים מונה השמעות פומבי</td>
-    </tr>
-    <tr class="subtotal-row">
-      <td>סה"כ השמעות מוזיקה</td>
-      <td class="counter">2,059,812</td>
-      <td class="unit">השמעות</td>
-    </tr>
-    <tr>
-      <td class="platform">TikTok</td>
-      <td class="counter">83,372,288</td>
-      <td class="unit">צפיות וידאו</td>
-    </tr>
-    <tr>
-      <td class="platform">Instagram Reels</td>
-      <td class="counter">22,729</td>
-      <td class="unit">צפיות וידאו</td>
-    </tr>
-    <tr class="subtotal-row">
-      <td>סה"כ צפיות ברשתות חברתיות</td>
-      <td class="counter">83,395,017</td>
-      <td class="unit">צפיות</td>
-    </tr>
-    <tr class="grand-row">
-      <td>סך-על כולל (מוזיקה + רשתות חברתיות)</td>
-      <td class="counter">85,454,829</td>
-      <td class="unit">סה"כ כללי</td>
-    </tr>
-  </table>
-</div>
-
-<h2>ניתוח 5 הערים המובילות</h2>
-<table>
-  <thead>
-    <tr>
-      <th>שם העיר</th>
-      <th>יבשת</th>
-      <th>מאזינים נוכחיים</th>
-      <th>הפרש טווח קצר (3 ימים)</th>
-      <th>הפרש טווח ארוך (14 ימים)</th>
-      <th>שיא כל הזמנים</th>
-      <th>סך הכל ימים נמדדים</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>מקסיקו סיטי</td>
-      <td>צפון אמריקה</td>
-      <td>9,685</td>
-      <td>+516</td>
-      <td>+2,609</td>
-      <td>9,685</td>
-      <td>23</td>
-    </tr>
-    <tr>
-      <td>לוס אנג'לס</td>
-      <td>צפון אמריקה</td>
-      <td>3,702</td>
-      <td>+52</td>
-      <td>-40</td>
-      <td>3,857</td>
-      <td>43</td>
-    </tr>
-    <tr>
-      <td>סידני</td>
-      <td>אוקיאניה</td>
-      <td>3,300</td>
-      <td>+68</td>
-      <td>+183</td>
-      <td>3,300</td>
-      <td>43</td>
-    </tr>
-    <tr>
-      <td>שיקגו</td>
-      <td>צפון אמריקה</td>
-      <td>2,749</td>
-      <td>+20</td>
-      <td>+128</td>
-      <td>2,749</td>
-      <td>42</td>
-    </tr>
-    <tr>
-      <td>מלבורן</td>
-      <td>אוקיאניה</td>
-      <td>2,671</td>
-      <td>+40</td>
-      <td>+2,671</td>
-      <td>2,671</td>
-      <td>12</td>
-    </tr>
-  </tbody>
+<h3>סיכום השמעות וצפיות לקטלוג (5 שירים ורמיקסים)</h3>
+<table class="bill-table">
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">1,809,734</td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">228,435</td>
+<td class="unit">צפיות והשמעות</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">21,643</td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, Amazon Music, iTunes, Deezer</td>
+<td colspan="2" style="color: #888; font-size: 13px;">אינם מפרסמים מונה השמעות פומבי</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ השמעות מוזיקה</td>
+<td class="counter">2,059,812</td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">TikTok</td>
+<td class="counter">83,372,288</td>
+<td class="unit">צפיות וידאו</td>
+</tr>
+<tr>
+<td class="platform">Instagram Reels</td>
+<td class="counter">22,729</td>
+<td class="unit">צפיות וידאו</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ צפיות ברשתות חברתיות</td>
+<td class="counter">83,395,017</td>
+<td class="unit">צפיות</td>
+</tr>
+<tr class="grand-row">
+<td>סך-על כולל (מוזיקה + רשתות חברתיות)</td>
+<td class="counter">85,454,829</td>
+<td class="unit">סה"כ כללי</td>
+</tr>
 </table>
-
-<h2>7 days a week</h2>
-<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: יחסי הנתונים יציבים ומהمנים מבחינה סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
-<p>המומנטום הגלובלי עומד כעת על -14.0%, עם תאוצה של -4.2%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+</div>
+<h2 id="top-cities">ניתוח 5 הערים המובילות</h2>
+<table>
+<thead>
+<tr>
+<th>שם העיר</th>
+<th>יבשת</th>
+<th>מאזינים נוכחיים</th>
+<th>הפרש טווח קצר (3 ימים)</th>
+<th>הפרש טווח ארוך (14 יום)</th>
+<th>שיא כל הזמנים</th>
+<th>סך ימים נמדדים</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מקסיקו סיטי</td>
+<td>צפון אמריקה</td>
+<td>9,685</td>
+<td>+516</td>
+<td>+2,609</td>
+<td>9,685</td>
+<td>23</td>
+</tr>
+<tr>
+<td>לוס אנג'לס</td>
+<td>צפון אמריקה</td>
+<td>3,702</td>
+<td>+52</td>
+<td>-40</td>
+<td>3,857</td>
+<td>43</td>
+</tr>
+<tr>
+<td>סידני</td>
+<td>אוקיאניה</td>
+<td>3,300</td>
+<td>+68</td>
+<td>+183</td>
+<td>3,300</td>
+<td>43</td>
+</tr>
+<tr>
+<td>שיקגו</td>
+<td>צפון אמריקה</td>
+<td>2,749</td>
+<td>+20</td>
+<td>+128</td>
+<td>2,749</td>
+<td>42</td>
+</tr>
+<tr>
+<td>מלבורן</td>
+<td>אוקיאניה</td>
+<td>2,671</td>
+<td>+40</td>
+<td>+2,671</td>
+<td>2,671</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">מדדי שירים</h2>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ותקינים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p>המומנטום הגלובלי עומד כעת על 14.0%-, עם תאוצה של 4.2%-. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
 <p>גילו של השיר "7 days a week" הוא 35 ימים</p>
 <p>סך השמעות מצטבר (Spotify): 1,668,232</p>
 <p>השמעות יומיות אחרונות: 14,763 (שינוי: -653)</p>
 <p>השמעות יומיות הגבוהות ביותר אי פעם: 21,861</p>
 <p>הרצפה השבועית החדשה ננעלה על 17,173. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 19,201 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 15,628.</p>
-
-<h3>צמיחה חזקה</h3>
+<h3>רדאר מומנטום אזורי</h3>
 <ul>
-  <li>אין אזורים המדווחים כעת על צמיחה חזקה.</li>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
 </ul>
-<h3>צמיחה מתונה</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על צמיחה מתונה.</li>
-</ul>
-<h3>התקרבות לרמה קבועה</h3>
-<ul>
-  <li>אין אזורים המתקרבים כעת לרמה קבועה.</li>
-</ul>
-<h3>שלב התכווצות</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על מדדי התכווצות פעילים.</li>
-</ul>
-
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
-  <li>טיקטוק: 83,316,722 צפיות, 1,032 סרטונים נוצרו (תוכן משתמשים), 2,639,155 לייקים, 95,615 שיתופים, ושיעור מעורבות של 3.3%.</li>
-  <li>סאונדקלאוד: 18,373 השמעות, 632 לייקים, 7 שיתופים.</li>
-  <li>קהל ומעורבות: 224,158 צפיות סך הכל, 26 סרטוני Shorts נוצרו, 3,792 לייקים, ושיעור מעורבות של 1.7%.</li>
-  <li>השמעות רדיו: 3 השמעות (ספינים) סך הכל על פני 3 תחנות רדיו.</li>
-  <li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 32.0/100.</li>
+<li>טיקטוק: 83,316,722 צפיות, 1,032 סרטונים נוצרו (תוכן משתמשים), 2,639,155 לייקים, 95,615 שיתופים, ושיעור מעורבות של 3.3%.</li>
+<li>סאונדקלאוד: 18,373 השמעות, 632 לייקים, 7 שיתופים.</li>
+<li>מדד קהל: 12,719 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>קהל ומעורבות: 224,158 צפיות סך הכל, 26 סרטוני Shorts נוצרו, 3,792 לייקים, ושיעור מעורבות של 1.7%.</li>
+<li>השמעות רדיו: 3 השמעות (ספינים) סך הכל על פני 3 תחנות רדיו.</li>
+<li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 32.0/100.</li>
 </ul>
-
 <h3>תובנות מצעדי Apple Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
-
 <h3>תובנות Shazam</h3>
 <p>מדד קהל: 12,719 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
-
 <h3>תובנות YouTube</h3>
 <p>קהל ומעורבות: 224,158 צפיות סך הכל, 26 סרטוני Shorts נוצרו, 3,792 לייקים, ושיעור מעורבות של 1.7%.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
-
 <h3>תובנות מצעדי iTunes</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
-
 <h3>תובנות מצעדי Amazon Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
-
-
-<h2>7 days a week - Dallin Remix</h2>
-<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: יחסי הנתונים יציבים ומהمנים מבחינה סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
-<p>המומנטום הגלובלי עומד כעת על -67.9%, עם תאוצה של -16.8%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Dallin Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ותקינים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p>המומנטום הגלובלי עומד כעת על 67.9%-, עם תאוצה של 16.8%-. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
 <p>גילו של השיר "7 days a week - Dallin Remix" הוא 35 ימים</p>
 <p>סך השמעות מצטבר (Spotify): 95,982</p>
 <p>השמעות יומיות אחרונות: 311 (שינוי: -63)</p>
 <p>השמעות יומיות הגבוהות ביותר אי פעם: 2,341</p>
 <p>הרצפה השבועית החדשה ננעלה על 967. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 1,716 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 748.</p>
-
-<h3>צמיחה חזקה</h3>
+<h3>רדאר מומנטום אזורי</h3>
 <ul>
-  <li>אין אזורים המדווחים כעת על צמיחה חזקה.</li>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
 </ul>
-<h3>צמיחה מתונה</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על צמיחה מתונה.</li>
-</ul>
-<h3>התקרבות לרמה קבועה</h3>
-<ul>
-  <li>אין אזורים המתקרבים כעת לרמה קבועה.</li>
-</ul>
-<h3>שלב התכווצות</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על מדדי התכווצות פעילים.</li>
-</ul>
-
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
-  <li>טיקטוק: 3,626 צפיות, 9 סרטונים נוצרו (תוכן משתמשים), 319 לייקים, 33 שיתופים, ושיעור מעורבות של 9.9%.</li>
-  <li>סאונדקלאוד: 2,449 השמעות, 51 לייקים, 2 שיתופים.</li>
-  <li>קהל ומעורבות: 2,830 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 43 לייקים, ושיעור מעורבות של 1.5%.</li>
-  <li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 6.0/100.</li>
+<li>סאונדקלאוד: 2,449 השמעות, 51 לייקים, 2 שיתופים.</li>
+<li>טיקטוק: 3,626 צפיות, 9 סרטונים נוצרו (תוכן משתמשים), 319 לייקים, 33 שיתופים, ושיעור מעורבות של 9.9%.</li>
+<li>קהל ומעורבות: 2,830 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 43 לייקים, ושיעור מעורבות של 1.5%.</li>
+<li>מדד קהל: 143 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 6.0/100.</li>
 </ul>
-
 <h3>תובנות מצעדי Apple Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
-
 <h3>תובנות Shazam</h3>
 <p>מדד קהל: 143 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
-
 <h3>תובנות YouTube</h3>
 <p>קהל ומעורבות: 2,830 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 43 לייקים, ושיעור מעורבות של 1.5%.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
-
 <h3>תובנות מצעדי iTunes</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
-
 <h3>תובנות מצעדי Amazon Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
-
-
-<h2>7 days a week - Mizmo Remix</h2>
-<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: יחסי הנתונים יציבים ומהمנים מבחינה סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
-<p>המומנטום הגלובלי עומד כעת על -12.8%, עם תאוצה של -1.1%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Mizmo Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ותקינים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p>המומנטום הגלובלי עומד כעת על 12.8%-, עם תאוצה של 1.1%-. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
 <p>גילו של השיר "7 days a week - Mizmo Remix" הוא 35 ימים</p>
 <p>סך השמעות מצטבר (Spotify): 28,338</p>
 <p>השמעות יומיות אחרונות: 175 (שינוי: -2)</p>
 <p>השמעות יומיות הגבוהות ביותר אי פעם: 604</p>
 <p>הרצפה השבועית החדשה ננעלה על 200. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 442 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 196.</p>
-
-<h3>צמיחה חזקה</h3>
+<h3>רדאר מומנטום אזורי</h3>
 <ul>
-  <li>אין אזורים המדווחים כעת על צמיחה חזקה.</li>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
 </ul>
-<h3>צמיחה מתונה</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על צמיחה מתונה.</li>
-</ul>
-<h3>התקרבות לרמה קבועה</h3>
-<ul>
-  <li>אין אזורים המתקרבים כעת לרמה קבועה.</li>
-</ul>
-<h3>שלב התכווצות</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על מדדי התכווצות פעילים.</li>
-</ul>
-
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
-  <li>אינסטגרם רילס: 22,729 צפיות על פני 4 רילסים שנוצרו, 826 לייקים, ושיעור מעורבות של 3.7%.</li>
-  <li>טיקטוק: 51,940 צפיות, 12 סרטונים נוצרו (תוכן משתמשים), 4,151 לייקים, 1,348 שיתופים, ושיעור מעורבות של 10.7%.</li>
-  <li>סאונדקלאוד: 173 השמעות, 13 לייקים, 1 שיתוף.</li>
-  <li>קהל ומעורבות: 640 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 8 לייקים, ושיעור מעורבות של 1.3%.</li>
-  <li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 3.0/100.</li>
+<li>טיקטוק: 51,940 צפיות, 12 סרטונים נוצרו (תוכן משתמשים), 4,151 לייקים, 1,348 שיתופים, ושיעור מעורבות של 10.7%.</li>
+<li>אינסטגרם רילס: 22,729 צפיות על פני 4 רילסים שנוצרו, 826 לייקים, ושיעור מעורבות של 3.7%.</li>
+<li>סאונדקלאוד: 173 השמעות, 13 לייקים, 1 שיתופים.</li>
+<li>מדד קהל: 4 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>קהל ומעורבות: 640 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 8 לייקים, ושיעור מעורבות של 1.3%.</li>
+<li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 3.0/100.</li>
 </ul>
-
 <h3>תובנות מצעדי Apple Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
-
 <h3>תובנות Shazam</h3>
 <p>מדד קהל: 4 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
-
 <h3>תובנות YouTube</h3>
 <p>קהל ומעורבות: 640 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 8 לייקים, ושיעור מעורבות של 1.3%.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
-
 <h3>תובנות מצעדי iTunes</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
-
 <h3>תובנות מצעדי Amazon Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
-
-
-<h2>7 days a week - Olli P Remix</h2>
-<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: יחסי הנתונים יציבים ומהمנים מבחינה סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
-<p>המומנטום הגלובלי עומד כעת על -30.7%, עם תאוצה של -19.1%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Olli P Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ותקינים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p>המומנטום הגלובלי עומד כעת על 30.7%-, עם תאוצה של 19.1%-. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
 <p>גילו של השיר "7 days a week - Olli P Remix" הוא 11 ימים</p>
 <p>סך השמעות מצטבר (Spotify): 3,112</p>
 <p>השמעות יומיות אחרונות: 38 (שינוי: -9)</p>
 <p>השמעות יומיות הגבוהות ביותר אי פעם: 70</p>
 <p>הרצפה השבועית החדשה ננעלה על 54. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 44 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 44.</p>
-
-<h3>צמיחה חזקה</h3>
+<h3>רדאר מומנטום אזורי</h3>
 <ul>
-  <li>אין אזורים המדווחים כעת על צמיחה חזקה.</li>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
 </ul>
-<h3>צמיחה מתונה</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על צמיחה מתונה.</li>
-</ul>
-<h3>התקרבות לרמה קבועה</h3>
-<ul>
-  <li>אין אזורים המתקרבים כעת לרמה קבועה.</li>
-</ul>
-<h3>שלב התכווצות</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על מדדי התכווצות פעילים.</li>
-</ul>
-
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
-<p>אין תובנות קהל רב-פלטפורמיות זמינות.</p>
-
+<p>אין נתוני קהל זמינים במספר פלטפורמות.</p>
 <h3>תובנות מצעדי Apple Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
-
 <h3>תובנות Shazam</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
-
 <h3>תובנות YouTube</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
-
 <h3>תובנות מצעדי iTunes</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
-
 <h3>תובנות מצעדי Amazon Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
-
-
-<h2>7 days a week - AVE Remix</h2>
-<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: יחסי הנתונים יציבים ומהمנים מבחינה סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
-<p>המומנטום הגלובלי עומד כעת על -27.5%, עם תאוצה של -5.4%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - AVE Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ותקינים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p>המומנטום הגלובלי עומד כעת על 27.5%-, עם תאוצה של 5.4%-. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
 <p>גילו של השיר "7 days a week - AVE Remix" הוא 11 ימים</p>
 <p>סך השמעות מצטבר (Spotify): 14,070</p>
 <p>השמעות יומיות אחרונות: 70 (שינוי: -4)</p>
 <p>השמעות יומיות הגבוהות ביותר אי פעם: 153</p>
 <p>הרצפה השבועית החדשה ננעלה על 96. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 94 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 94.</p>
-
-<h3>צמיחה חזקה</h3>
+<h3>רדאר מומנטום אזורי</h3>
 <ul>
-  <li>אין אזורים המדווחים כעת על צמיחה חזקה.</li>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
 </ul>
-<h3>צמיחה מתונה</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על צמיחה מתונה.</li>
-</ul>
-<h3>התקרבות לרמה קבועה</h3>
-<ul>
-  <li>אין אזורים המתקרבים כעת לרמה קבועה.</li>
-</ul>
-<h3>שלב התכווצות</h3>
-<ul>
-  <li>אין אזורים המדווחים כעת על מדדי התכווצות פעילים.</li>
-</ul>
-
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
-  <li>סאונדקלאוד: 648 השמעות, 30 לייקים, 0 שיתופים.</li>
-  <li>קהל ומעורבות: 807 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 12 לייקים, ושיעור מעורבות של 1.5%.</li>
-  <li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 3.0/100.</li>
+<li>סאונדקלאוד: 648 השמעות, 30 לייקים, 0 שיתופים.</li>
+<li>קהל ומעורבות: 807 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 12 לייקים, ושיעור מעורבות של 1.5%.</li>
+<li>מדד קהל: 12 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 3.0/100.</li>
 </ul>
-
 <h3>תובנות מצעדי Apple Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
-
 <h3>תובנות Shazam</h3>
 <p>מדד קהל: 12 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
-
 <h3>תובנות YouTube</h3>
 <p>קהל ומעורבות: 807 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 12 לייקים, ושיעור מעורבות של 1.5%.</p>
 <p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
-
 <h3>תובנות מצעדי iTunes</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
-
 <h3>תובנות מצעדי Amazon Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
+</div>
+</details>
+<h2 id="summary">סיכום</h2>
+<p>הרמיקסים המורשים לשיר '7 days a week' (רמיקס Dallin ורמיקס Mizmo ורמיקס Olli P ורמיקס AVE) תרמו סך משולב של 594 השמעות יומיות היום. נתון זה מהווה תוספת של 4.0% להשמעות היומיות של השיר המקורי.</p>
 
-<p>הרמיקסים המורשים עבור '7 days a week' (רמיקס דאלין ורמיקס מיזמו ורמיקס אולי פי ורמיקס AVE) תרמו סך של 594 השמעות יומיות משולבות היום. נתון זה מייצג תוספת של 4.0% להשמעות היומיות של השיר המקורי.</p>
-
-</body></html>
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+}
+</script></body>
+</html>

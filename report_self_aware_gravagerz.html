@@ -4,25 +4,205 @@
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width,initial-scale=1.0">
                 <title>Self Aware-Gravagerz - Dashboard</title>
+                
                 <style>
                     div::-webkit-scrollbar { height: 6px; }
                     div::-webkit-scrollbar-track { background: #141721; border-radius: 4px; }
                     div::-webkit-scrollbar-thumb { background: #2d303e; border-radius: 4px; }
                     div::-webkit-scrollbar-thumb:hover { background: #3d4254; }
+
+                    /* Sticky Navigation Bar */
+                    .dashboard-sticky-nav {
+                        position: sticky;
+                        top: 10px;
+                        z-index: 1000;
+                        background: rgba(14, 17, 23, 0.94);
+                        backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
+                        border: 1px solid #2d303e;
+                        border-radius: 12px;
+                        padding: 10px 16px;
+                        margin-bottom: 25px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 12px;
+                        flex-wrap: wrap;
+                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+                    }
+                    .nav-links-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        flex-wrap: wrap;
+                    }
+                    .nav-btn {
+                        background: #141721;
+                        color: #FFD700 !important;
+                        border: 1px solid #2d303e;
+                        padding: 7px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-decoration: none;
+                        transition: all 0.2s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .nav-btn:hover {
+                        background: #FFD700;
+                        color: #000 !important;
+                        border-color: #FFD700;
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+                    }
+                    .nav-controls {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .ctrl-btn {
+                        background: #1a1510;
+                        color: #FF7A00;
+                        border: 1px solid #FF7A00;
+                        padding: 6px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .ctrl-btn:hover {
+                        background: #FF7A00;
+                        color: #000;
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 10px rgba(255, 122, 0, 0.3);
+                    }
+
+                    /* Accordion Styles */
+                    details.dashboard-accordion {
+                        background: #0e1117;
+                        border: 1px solid #2d303e;
+                        border-radius: 10px;
+                        margin-top: 25px;
+                        margin-bottom: 25px;
+                        overflow: hidden;
+                        transition: border-color 0.2s ease;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+                        scroll-margin-top: 80px;
+                    }
+                    details.dashboard-accordion[open] {
+                        border-color: #3e4459;
+                    }
+                    summary.dashboard-summary {
+                        padding: 14px 18px;
+                        cursor: pointer;
+                        user-select: none;
+                        list-style: none;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #141721;
+                        font-size: 15px;
+                        font-weight: 700;
+                        color: #ffffff;
+                        transition: background 0.2s ease;
+                    }
+                    summary.dashboard-summary::-webkit-details-marker {
+                        display: none;
+                    }
+                    summary.dashboard-summary:hover {
+                        background: #1c202d;
+                    }
+                    summary.dashboard-summary::after {
+                        content: "＋";
+                        color: #FF7A00;
+                        font-weight: 900;
+                        font-size: 18px;
+                        margin-left: 10px;
+                        transition: transform 0.2s ease;
+                    }
+                    details.dashboard-accordion[open] > summary.dashboard-summary::after {
+                        content: "−";
+                        color: #FF7A00;
+                    }
+                    .summary-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .accordion-badge {
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: #a3a8b8;
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid #2d303e;
+                        padding: 3px 8px;
+                        border-radius: 12px;
+                    }
+                    .accordion-content {
+                        padding: 15px;
+                        background: #0e1117;
+                    }
+
+                    /* Hero Section and Cross Platform Scroll Margins */
+                    .dashboard-hero-section, .cross-platform-wrapper {
+                        scroll-margin-top: 80px;
+                    }
+
                     @media (max-width: 600px) {
                         body { padding: 10px !important; }
+                        .dashboard-sticky-nav {
+                            top: 5px;
+                            padding: 8px 10px;
+                            gap: 8px;
+                        }
+                        .nav-btn {
+                            padding: 5px 10px;
+                            font-size: 11px;
+                        }
+                        .ctrl-btn {
+                            padding: 5px 10px;
+                            font-size: 11px;
+                        }
+                        summary.dashboard-summary {
+                            padding: 12px 14px;
+                            font-size: 14px;
+                        }
                     }
                 </style>
+            
             </head>
             <body style="background:#000; padding:20px; font-family:sans-serif;">
                 <div style="max-width:1200px; margin:0 auto;">
                     <div style="margin-bottom:20px;"><a href="lobby_temper_city.html" style="color:#1DB954; text-decoration:none; font-size:16px; font-weight:bold;">⬅ Back to Temper City Hub</a></div>
+            <nav class="dashboard-sticky-nav">
+                <div class="nav-links-container">
+                    <a href="#sec-spotify" onclick="jumpToDashboardSection('sec-spotify'); return false;" class="nav-btn">🎵 Spotify Overview</a>
+                        <a href="#sec-audience" onclick="jumpToDashboardSection('sec-audience'); return false;" class="nav-btn">👥 Audience Reach</a>
+                        <a href="#sec-cross-platform" onclick="jumpToDashboardSection('sec-cross-platform'); return false;" class="nav-btn">🌐 Cross-Platform Charts</a>
+                </div>
+                <div class="nav-controls">
+                    <button type="button" onclick="toggleAllDashboard(true)" class="ctrl-btn expand-btn">➕ Expand All</button>
+                    <button type="button" onclick="toggleAllDashboard(false)" class="ctrl-btn collapse-btn">➖ Collapse All</button>
+                </div>
+            </nav>
+            
+            <section id="sec-spotify" class="dashboard-hero-section">
+                
+                
+                
             <div style='text-align: center; margin: 30px 0;'>
                 <a href="weekly_charts_self_aware_gravagerz.html" style='background-color: #1DB954; color: white; padding: 15px 40px; text-decoration: none; font-size: 1.5em; border-radius: 50px; display: inline-block; font-weight: bold; box-shadow: 0px 4px 15px rgba(29, 185, 84, 0.4); border: 2px solid #fff;'>
                     📊 Click Here to See All Weekly Charts
                 </a>
             </div>
             
+                
     <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px;color:white;">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2d303e; padding-bottom:10px; margin-bottom:20px;">
             <div>
@@ -78,9 +258,21 @@
             
         </div>
     </div>
-    <div style="background:#0e1117;padding:20px;border-radius:10px;color:white;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">📍 Top 5 Cities (Listeners)</h3><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇧🇷</div><div><div style="font-size:15px;font-weight:bold;">São Paulo</div><div style="color:#1DB954;font-weight:bold;">341,619</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇬🇧</div><div><div style="font-size:15px;font-weight:bold;">London</div><div style="color:#1DB954;font-weight:bold;">324,515</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇦🇺</div><div><div style="font-size:15px;font-weight:bold;">Sydney</div><div style="color:#1DB954;font-weight:bold;">296,417</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇲🇽</div><div><div style="font-size:15px;font-weight:bold;">Mexico City</div><div style="color:#1DB954;font-weight:bold;">296,225</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇦🇺</div><div><div style="font-size:15px;font-weight:bold;">Melbourne</div><div style="color:#1DB954;font-weight:bold;">254,524</div></div></div></div></div><div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">📊 Streaming Velocity & Total Trends</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="edbd0917-2224-442e-96b5-9f8f04dea04e" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("edbd0917-2224-442e-96b5-9f8f04dea04e")) {                    Plotly.newPlot(                        "edbd0917-2224-442e-96b5-9f8f04dea04e",                        [{"marker":{"color":"#1DB954"},"name":"Daily Streams","opacity":0.6,"x":["2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAgDPEQA=="},"type":"bar","xaxis":"x","yaxis":"y"},{"line":{"color":"#ffffff","width":3},"marker":{"color":"#ffffff","size":6},"mode":"lines+markers","name":"Total Streams","x":["2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000"],"y":{"dtype":"i2","bdata":"sDoXYw=="},"type":"scatter","xaxis":"x","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.94],"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Daily Streams"},"showgrid":false},"yaxis2":{"anchor":"x","overlaying":"y","side":"right","title":{"text":"Total Streams"},"showgrid":true,"gridcolor":"#2d303e"},"font":{"color":"#a3a8b8"},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":20,"r":20,"t":60,"b":20},"paper_bgcolor":"#1a1c24","plot_bgcolor":"#1a1c24","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div></div><div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px; border:1px solid #2d303e;"><h3 style="color:#1DB954;margin-top:0;margin-bottom:15px; font-size:18px;">⚡ Global Momentum Trackers (Interactive)</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="fdc17e00-c053-437b-9a73-83d98c281a14" class="plotly-graph-div" style="height:380px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("fdc17e00-c053-437b-9a73-83d98c281a14")) {                    Plotly.newPlot(                        "fdc17e00-c053-437b-9a73-83d98c281a14",                        [{"line":{"color":"#FFD700","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Streams Vel","x":["2026-09-06","2026-09-07"],"y":[0.0,0.0],"type":"scatter","xaxis":"x","yaxis":"y"},{"line":{"color":"#1DB954","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Followers Vel","x":["2026-09-06","2026-09-07"],"y":[0.0,-0.012668007813638882],"type":"scatter","xaxis":"x2","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.46],"gridcolor":"#333"},"yaxis":{"anchor":"x","domain":[0.0,1.0],"gridcolor":"#333"},"xaxis2":{"anchor":"y2","domain":[0.54,1.0],"gridcolor":"#333"},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"gridcolor":"#333"},"annotations":[{"font":{"size":16},"showarrow":false,"text":"Streams Velocity Trend","x":0.23,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Followers Conversion Trend","x":0.77,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"font":{"color":"#a3a8b8"},"margin":{"l":30,"r":30,"t":50,"b":80},"paper_bgcolor":"#0e1117","plot_bgcolor":"#0e1117","height":380,"showlegend":false,"sliders":[{"active":1,"bgcolor":"#1a1c24","bordercolor":"#2d303e","currentvalue":{"prefix":"Smoothing: "},"font":{"color":"#a3a8b8"},"pad":{"t":50},"steps":[{"args":[{"y":[[0.0,0.0],[0.0,-0.025336015627277764]]}],"label":"Raw (Noise)","method":"restyle"},{"args":[{"y":[[0.0,0.0],[0.0,-0.012668007813638882]]}],"label":"3-Day MA","method":"restyle"},{"args":[{"y":[[0.0,0.0],[0.0,-0.012668007813638882]]}],"label":"7-Day MA","method":"restyle"},{"args":[{"y":[[0.0,0.0],[0.0,-0.012668007813638882]]}],"label":"14-Day MA","method":"restyle"}]}]},                        {"responsive": true}                    )                };            </script>        </div></div>
+    
+                <div style="background:#0e1117;padding:20px;border-radius:10px;color:white;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">📍 Top 5 Cities (Listeners)</h3><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇧🇷</div><div><div style="font-size:15px;font-weight:bold;">São Paulo</div><div style="color:#1DB954;font-weight:bold;">341,619</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇬🇧</div><div><div style="font-size:15px;font-weight:bold;">London</div><div style="color:#1DB954;font-weight:bold;">324,515</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇦🇺</div><div><div style="font-size:15px;font-weight:bold;">Sydney</div><div style="color:#1DB954;font-weight:bold;">296,417</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇲🇽</div><div><div style="font-size:15px;font-weight:bold;">Mexico City</div><div style="color:#1DB954;font-weight:bold;">296,225</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇦🇺</div><div><div style="font-size:15px;font-weight:bold;">Melbourne</div><div style="color:#1DB954;font-weight:bold;">254,524</div></div></div></div></div>
+                <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">📊 Streaming Velocity & Total Trends</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="a356faff-0be3-471b-b3a4-5b47874dfe43" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("a356faff-0be3-471b-b3a4-5b47874dfe43")) {                    Plotly.newPlot(                        "a356faff-0be3-471b-b3a4-5b47874dfe43",                        [{"marker":{"color":"#1DB954"},"name":"Daily Streams","opacity":0.6,"x":["2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAgDPEQA=="},"type":"bar","xaxis":"x","yaxis":"y"},{"line":{"color":"#ffffff","width":3},"marker":{"color":"#ffffff","size":6},"mode":"lines+markers","name":"Total Streams","x":["2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000"],"y":{"dtype":"i2","bdata":"sDoXYw=="},"type":"scatter","xaxis":"x","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.94],"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Daily Streams"},"showgrid":false},"yaxis2":{"anchor":"x","overlaying":"y","side":"right","title":{"text":"Total Streams"},"showgrid":true,"gridcolor":"#2d303e"},"font":{"color":"#a3a8b8"},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":20,"r":20,"t":60,"b":20},"paper_bgcolor":"#1a1c24","plot_bgcolor":"#1a1c24","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div></div>
+                <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px; border:1px solid #2d303e;"><h3 style="color:#1DB954;margin-top:0;margin-bottom:15px; font-size:18px;">⚡ Global Momentum Trackers (Interactive)</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="8d26ee83-393b-41e3-ab5d-0d1fe1853133" class="plotly-graph-div" style="height:380px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("8d26ee83-393b-41e3-ab5d-0d1fe1853133")) {                    Plotly.newPlot(                        "8d26ee83-393b-41e3-ab5d-0d1fe1853133",                        [{"line":{"color":"#FFD700","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Streams Vel","x":["2026-09-06","2026-09-07"],"y":[0.0,0.0],"type":"scatter","xaxis":"x","yaxis":"y"},{"line":{"color":"#1DB954","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Followers Vel","x":["2026-09-06","2026-09-07"],"y":[0.0,-0.012668007813638882],"type":"scatter","xaxis":"x2","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.46],"gridcolor":"#333"},"yaxis":{"anchor":"x","domain":[0.0,1.0],"gridcolor":"#333"},"xaxis2":{"anchor":"y2","domain":[0.54,1.0],"gridcolor":"#333"},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"gridcolor":"#333"},"annotations":[{"font":{"size":16},"showarrow":false,"text":"Streams Velocity Trend","x":0.23,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Followers Conversion Trend","x":0.77,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"font":{"color":"#a3a8b8"},"margin":{"l":30,"r":30,"t":50,"b":80},"paper_bgcolor":"#0e1117","plot_bgcolor":"#0e1117","height":380,"showlegend":false,"sliders":[{"active":1,"bgcolor":"#1a1c24","bordercolor":"#2d303e","currentvalue":{"prefix":"Smoothing: "},"font":{"color":"#a3a8b8"},"pad":{"t":50},"steps":[{"args":[{"y":[[0.0,0.0],[0.0,-0.025336015627277764]]}],"label":"Raw (Noise)","method":"restyle"},{"args":[{"y":[[0.0,0.0],[0.0,-0.012668007813638882]]}],"label":"3-Day MA","method":"restyle"},{"args":[{"y":[[0.0,0.0],[0.0,-0.012668007813638882]]}],"label":"7-Day MA","method":"restyle"},{"args":[{"y":[[0.0,0.0],[0.0,-0.012668007813638882]]}],"label":"14-Day MA","method":"restyle"}]}]},                        {"responsive": true}                    )                };            </script>        </div></div>
+            </section>
+            
+                <details id="sec-audience" class="dashboard-accordion">
+                    <summary class="dashboard-summary">
+                        <span class="summary-title">👥 Multi-Platform Audience & Social Reach</span>
+                        <span class="accordion-badge">Cross-Platform KPI</span>
+                    </summary>
+                    <div class="accordion-content">
+                        
     <div style="background:#0e1117; padding:20px; border-radius:10px; margin-bottom:25px; border:1px solid #2d303e; color:white; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2d303e; padding-bottom:12px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
             <div>
@@ -166,22 +358,43 @@
         </div>
     </div>
     
-            <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; margin-top:25px; margin-bottom:25px; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
-                    <h3 style="color:#FA243C; margin:0; font-size:1.35em; display:flex; align-items:center; gap:8px;">
-                        <span>🍎</span> Apple Music Charts
-                    </h3>
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
-                            👈 Swipe table horizontally 👉
-                        </span>
-                        <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
-                            📅 Crawl Date: <span style="color:#fff;">07/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 07/09/2026 vs 06/09/2026</span>
-                        </div>
                     </div>
-                </div>
-                <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
-                    <table id="table_applemusic_selfawaregravagerz" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
+                </details>
+                
+                <section id="sec-cross-platform" class="cross-platform-wrapper" style="margin-top:35px;">
+                    <div style="margin-bottom:15px; border-bottom:1px solid #2d303e; padding-bottom:10px;">
+                        <h2 style="color:#FFD700; margin:0 0 6px 0; font-size:1.5em; display:flex; align-items:center; gap:10px;">
+                            🌐 Multi-Platform Chart Positions
+                        </h2>
+                        <p style="color:#a3a8b8; margin:0; font-size:13px;">Daily performance and peak rankings across Apple Music, Shazam, iTunes, YouTube, and Amazon Music.</p>
+                    </div>
+                    
+            <details id="platform-applemusic-selfawaregravagerz" class="dashboard-accordion platform-accordion" style="border-left: 4px solid #FA243C; margin-top:16px; margin-bottom:16px;">
+                <summary class="dashboard-summary">
+                    <span class="summary-title" style="color:#FA243C;">
+                        <span style="font-size:1.15em; margin-right:6px;">🍎</span> Apple Music Charts
+                    </span>
+                    <span class="accordion-badge" style="border-color:#FA243C55; color:#FA243C;">
+                        3 entries
+                    </span>
+                </summary>
+                <div class="accordion-content">
+                    <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <h3 style="color:#FA243C; margin:0; font-size:1.25em; display:flex; align-items:center; gap:8px;">
+                                <span>🍎</span> Apple Music Chart Positions
+                            </h3>
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
+                                    👈 Swipe table horizontally 👉
+                                </span>
+                                <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
+                                    📅 Crawl Date: <span style="color:#fff;">07/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 07/09/2026 vs 06/09/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
+                            <table id="table_applemusic_selfawaregravagerz" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
                         <thead>
                             <tr style="background:#1a1c24; color:#a3a8b8; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">
                                 <th onclick="sortCrossPlatformTable('table_applemusic_selfawaregravagerz', 0, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; position:sticky; left:0; background:#1a1c24; z-index:3; border-bottom:2px solid #2d303e; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px;" title="Click to sort by Country">Country <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
@@ -251,23 +464,35 @@
                     </table>
                 </div>
             </div>
-            
-            <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; margin-top:25px; margin-bottom:25px; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
-                    <h3 style="color:#EA4CC0; margin:0; font-size:1.35em; display:flex; align-items:center; gap:8px;">
-                        <span>🎵</span> iTunes Charts
-                    </h3>
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
-                            👈 Swipe table horizontally 👉
-                        </span>
-                        <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
-                            📅 Crawl Date: <span style="color:#fff;">07/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 07/09/2026 vs 06/09/2026</span>
+        </div>
+    </details>
+    
+            <details id="platform-itunes-selfawaregravagerz" class="dashboard-accordion platform-accordion" style="border-left: 4px solid #EA4CC0; margin-top:16px; margin-bottom:16px;">
+                <summary class="dashboard-summary">
+                    <span class="summary-title" style="color:#EA4CC0;">
+                        <span style="font-size:1.15em; margin-right:6px;">🎵</span> iTunes Charts
+                    </span>
+                    <span class="accordion-badge" style="border-color:#EA4CC055; color:#EA4CC0;">
+                        6 entries
+                    </span>
+                </summary>
+                <div class="accordion-content">
+                    <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <h3 style="color:#EA4CC0; margin:0; font-size:1.25em; display:flex; align-items:center; gap:8px;">
+                                <span>🎵</span> iTunes Chart Positions
+                            </h3>
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
+                                    👈 Swipe table horizontally 👉
+                                </span>
+                                <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
+                                    📅 Crawl Date: <span style="color:#fff;">07/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 07/09/2026 vs 06/09/2026</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
-                    <table id="table_itunes_selfawaregravagerz" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
+                        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
+                            <table id="table_itunes_selfawaregravagerz" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
                         <thead>
                             <tr style="background:#1a1c24; color:#a3a8b8; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">
                                 <th onclick="sortCrossPlatformTable('table_itunes_selfawaregravagerz', 0, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; position:sticky; left:0; background:#1a1c24; z-index:3; border-bottom:2px solid #2d303e; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px;" title="Click to sort by Country">Country <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
@@ -391,7 +616,9 @@
                     </table>
                 </div>
             </div>
-            
+        </div>
+    </details>
+    
         <script>
         if (typeof sortCrossPlatformTable === 'undefined') {
             function sortCrossPlatformTable(tableId, colIndex, sortType) {
@@ -441,6 +668,64 @@
         }
         </script>
         
+                </section>
+                
                 </div>
+                
+                <script>
+                function toggleAllDashboard(open) {
+                    document.querySelectorAll('details.dashboard-accordion').forEach(function(d) {
+                        d.open = open;
+                    });
+                    if (open) {
+                        window.dispatchEvent(new Event('resize'));
+                        setTimeout(function() {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 60);
+                    }
+                }
+
+                function jumpToDashboardSection(id) {
+                    var target = document.getElementById(id);
+                    if (target) {
+                        if (target.tagName.toLowerCase() === 'details') {
+                            target.open = true;
+                        } else {
+                            var parentDetails = target.closest('details');
+                            if (parentDetails) parentDetails.open = true;
+                            target.querySelectorAll('details.dashboard-accordion').forEach(function(d) {
+                                d.open = true;
+                            });
+                        }
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                            window.dispatchEvent(new Event('resize'));
+                        }, 50);
+                        setTimeout(function() {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 150);
+                    }
+                }
+
+                function initDashboardAccordionListeners() {
+                    document.querySelectorAll('details.dashboard-accordion').forEach(function(detail) {
+                        detail.addEventListener('toggle', function() {
+                            if (this.open) {
+                                window.dispatchEvent(new Event('resize'));
+                                setTimeout(function() {
+                                    window.dispatchEvent(new Event('resize'));
+                                }, 60);
+                            }
+                        });
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initDashboardAccordionListeners);
+                } else {
+                    initDashboardAccordionListeners();
+                }
+                </script>
+            
             </body>
             </html>
