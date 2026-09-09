@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mia Miles - Performance Metrics Report</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: left;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: left;
+    }
+    .bill-table .counter {
+        text-align: right;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: left;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+    }
+</style></head>
+<body>
+<h1>Mia Miles - Performance Metrics Report</h1>
+<p class="spotify-disclaimer"><em>Note: This report is Spotify-centric; unless explicitly stated, all metrics originate from Spotify (e.g. Cities, thermal maps, etc.)</em></p>
+<p><strong>Data Date:</strong> 2026-09-09 (Wednesday)</p>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">Band Overview</a>
+<a href="#top-cities">Top Cities</a>
+<a href="#track-metrics">Track Metrics</a>
+<a href="#summary">Summary</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">Expand All</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">Collapse All</button>
+</div>
+</nav><h2 id="band-overview">Band Overview</h2>
+<p><strong>Followers:</strong> 3,522 (+6)</p>
+<p><strong>Monthly Listeners:</strong> 291,843 (+1,657)</p>
+<p>The artist is not yet ranked.</p>
+<div class="restaurant-bill">
+<h3>Catalog Streams &amp; Social Summary (5 Songs &amp; Remixes)</h3>
+<table class="bill-table">
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">1,844,101</td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">230,557</td>
+<td class="unit">views / streams</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">22,181</td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, Amazon Music, iTunes, Deezer</td>
+<td colspan="2" style="color: #888; font-size: 13px;">do not disclose public stream counters</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Music Streaming</td>
+<td class="counter">2,096,839</td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">TikTok</td>
+<td class="counter">88,179,616</td>
+<td class="unit">video views</td>
+</tr>
+<tr>
+<td class="platform">Instagram Reels</td>
+<td class="counter">233,552</td>
+<td class="unit">video views</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Social Media Views</td>
+<td class="counter">88,413,168</td>
+<td class="unit">views</td>
+</tr>
+<tr class="grand-row">
+<td>Combined Grand Total (Music + Social)</td>
+<td class="counter">90,510,007</td>
+<td class="unit">Grand Total</td>
+</tr>
+</table>
+</div>
+<h2 id="top-cities">Top 5 Cities Analysis</h2>
+<table>
+<thead>
+<tr>
+<th>City Name</th>
+<th>Continent</th>
+<th>Current Listeners</th>
+<th>Short-Term Diff (3d)</th>
+<th>Long-Term Diff (14d)</th>
+<th>All-Time Peak</th>
+<th>Total Measured Days</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mexico City</td>
+<td>North America</td>
+<td>9,919</td>
+<td>+398</td>
+<td>+2,225</td>
+<td>9,919</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Los Angeles</td>
+<td>North America</td>
+<td>3,649</td>
+<td>-30</td>
+<td>-69</td>
+<td>3,857</td>
+<td>45</td>
+</tr>
+<tr>
+<td>Sydney</td>
+<td>Oceania</td>
+<td>3,312</td>
+<td>+59</td>
+<td>+157</td>
+<td>3,315</td>
+<td>45</td>
+</tr>
+<tr>
+<td>Chicago</td>
+<td>North America</td>
+<td>2,730</td>
+<td>+5</td>
+<td>+84</td>
+<td>2,749</td>
+<td>44</td>
+</tr>
+<tr>
+<td>Guadalajara</td>
+<td>Unknown</td>
+<td>2,687</td>
+<td>+2,687</td>
+<td>+2,687</td>
+<td>2,687</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">Track Metrics</h2>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at 5.9%, with an Acceleration of 15.5%. This indicates the track is in a Accelerating Expansion phase.</p>
+<p>Track Age: 37 days</p>
+<p>All-Time Cumulative Streams (Spotify): 1,701,388</p>
+<p>Latest Daily Streams: 17,767 (Delta: +2,378)</p>
+<p>Highest Daily Streams Ever: 21,861</p>
+<p>The current cycle is in progress (Day 2 of 7). The current partial average is 16,578. This is lower than the all-time high floor of 19,201 and lower than the previous week's floor of 17,173.</p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>TikTok: 88,122,340 views, 33,112 UGC videos created, 2,710,527 likes, 101,202 shares, with an engagement rate of 3.2%.</li>
+<li>Instagram Reels: 210,738 views across 1 Reels created, 12,646 likes, with an engagement rate of 6.3%.</li>
+<li>SoundCloud: 18,589 streams, 640 likes, 7 shares.</li>
+<li>Radio Airplay: 3 total spins across 3 radio stations.</li>
+<li>Deezer: 0 playlist reach across 0 playlists, with a track popularity score of 24.0/100.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 12,758 total Shazam recognitions/tags tracked globally.</p>
+<p>No active Shazam chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 226,222 total views, 27 YouTube Shorts created, 3,803 likes, and an engagement rate of 1.6%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - Dallin Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at -58.8%, with an Acceleration of 15.4%. This indicates the track is in a Decelerating Contraction phase.</p>
+<p>Track Age: 37 days</p>
+<p>All-Time Cumulative Streams (Spotify): 96,585</p>
+<p>Latest Daily Streams: 323 (Delta: +43)</p>
+<p>Highest Daily Streams Ever: 2,341</p>
+<p>The current cycle is in progress (Day 2 of 7). The current partial average is 301. This is lower than the all-time high floor of 1,716 and lower than the previous week's floor of 967.</p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>TikTok: 4,475 views, 9 UGC videos created, 337 likes, 35 shares, with an engagement rate of 8.5%.</li>
+<li>YouTube: 2,862 views, 0 YouTube Shorts created, 45 likes, and an engagement rate of 1.6%.</li>
+<li>SoundCloud: 2,737 streams, 54 likes, 2 shares.</li>
+<li>Deezer: 0 playlist reach across 0 playlists, with a track popularity score of 6.0/100.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 145 total Shazam recognitions/tags tracked globally.</p>
+<p>No active Shazam chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 2,862 total views, 0 YouTube Shorts created, 45 likes, and an engagement rate of 1.6%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - Mizmo Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at -7.4%, with an Acceleration of 8.9%. This indicates the track is in a Decelerating Contraction phase.</p>
+<p>Track Age: 37 days</p>
+<p>All-Time Cumulative Streams (Spotify): 28,712</p>
+<p>Latest Daily Streams: 195 (Delta: +16)</p>
+<p>Highest Daily Streams Ever: 604</p>
+<p>The current cycle is in progress (Day 2 of 7). The current partial average is 187. This is lower than the all-time high floor of 442 and lower than the previous week's floor of 200.</p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>TikTok: 52,801 views, 11 UGC videos created, 4,230 likes, 1,375 shares, with an engagement rate of 10.7%.</li>
+<li>Instagram Reels: 22,814 views across 5 Reels created, 826 likes, with an engagement rate of 3.7%.</li>
+<li>SoundCloud: 177 streams, 13 likes, 1 shares.</li>
+<li>Deezer: 0 playlist reach across 0 playlists, with a track popularity score of 3.0/100.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 4 total Shazam recognitions/tags tracked globally.</p>
+<p>No active Shazam chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 650 total views, 0 YouTube Shorts created, 8 likes, and an engagement rate of 1.2%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - Olli P Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at 2.6%, with an Acceleration of 70.0%. This indicates the track is in a Accelerating Expansion phase.</p>
+<p>Track Age: 13 days</p>
+<p>All-Time Cumulative Streams (Spotify): 3,193</p>
+<p>Latest Daily Streams: 51 (Delta: +21)</p>
+<p>Highest Daily Streams Ever: 70</p>
+<p>The current cycle is in progress (Day 2 of 7). The current partial average is 40. This is lower than the all-time high floor of 54 and lower than the previous week's floor of 54.</p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p>No active cross-platform audience metrics available for this track.</p>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>Shazam Insights</h3>
+<p>No active Shazam chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - AVE Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at -10.5%, with an Acceleration of 4.0%. This indicates the track is in a Decelerating Contraction phase.</p>
+<p>Track Age: 13 days</p>
+<p>All-Time Cumulative Streams (Spotify): 14,223</p>
+<p>Latest Daily Streams: 78 (Delta: +3)</p>
+<p>Highest Daily Streams Ever: 153</p>
+<p>The current cycle is in progress (Day 2 of 7). The current partial average is 76. This is lower than the all-time high floor of 96 and lower than the previous week's floor of 96.</p>
+<h3>Strong Growth</h3>
+<ul></ul>
+<h3>Moderate Growth</h3>
+<ul></ul>
+<h3>Approaching Plateau</h3>
+<ul></ul>
+<h3>Contraction Phase</h3>
+<ul></ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>SoundCloud: 678 streams, 32 likes, 0 shares.</li>
+<li>YouTube: 823 views, 0 YouTube Shorts created, 12 likes, and an engagement rate of 1.5%.</li>
+<li>Deezer: 0 playlist reach across 0 playlists, with a track popularity score of 3.0/100.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 12 total Shazam recognitions/tags tracked globally.</p>
+<p>No active Shazam chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 823 total views, 0 YouTube Shorts created, 12 likes, and an engagement rate of 1.5%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<h2 id="summary">Summary</h2>
+<p>The licensed remixes for '7 days a week' (Dallin Remix and Mizmo Remix and Olli P Remix and AVE Remix) contributed a combined 647 daily streams today. This represents a 3.6% addition to the original track's daily streams.</p>
+
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+}
+</script></body>
+</html>
