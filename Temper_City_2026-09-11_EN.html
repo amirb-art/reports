@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Temper City - Performance Metrics Report</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: left;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: left;
+    }
+    .bill-table .counter {
+        text-align: right;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: left;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+    }
+</style></head>
+<body>
+<h1>Temper City - Performance Metrics Report</h1>
+<p class="spotify-disclaimer"><em>Note: This report is Spotify-centric; unless explicitly stated, all metrics originate from Spotify (e.g. Cities, thermal maps, etc.)</em></p>
+<p><strong>Data Date:</strong> 2026-09-11 (Friday)</p>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">Band Overview</a>
+<a href="#top-cities">Top Cities</a>
+<a href="#track-metrics">Track Metrics</a>
+<a href="#summary">Summary</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">Expand All</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">Collapse All</button>
+</div>
+</nav><h2 id="band-overview">Band Overview</h2>
+<p><strong>Followers:</strong> 279,076 (+1,765)</p>
+<p><strong>Monthly Listeners:</strong> 31,572,126 (-63,315)</p>
+<p><strong>Global Artist Rank:</strong> #206 (Yesterday: #204, Last Week: #197, All-Time Peak: #196). This compares the artist to all 11 million artists globally on Spotify.</p>
+<div class="restaurant-bill">
+<h3>Catalog Streams &amp; Social Summary (5 Songs &amp; Remixes)</h3>
+<table class="bill-table">
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">594,155,227</td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">412,065,255</td>
+<td class="unit">views / streams</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">8,031,376</td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, Amazon Music, iTunes, Deezer</td>
+<td colspan="2" style="color: #888; font-size: 13px;">do not disclose public stream counters</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Music Streaming</td>
+<td class="counter">1,014,251,858</td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">TikTok</td>
+<td class="counter">9,476,624,506</td>
+<td class="unit">video views</td>
+</tr>
+<tr>
+<td class="platform">Instagram Reels</td>
+<td class="counter">66,204,640</td>
+<td class="unit">video views</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Social Media Views</td>
+<td class="counter">9,542,829,146</td>
+<td class="unit">views</td>
+</tr>
+<tr class="grand-row">
+<td>Combined Grand Total (Music + Social)</td>
+<td class="counter">10,557,081,004</td>
+<td class="unit">Grand Total</td>
+</tr>
+</table>
+</div>
+<h2 id="top-cities">Top 5 Cities Analysis</h2>
+<table>
+<thead>
+<tr>
+<th>City Name</th>
+<th>Continent</th>
+<th>Current Listeners</th>
+<th>Short-Term Diff (3d)</th>
+<th>Long-Term Diff (14d)</th>
+<th>All-Time Peak</th>
+<th>Total Measured Days</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>São Paulo</td>
+<td>South America</td>
+<td>332,852</td>
+<td>-6,231</td>
+<td>-13,064</td>
+<td>345,916</td>
+<td>126</td>
+</tr>
+<tr>
+<td>London</td>
+<td>Europe</td>
+<td>320,760</td>
+<td>-1,805</td>
+<td>-5,380</td>
+<td>334,140</td>
+<td>169</td>
+</tr>
+<tr>
+<td>Sydney</td>
+<td>Oceania</td>
+<td>298,624</td>
+<td>+1,289</td>
+<td>+6,277</td>
+<td>298,624</td>
+<td>138</td>
+</tr>
+<tr>
+<td>Mexico City</td>
+<td>North America</td>
+<td>288,516</td>
+<td>-7,822</td>
+<td>-7,507</td>
+<td>332,233</td>
+<td>110</td>
+</tr>
+<tr>
+<td>Melbourne</td>
+<td>Oceania</td>
+<td>253,665</td>
+<td>-714</td>
+<td>+4,436</td>
+<td>254,804</td>
+<td>66</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">Track Metrics</h2>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at 0.8%, with an Acceleration of 0.0%. This indicates the track is in a Accelerating Expansion phase.</p>
+<p><strong>Spotify Chart Status:</strong></p>
+<ul>
+<li>Switzerland: Rank #2 (No change)</li>
+<li>Austria: Rank #4 (No change)</li>
+<li>Belgium: Rank #6 (No change)</li>
+<li>Luxembourg: Rank #6 (Up 2 spots)</li>
+<li>Latvia: Rank #6 (Up 1 spots)</li>
+<li>Germany: Rank #8 (Down 2 spots)</li>
+</ul>
+<p><strong>Track Age:</strong> 206 days</p>
+<p>All-Time Cumulative Streams (Spotify): 477,215,738</p>
+<p>Latest Daily Streams: 3,010,380 (Delta: 1,291)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 3,550,611</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 3,001,817. This is lower than the all-time high floor of 3,323,146 and lower than the previous week's floor of 3,079,874.</p>
+<h3>Strong Growth</h3>
+<ul>
+<li>Saudi Arabia: 15.5%</li>
+<li>Israel: 14.9%</li>
+<li>Luxembourg: 11.4%</li>
+<li>Malaysia: 6.2%</li>
+<li>Romania: 6.2%</li>
+<li>Portugal: 5.9%</li>
+<li>Kazakhstan: 5.6%</li>
+</ul>
+<h3>Moderate Growth</h3>
+<ul>
+<li>Hungary: 4.5%</li>
+<li>Morocco: 4.2%</li>
+<li>Slovakia: 4.2%</li>
+<li>Nicaragua: 3.8%</li>
+<li>Norway: 3.8%</li>
+<li>Czech Republic: 3.7%</li>
+<li>Brazil: 3.6%</li>
+<li>Hong Kong: 3.4%</li>
+<li>Poland: 2.9%</li>
+<li>United Arab Emirates: 2.7%</li>
+<li>Singapore: 2.5%</li>
+<li>Austria: 2.4%</li>
+<li>Estonia: 2.4%</li>
+<li>Bulgaria: 2.3%</li>
+<li>Lithuania: 2.3%</li>
+<li>Netherlands: 2.1%</li>
+<li>Latvia: 2.0%</li>
+<li>Denmark: 1.9%</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+<li>Switzerland: 0.5%</li>
+<li>United Kingdom: 0.5%</li>
+<li>South Africa: 0.5%</li>
+<li>Canada: -0.7%</li>
+<li>New Zealand: -0.7%</li>
+<li>Taiwan: -0.7%</li>
+<li>Sweden: -1.1%</li>
+<li>Germany: -1.2%</li>
+<li>Iceland: -1.2%</li>
+<li>Belgium: -1.5%</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul>
+<li>France: -2.8%</li>
+<li>Ireland: -4.0%</li>
+<li>United States: -4.0%</li>
+<li>Finland: -4.7%</li>
+</ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>Deezer: 33,997,396 playlist reach across 101 playlists, with a track popularity score of 98.0/100.</li>
+<li>Instagram Reels: 44,416,911 views across 206,043 Reels created, 2,654,561 likes, with an engagement rate of 6.0%.</li>
+<li>Radio Airplay: 206,797 total spins across 2,920 radio stations.</li>
+<li>Shazam: 4,226,534 total Shazam recognitions/tags tracked globally.</li>
+<li>SoundCloud: 6,029,307 streams, 128,296 likes, 773 shares.</li>
+<li>TikTok: 7,566,113,370 views, 3,384,767 UGC videos created, 700,433,338 likes, 90,394,202 shares, with an engagement rate of 10.5%.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 141 charts across 97 countries today, with 66 Top 10 positions (including 3 at #1). Historical anchor: Tracked for 127 days, reaching 109 countries, with an all-time peak of #1 in Austria (Alternative), Germany (Alternative), Luxembourg (Alternative), Switzerland (Alternative), Uruguay (Alternative) and 7 more.</p>
+<ul>
+<li>Austria (Alternative): Rank #1 (No change, Peak: #1)</li>
+<li>Switzerland (Alternative): Rank #1 (No change, Peak: #1)</li>
+<li>Germany (Alternative): Rank #1 (No change, Peak: #1)</li>
+<li>Qatar (Alternative): Rank #2 (Up 1 spots, Peak: #1)</li>
+<li>Slovakia (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Cyprus (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Greece (Alternative): Rank #2 (No change, Peak: #2)</li>
+<li>Serbia (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Bhutan (Alternative): Rank #2 (Up 8 spots, Peak: #1)</li>
+<li>Malta (Alternative): Rank #2 (Up 1 spots, Peak: #1)</li>
+<li>Bahrain (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Poland (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Lithuania (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Oman (Alternative): Rank #3 (Up 2 spots, Peak: #1)</li>
+<li>Luxembourg (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Maldives (Alternative): Rank #3 (Up 2 spots, Peak: #1)</li>
+<li>Hungary (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Yemen (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Moldova (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Suriname (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Czech Republic (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Finland (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Switzerland (General): Rank #3 (No change, Peak: #3)</li>
+<li>Turkmenistan (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Austria (General): Rank #3 (No change, Peak: #3)</li>
+<li>Jordan (Alternative): Rank #4 (No change, Peak: #1)</li>
+<li>Slovenia (Alternative): Rank #4 (No change, Peak: #1)</li>
+<li>Uruguay (Alternative): Rank #4 (No change, Peak: #1)</li>
+<li>Armenia (Alternative): Rank #4 (No change, Peak: #1)</li>
+<li>Belgium (Alternative): Rank #4 (No change, Peak: #2)</li>
+<li>Saudi Arabia (Alternative): Rank #4 (No change, Peak: #1)</li>
+<li>Ukraine (Alternative): Rank #4 (No change, Peak: #2)</li>
+<li>Italy (Alternative): Rank #4 (No change, Peak: #1)</li>
+<li>Latvia (Alternative): Rank #4 (Down 1 spots, Peak: #1)</li>
+<li>Estonia (Alternative): Rank #5 (Up 3 spots, Peak: #1)</li>
+<li>Romania (Alternative): Rank #5 (Up 1 spots, Peak: #1)</li>
+<li>Cayman Islands (Alternative): Rank #5 (No change, Peak: #1)</li>
+<li>Sweden (Alternative): Rank #5 (Down 1 spots, Peak: #2)</li>
+<li>Lebanon (Alternative): Rank #5 (No change, Peak: #1)</li>
+<li>Sri Lanka (Alternative): Rank #6 (No change, Peak: #1)</li>
+<li>Kyrgyzstan (Alternative): Rank #6 (No change, Peak: #2)</li>
+<li>France (Alternative): Rank #6 (No change, Peak: #4)</li>
+<li>Uzbekistan (Alternative): Rank #6 (No change, Peak: #2)</li>
+<li>Azerbaijan (Alternative): Rank #6 (Up 1 spots, Peak: #3)</li>
+<li>Iraq (Alternative): Rank #6 (No change, Peak: #1)</li>
+<li>Bosnia and Herzegovina (Alternative): Rank #6 (Up 12 spots, Peak: #1)</li>
+<li>United Arab Emirates (Alternative): Rank #7 (Up 1 spots, Peak: #1)</li>
+<li>Australia (Alternative): Rank #7 (Up 1 spots, Peak: #5)</li>
+<li>Hong Kong (Alternative): Rank #7 (No change, Peak: #4)</li>
+<li>Germany (General): Rank #7 (No change, Peak: #6)</li>
+<li>Netherlands (Alternative): Rank #7 (No change, Peak: #4)</li>
+<li>Tajikistan (Alternative): Rank #8 (No change, Peak: #1)</li>
+<li>Croatia (Alternative): Rank #8 (Up 10 spots, Peak: #1)</li>
+<li>Egypt (Alternative): Rank #8 (No change, Peak: #1)</li>
+<li>Norway (Alternative): Rank #8 (No change, Peak: #2)</li>
+<li>Portugal (Alternative): Rank #8 (No change, Peak: #4)</li>
+<li>Kosovo (Alternative): Rank #8 (No change, Peak: #2)</li>
+<li>Panama (Alternative): Rank #8 (Up 1 spots, Peak: #1)</li>
+<li>Georgia (Alternative): Rank #8 (Up 8 spots, Peak: #1)</li>
+<li>Algeria (Alternative): Rank #8 (No change, Peak: #1)</li>
+<li>India (Alternative): Rank #9 (Up 1 spots, Peak: #6)</li>
+<li>Taiwan (Alternative): Rank #9 (Up 1 spots, Peak: #5)</li>
+<li>Antigua and Barbuda (Alternative): Rank #9 (No change, Peak: #2)</li>
+<li>Singapore (Alternative): Rank #10 (No change, Peak: #4)</li>
+<li>Belarus (Alternative): Rank #10 (Up 1 spots, Peak: #2)</li>
+<li>Kazakhstan (Alternative): Rank #10 (No change, Peak: #3)</li>
+</ul>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 4,226,534 total Shazam recognitions/tags tracked globally.</p>
+<p>Active in 59 charts across 58 countries today, with 13 Top 10 positions. Historical anchor: Tracked for 118 days, reaching 84 countries, with an all-time peak of #1 in Bahrain (General), Czech Republic (General), Estonia (General), Israel (General), Latvia (General) and 3 more.</p>
+<p>In Shazam Global (Alternative), the track holds Rank #2 (No change, Peak: #1). Tracked for 7 days (Streak at current rank: 7 days, Days in Top 10: 7, Days in Top 20: 7).</p>
+<p>In Shazam Global (General), the track holds Rank #8 (No change, Peak: #4). Tracked for 111 days (Streak at current rank: 3 days, Days in Top 10: 111, Days in Top 20: 111).</p>
+<ul>
+<li>Global (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Australia (General): Rank #3 (No change, Peak: #2)</li>
+<li>Poland (General): Rank #3 (No change, Peak: #2)</li>
+<li>Austria (General): Rank #4 (No change, Peak: #1)</li>
+<li>Germany (General): Rank #4 (No change, Peak: #2)</li>
+<li>Portugal (General): Rank #4 (No change, Peak: #3)</li>
+<li>Switzerland (General): Rank #4 (No change, Peak: #2)</li>
+<li>France (General): Rank #5 (No change, Peak: #2)</li>
+<li>Belgium (General): Rank #6 (No change, Peak: #4)</li>
+<li>Czech Republic (General): Rank #8 (No change, Peak: #1)</li>
+<li>Global (General): Rank #8 (No change, Peak: #4)</li>
+<li>Singapore (General): Rank #8 (No change, Peak: #4)</li>
+<li>Finland (General): Rank #10 (No change, Peak: #4)</li>
+</ul>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 350,911,293 total views, 340,474 YouTube Shorts created, 6,495,028 likes, and an engagement rate of 1.7%.</p>
+<p>Active in 35 charts across 26 countries today, with 2 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 26 countries, with an all-time peak of #3 in Austria (General).</p>
+<ul>
+<li>Austria (General): Rank #5 (No change, Peak: #2)</li>
+<li>Switzerland (General): Rank #10 (No change, Peak: #7)</li>
+</ul>
+<h3>iTunes Insights</h3>
+<p>Active in 53 charts across 39 countries today, with 20 Top 10 positions (including 3 at #1). Historical anchor: Tracked for 6 days, reaching 51 countries, with an all-time peak of #1 in Austria (Alternative), Indonesia (Alternative), Poland (Alternative), Belgium (Alternative), Czech Republic (Alternative) and 8 more.</p>
+<ul>
+<li>Austria (Alternative): Rank #1 (Up 1 spots, Peak: #1)</li>
+<li>Poland (Alternative): Rank #1 (No change, Peak: #1)</li>
+<li>France (Alternative): Rank #1 (No change, Peak: #1)</li>
+<li>Grenada (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Australia (Alternative): Rank #2 (No change, Peak: #1)</li>
+<li>Sweden (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Germany (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Netherlands (Alternative): Rank #3 (Up 1 spots, Peak: #1)</li>
+<li>Taiwan (Alternative): Rank #3 (No change, Peak: #1)</li>
+<li>Switzerland (Alternative): Rank #4 (No change, Peak: #4)</li>
+<li>Trinidad and Tobago (Alternative): Rank #4 (No change, Peak: #3)</li>
+<li>Austria (General): Rank #4 (Up 1 spots, Peak: #4)</li>
+<li>Mexico (Alternative): Rank #5 (No change, Peak: #5)</li>
+<li>Belgium (Alternative): Rank #5 (Up 11 spots, Peak: #1)</li>
+<li>Ireland (Alternative): Rank #6 (Up 4 spots, Peak: #2)</li>
+<li>India (Alternative): Rank #7 (No change, Peak: #1)</li>
+<li>Armenia (Alternative): Rank #7 (Down 1 spots, Peak: #4)</li>
+<li>Global (Alternative): Rank #8 (No change, Peak: #4)</li>
+<li>Brazil (Alternative): Rank #8 (No change, Peak: #1)</li>
+<li>Italy (Alternative): Rank #9 (Up 1 spots, Peak: #1)</li>
+</ul>
+<h3>Amazon Music Insights</h3>
+<p>Active in 38 charts across 15 countries today, with 14 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 15 countries, with an all-time peak of #1 in Italy (Alternative Rock), Europe (Alternative Rock), Europe (Rock), Germany (Alternative Rock).</p>
+<ul>
+<li>Australia (Alternative Rock): Rank #2 (No change, Peak: #1)</li>
+<li>Europe (Alternative Rock): Rank #2 (No change, Peak: #1)</li>
+<li>France (Alternative Rock): Rank #2 (No change, Peak: #2)</li>
+<li>Germany (Alternative Rock): Rank #2 (Down 1 spots, Peak: #1)</li>
+<li>India (Alternative Rock): Rank #2 (No change, Peak: #2)</li>
+<li>Italy (Alternative Rock): Rank #2 (Down 1 spots, Peak: #1)</li>
+<li>Australia (Rock): Rank #3 (Up 2 spots, Peak: #2)</li>
+<li>Australia (Indie): Rank #5 (Up 5 spots, Peak: #4)</li>
+<li>Canada (Alternative Rock): Rank #5 (Down 1 spots, Peak: #3)</li>
+<li>Europe (Rock): Rank #5 (Down 1 spots, Peak: #1)</li>
+<li>Germany (Pop): Rank #5 (Down 1 spots, Peak: #3)</li>
+<li>Brazil (Indie): Rank #6 (Up 3 spots, Peak: #3)</li>
+<li>Germany (General): Rank #6 (Down 1 spots, Peak: #4)</li>
+<li>India (Rock): Rank #7 (No change, Peak: #4)</li>
+</ul>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-LUM!X</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Kinematic data is N/A (requires 8 days of history).</p>
+<p><strong>Spotify Chart Status:</strong> None</p>
+<p><strong>Track Age:</strong> 47 days</p>
+<p>All-Time Cumulative Streams (Spotify): 53,290,435</p>
+<p>Latest Daily Streams: 559,474 (Delta: 10,566)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 773,367</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 562,554. This is lower than the all-time high floor of 609,407 and higher than the previous week's floor of 560,298.</p>
+<h3>Strong Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Moderate Growth</h3>
+<ul>
+<li>Switzerland: 2.1%</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+<li>Germany: -0.8%</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>Deezer: 357,493 playlist reach across 10 playlists, with a track popularity score of 83.0/100.</li>
+<li>Instagram Reels: 3,865,585 views across 73,604 Reels created, 152,781 likes, with an engagement rate of 4.1%.</li>
+<li>Radio Airplay: 24,344 total spins across 180 radio stations.</li>
+<li>Shazam: 503,625 total Shazam recognitions/tags tracked globally.</li>
+<li>SoundCloud: 1,273,849 streams, 40,570 likes, 316 shares.</li>
+<li>TikTok: 948,790,451 views, 392,389 UGC videos created, 61,437,062 likes, 4,456,040 shares, with an engagement rate of 7.0%.</li>
+<li>YouTube: 27,756,655 views, 2,562 YouTube Shorts created, 390,671 likes, and an engagement rate of 1.3%.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 63 charts across 63 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 7 days, reaching 88 countries, with an all-time peak of #2 in Algeria (Electronic).</p>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 503,625 total Shazam recognitions/tags tracked globally.</p>
+<p>Active in 13 charts across 13 countries today, with 0 Top 10 positions. Historical anchor: Tracked for 7 days, reaching 13 countries, with an all-time peak of #10 in Brazil (Dance).</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 18 charts across 16 countries today, with 6 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 24 countries, with an all-time peak of #1 in Malta (Electronic).</p>
+<ul>
+<li>Malta (Electronic): Rank #2 (Down 1 spots, Peak: #1)</li>
+<li>Belgium (Electronic): Rank #4 (No change, Peak: #4)</li>
+<li>Hungary (Electronic): Rank #4 (New Entry, Peak: #2)</li>
+<li>Netherlands (Electronic): Rank #5 (Up 5 spots, Peak: #4)</li>
+<li>Austria (Electronic): Rank #9 (No change, Peak: #2)</li>
+<li>Germany (Electronic): Rank #10 (Up 15 spots, Peak: #2)</li>
+</ul>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-Ian Asher</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at 14.2%, with an Acceleration of 0.6%. This indicates the track is in a Accelerating Expansion phase.</p>
+<p><strong>Spotify Chart Status:</strong> None</p>
+<p><strong>Track Age:</strong> 47 days</p>
+<p>All-Time Cumulative Streams (Spotify): 61,667,835</p>
+<p>Latest Daily Streams: 555,701 (Delta: 3,366)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 951,713</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 551,433. This is lower than the all-time high floor of 745,493 and lower than the previous week's floor of 572,160.</p>
+<h3>Strong Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Moderate Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>Deezer: 58,630 playlist reach across 3 playlists, with a track popularity score of 77.0/100.</li>
+<li>Instagram Reels: 17,312,344 views across 243 Reels created, 1,014,258 likes, with an engagement rate of 5.9%.</li>
+<li>Radio Airplay: 828 total spins across 36 radio stations.</li>
+<li>Shazam: 4,735 total Shazam recognitions/tags tracked globally.</li>
+<li>SoundCloud: 713,561 streams, 21,427 likes, 178 shares.</li>
+<li>TikTok: 926,626,741 views, 346,178 UGC videos created, 71,876,567 likes, 6,342,571 shares, with an engagement rate of 8.5%.</li>
+<li>YouTube: 30,684,787 views, 292 YouTube Shorts created, 419,647 likes, and an engagement rate of 1.5%.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 49 charts across 49 countries today, with 3 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 7 days, reaching 95 countries, with an all-time peak of #3 in Seychelles (Electronic).</p>
+<ul>
+<li>Seychelles (Electronic): Rank #5 (Up 7 spots, Peak: #3)</li>
+<li>Papua New Guinea (Electronic): Rank #6 (No change, Peak: #4)</li>
+<li>The Gambia (Electronic): Rank #10 (No change, Peak: #1)</li>
+</ul>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 4,735 total Shazam recognitions/tags tracked globally.</p>
+<p>Active in 8 charts across 8 countries today, with 0 Top 10 positions. Historical anchor: Tracked for 7 days, reaching 9 countries, with an all-time peak of #25 in Canada (Dance).</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 12 charts across 12 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 16 countries, with an all-time peak of #10 in South Africa (Electronic).</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Reverse Psychology</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Global Momentum is currently at 45.2%, with an Acceleration of 9.3%. This indicates the track is in a Accelerating Expansion phase.</p>
+<p><strong>Spotify Chart Status:</strong> None</p>
+<p><strong>Track Age:</strong> 15 days</p>
+<p>All-Time Cumulative Streams (Spotify): 1,817,847</p>
+<p>Latest Daily Streams: 225,839 (Delta: 19,123)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 225,839</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 177,613. This is higher than the all-time high floor of 107,863 and higher than the previous week's floor of 107,863.</p>
+<h3>Strong Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Moderate Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>Deezer: 188,652 playlist reach across 2 playlists, with a track popularity score of 73.0/100.</li>
+<li>Instagram Reels: 609,800 views across 47 Reels created, 35,724 likes, with an engagement rate of 6.0%.</li>
+<li>Radio Airplay: 241 total spins across 86 radio stations.</li>
+<li>Shazam: 6,686 total Shazam recognitions/tags tracked globally.</li>
+<li>SoundCloud: 11,457 streams, 460 likes, 11 shares.</li>
+<li>TikTok: 24,632,222 views, 1,315 UGC videos created, 1,417,538 likes, 328,646 shares, with an engagement rate of 7.2%.</li>
+<li>YouTube: 976,575 views, 27 YouTube Shorts created, 31,478 likes, and an engagement rate of 3.6%.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 7 days, reaching 12 countries, with an all-time peak of #55 in Maldives (Alternative).</p>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 6,686 total Shazam recognitions/tags tracked globally.</p>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions. Historical anchor: Tracked for 6 days, reaching 1 countries, with an all-time peak of #103 in Israel (General).</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 1 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 9 countries, with an all-time peak of #2 in Poland (Alternative).</p>
+<ul>
+<li>Poland (Alternative): Rank #2 (No change, Peak: #2)</li>
+</ul>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-Gravagerz</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> HIGH - The data relationships are stable and statistically sound, indicating a reliable dataset for analysis.</p>
+<p>Kinematic data is N/A (requires 8 days of history).</p>
+<p><strong>Spotify Chart Status:</strong> None</p>
+<p><strong>Track Age:</strong> 6 days</p>
+<p>All-Time Cumulative Streams (Spotify): 163,372</p>
+<p>Latest Daily Streams: 64,544 (Delta: 23,524)</p>
+<p><strong>Highest Daily Streams Ever:</strong> 64,544</p>
+<p><strong>Weekly Floor Analysis:</strong> The current cycle is in progress (Day 4 of 7). The current partial average is 34,501. This is higher than the all-time high floor of 5,171 and higher than the previous week's floor of 5,171.</p>
+<h3>Strong Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Moderate Growth</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Approaching Plateau</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Contraction Phase</h3>
+<ul>
+<li>None recorded</li>
+</ul>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>Deezer: 0 playlist reach across 0 playlists, with a track popularity score of 51.0/100.</li>
+<li>Shazam: 5 total Shazam recognitions/tags tracked globally.</li>
+<li>SoundCloud: 3,202 streams, 164 likes, 3 shares.</li>
+<li>TikTok: 10,461,722 views, 9,594 UGC videos created, 916,647 likes, 101,023 shares, with an engagement rate of 9.8%.</li>
+<li>YouTube: 1,735,945 views, 0 YouTube Shorts created, 15,515 likes, and an engagement rate of 0.9%.</li>
+<li>Radio Airplay: 11 total spins across 6 radio stations.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 6 charts across 6 countries today, with 1 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 12 countries, with an all-time peak of #3 in Saint Lucia (Electronic).</p>
+<ul>
+<li>Saint Lucia (Electronic): Rank #3 (No change, Peak: #2)</li>
+</ul>
+<h3>Shazam Insights</h3>
+<p>Audience Metric: 5 total Shazam recognitions/tags tracked globally.</p>
+<p>No active Shazam chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 4 charts across 4 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 6 days, reaching 7 countries, with an all-time peak of #2 in Singapore (Electronic).</p>
+<h3>Amazon Music Insights</h3>
+<p>No active Amazon Music chart positions tracked today.</p>
+</div>
+</details>
+<h2 id="summary">Summary</h2>
+<p>The licensed remixes for 'Self Aware' (LUM!X and Ian Asher and Gravagerz) contributed a combined 1,179,719 daily streams today. This represents a 39.2% addition to the original track's daily streams.</p>
+
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+}
+</script></body>
+</html>
