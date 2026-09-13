@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מתודולוגיית דירוגים והסברים | Rankings Methodology & Guide</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #e6edf3;
+            --text-muted: #8b949e;
+            --accent-green: #1db954;
+            --accent-blue: #38bdf8;
+            --accent-gold: #f59e0b;
+            --badge-bg: rgba(56, 189, 248, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 24px 16px 80px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Top Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 32px;
+        }
+
+        .header-title h1 {
+            font-size: 1.6rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: #21262d;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: var(--accent-green);
+            color: #ffffff;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #21262d;
+            color: var(--accent-blue);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #30363d;
+            color: #ffffff;
+        }
+
+        /* Sections & Cards */
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 32px;
+            scroll-margin-top: 30px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .section-card:target {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.35);
+            animation: pulse-target 1.5s ease-out;
+        }
+
+        @keyframes pulse-target {
+            0% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
+        }
+
+        .badge-icon {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        /* Content elements */
+        p {
+            margin-bottom: 16px;
+            font-size: 1.02rem;
+            color: #d1d5db;
+        }
+
+        .highlight-stat {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            margin-bottom: 4px;
+        }
+
+        .stat-number.blue {
+            color: var(--accent-blue);
+        }
+
+        .stat-number.gold {
+            color: var(--accent-gold);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        [dir="ltr"] table {
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: #21262d;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tier-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+
+        .tier-1 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .tier-2 { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .tier-3 { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+        .tier-4 { background: rgba(156, 163, 175, 0.2); color: #d1d5db; border: 1px solid rgba(156, 163, 175, 0.4); }
+
+        .pts-val {
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 1.05rem;
+        }
+
+        /* Note box */
+        .callout {
+            background: rgba(29, 185, 84, 0.08);
+            border-right: 4px solid var(--accent-green);
+            padding: 16px 20px;
+            border-radius: 4px 8px 8px 4px;
+            margin: 20px 0;
+            color: #e6edf3;
+            font-size: 0.95rem;
+        }
+
+        [dir="ltr"] .callout {
+            border-right: none;
+            border-left: 4px solid var(--accent-green);
+            border-radius: 8px 4px 4px 8px;
+        }
+
+        .callout strong {
+            color: var(--accent-green);
+        }
+
+        /* Language visibility */
+        .content-he { display: block; }
+        .content-en { display: none; }
+
+        body.lang-en {
+            direction: ltr;
+        }
+        body.lang-en .content-he { display: none; }
+        body.lang-en .content-en { display: block; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <span class="content-he">
+                    <h1>📚 מתודולוגיית דירוגים והסברים</h1>
+                    <p>מדריך מפורט על אופן חישוב דירוגי האומן העולמיים בספוטיפיי וב-Kworb</p>
+                </span>
+                <span class="content-en">
+                    <h1>📚 Rankings Methodology & Guide</h1>
+                    <p>Detailed guide on how Spotify and Kworb global artist rankings are calculated</p>
+                </span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="lang-switch">
+                    <button class="lang-btn active" id="btn-he" onclick="setLang('he')">עברית</button>
+                    <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+                </div>
+                <a href="javascript:history.back()" class="back-btn">
+                    <span class="content-he">↩ חזרה לדוח</span>
+                    <span class="content-en">↩ Back to Report</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- ==================================================================== -->
+        <!-- SECTION 1: SPOTIFY GLOBAL ARTIST RANK                                -->
+        <!-- ==================================================================== -->
+        <section id="spotify-global-rank" class="section-card">
+            <!-- HEBREW -->
+            <div class="content-he">
+                <div class="card-header">
+                    <span class="badge-icon">🎧</span>
+                    <div>
+                        <h2 class="card-title">דירוג אומן עולמי בספוטיפיי (Spotify Global Artist Rank)</h2>
+                        <span class="card-subtitle">Spotify Monthly Listeners Chart</span>
+                    </div>
+                </div>
+
+                <p>בפלטפורמת <strong>Spotify</strong> רשומים כיום למעלה מ-<strong>11 מיליון אומנים</strong> ברחבי העולם. מתוכם, ספוטיפיי עוקבת ומדרגת באופן רשמי אך ורק את <strong>25,000 האומנים המובילים</strong> (המהווים כ-<strong>0.2%</strong> בלבד מכלל האומנים בפלטפורמה).</p>
+
+                <div class="highlight-stat">
+                    <div class="stat-box">
+                        <div class="stat-number">11M+</div>
+                        <div class="stat-label">אומנים רשומים בספוטיפיי</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number blue">25,000</div>
+                        <div class="stat-label">אומנים מדורגים (טופ 0.2%)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number gold">~500,000</div>
+                        <div class="stat-label">מאזינים חודשיים כרף כניסה</div>
+                    </div>
+                </div>
+
+                <p><strong>כיצד נקבע הדירוג?</strong><br>
+                הדירוג נקבע על פי מספר <strong>המאזינים החודשיים (Monthly Listeners)</strong> שנמדדו ב-28 הימים האחרונים. כדי להיכנס לטופ 25,000, נדרש לאומן רף מינימלי של כ-500,000 מאזינים חודשיים פעילים.</p>
+
+                <div class="callout">
+                    <strong>🎖️ מדליית האומן של ספוטיפיי (Top 500 Artist Badge):</strong><br>
+                    עבור 500 האומנים המובילים בעולם (מקומות 1 עד 500), ספוטיפיי מעניקה בדף הפרופיל הרשמי של האומן באפליקציה מדליה מיוחדת המציינת את מיקומו הגלובלי המדויק.
+                </div>
+
+                <p><strong>משמעות האחוזונים העולמיים:</strong></p>
+                <ul>
+                    <li style="margin-bottom: 8px;"><strong>טופ 500 האומנים הראשונים:</strong> מהווים <strong>0.004%</strong> בלבד מכלל אומני העולם בספוטיפיי.</li>
+                    <li style="margin-bottom: 8px;"><strong>טופ 200 האומנים הראשונים:</strong> מהווים <strong>0.0018%</strong> מכלל אומני העולם בספוטיפיי.</li>
+                </ul>
+            </div>
+
+            <!-- ENGLISH -->
+            <div class="content-en">
+                <div class="card-header">
+                    <span class="badge-icon">🎧</span>
+                    <div>
+                        <h2 class="card-title">Global Artist Rank (Spotify)</h2>
+                        <span class="card-subtitle">Spotify Monthly Listeners Chart</span>
+                    </div>
+                </div>
+
+                <p>There are over <strong>11 million registered artists</strong> worldwide on Spotify. Among them, Spotify tracks and officially ranks only the <strong>top 25,000 artists</strong> globally (representing roughly <strong>0.2%</strong> of all catalog artists).</p>
+
+                <div class="highlight-stat">
+                    <div class="stat-box">
+                        <div class="stat-number">11M+</div>
+                        <div class="stat-label">Registered Spotify Artists</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number blue">25,000</div>
+                        <div class="stat-label">Ranked Artists (Top 0.2%)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number gold">~500,000</div>
+                        <div class="stat-label">Monthly Listeners Entry Threshold</div>
+                    </div>
+                </div>
+
+                <p><strong>How is the rank determined?</strong><br>
+                The rank is determined strictly by the number of <strong>Monthly Listeners</strong> over the past 28-day rolling window. Reaching position #25,000 requires an artist to maintain an approximate threshold of 500,000 monthly active listeners.</p>
+
+                <div class="callout">
+                    <strong>🎖️ Spotify Top 500 Artist Profile Badge:</strong><br>
+                    For artists ranked #1 to #500 worldwide, Spotify awards a special ranking badge on the artist's official profile in the Spotify app displaying their exact global position.
+                </div>
+
+                <p><strong>Global Percentile Distribution:</strong></p>
+                <ul>
+                    <li style="margin-bottom: 8px;"><strong>Top 500 Artists:</strong> Represent just <strong>0.004%</strong> of all musical artists worldwide on Spotify.</li>
+                    <li style="margin-bottom: 8px;"><strong>Top 200 Artists:</strong> Represent an elite <strong>0.0018%</strong> of all musical artists worldwide on Spotify.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- SECTION 2: KWORB WORLDWIDE DIGITAL ARTIST RANK (WEIGHTED)           -->
+        <!-- ==================================================================== -->
+        <section id="worldwide-digital-artist-rank" class="section-card">
+            <!-- HEBREW -->
+            <div class="content-he">
+                <div class="card-header">
+                    <span class="badge-icon">🌐</span>
+                    <div>
+                        <h2 class="card-title">דירוג אומן עולמי דיגיטלי (רב-פלטפורמי משוקלל)</h2>
+                        <span class="card-subtitle">Kworb Global Digital Artist Ranking</span>
+                    </div>
+                </div>
+
+                <p>הדירוג הדיגיטלי העולמי המשוקלל ב-<strong>Kworb</strong> מודד את ההשפעה והפופולריות הכוללת של אומן בזמן אמת על פני <strong>6 פלטפורמות דיגיטליות מובילות</strong> במקביל: <strong>Spotify, Apple Music, iTunes, YouTube, Shazam, ו-Deezer</strong>.</p>
+
+                <p><strong>נוסחת הניקוד הכולל:</strong><br>
+                הציון של האומן נקבע כסכום הנקודות המצטבר ששיריו הניבו בכל אחת משש הפלטפורמות:</p>
+                <div style="background: #0d1117; padding: 12px 18px; border-radius: 6px; font-family: monospace; font-size: 1.05rem; color: #38bdf8; margin: 12px 0; border: 1px solid var(--border-color); text-align: center;">
+                    Points = Apple Music + Spotify + iTunes + YouTube + Shazam + Deezer
+                </div>
+
+                <h3 style="margin-top: 24px; margin-bottom: 12px; color: #ffffff; font-size: 1.15rem;">כיצד מתבצע השקלול לפי מדינות (4 Tiers)?</h3>
+                <p>הניקוד אינו ספירה עיוורת של מכירות או כמות מצעדים, אלא <strong>משקלל את חשיבות וגודל שוק המוזיקה של כל מדינה</strong>. מדינות העולם מחולקות ל-4 דרגים (Tiers):</p>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>דרג שוק (Tier)</th>
+                                <th>מדינות מובילות הנכללות בדרג</th>
+                                <th>ניקוד למקום ראשון (#1)</th>
+                                <th>יחס משקל</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tier-tag tier-1">Tier 1</span></td>
+                                <td>ארצות הברית, בריטניה, גרמניה, יפן, אוסטרליה</td>
+                                <td class="pts-val" style="color: #fbbf24;">1,600 נק'</td>
+                                <td>פי 22.8 לעומת דרג 4</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tier-tag tier-2">Tier 2</span></td>
+                                <td>קנדה, צרפת, איטליה, מקסיקו, ספרד, ברזיל, הולנד, שוויץ, אוסטריה, רוסיה, הודו</td>
+                                <td class="pts-val" style="color: #38bdf8;">800 נק'</td>
+                                <td>פי 11.4 לעומת דרג 4</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tier-tag tier-3">Tier 3</span></td>
+                                <td>אירלנד, שוודיה, נורווגיה, דנמרק, פולין, סינגפור, הונג קונג, טייוואן, ניו זילנד</td>
+                                <td class="pts-val" style="color: #c084fc;">300 נק'</td>
+                                <td>פי 4.3 לעומת דרג 4</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tier-tag tier-4">Tier 4</span></td>
+                                <td>ישראל, ארגנטינה, יוון, צ'כיה, רומניה, פורטוגל, קניה, סלובקיה, פינלנד, אוקראינה</td>
+                                <td class="pts-val" style="color: #d1d5db;">70 נק'</td>
+                                <td>בסיס (70 נקודות)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout">
+                    <strong>💡 מדוע השיטה בנויה כך? (מתוך עקרונות Kworb הרשמיים):</strong><br>
+                    לו המדד היה מבוסס על נתוני נתח שוק דולריים בלבד, ארה"ב ובריטניה היו מגמדות ומעלימות לחלוטין את שאר מדינות העולם. שיטת 4 הדרגים מייצרת איזון אובייקטיבי שמתגמל הצלחה רב-לאומית אמיתית תוך שמירה על משקל ראוי למעצמות המוזיקה הגלובליות.
+                </div>
+
+                <p><strong>דעיכת הניקוד לפי מיקום במצעד (Position Decay):</strong><br>
+                ככל ששיר יורד בדירוג המצעד (מקום 2, 3 ... 200), הניקוד דועך באופן מעריכי. מקום #1 מעניק את מלוא הניקוד של הדרג, בעוד מקום #100 ומטה מעניק נקודות בודדות בלבד.</p>
+            </div>
+
+            <!-- ENGLISH -->
+            <div class="content-en">
+                <div class="card-header">
+                    <span class="badge-icon">🌐</span>
+                    <div>
+                        <h2 class="card-title">Worldwide Digital Artist Rank (Weighted All-Platform)</h2>
+                        <span class="card-subtitle">Kworb Global Digital Artist Ranking</span>
+                    </div>
+                </div>
+
+                <p>The <strong>Kworb Global Digital Artist Ranking</strong> measures the real-time global popularity and chart power of an artist across <strong>6 major digital music platforms simultaneously</strong>: <strong>Spotify, Apple Music, iTunes, YouTube, Shazam, and Deezer</strong>.</p>
+
+                <p><strong>Total Points Calculation:</strong><br>
+                An artist's overall score is the direct sum of points earned across all 6 services:</p>
+                <div style="background: #0d1117; padding: 12px 18px; border-radius: 6px; font-family: monospace; font-size: 1.05rem; color: #38bdf8; margin: 12px 0; border: 1px solid var(--border-color); text-align: center;">
+                    Points = Apple Music + Spotify + iTunes + YouTube + Shazam + Deezer
+                </div>
+
+                <h3 style="margin-top: 24px; margin-bottom: 12px; color: #ffffff; font-size: 1.15rem;">How Country Weighting Works (4 Tiers)</h3>
+                <p>Points are not awarded equally across nations. Instead, points are <strong>weighted by national music market size</strong> to reflect true global commercial reach. All tracked countries are divided into 4 tiers:</p>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Market Tier</th>
+                                <th>Representative Countries</th>
+                                <th>Points for #1 Position</th>
+                                <th>Relative Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tier-tag tier-1">Tier 1</span></td>
+                                <td>United States, United Kingdom, Germany, Japan, Australia</td>
+                                <td class="pts-val" style="color: #fbbf24;">1,600 pts</td>
+                                <td>22.8x vs. Tier 4</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tier-tag tier-2">Tier 2</span></td>
+                                <td>Canada, France, Italy, Mexico, Spain, Brazil, Netherlands, Switzerland, Austria, Russia, India</td>
+                                <td class="pts-val" style="color: #38bdf8;">800 pts</td>
+                                <td>11.4x vs. Tier 4</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tier-tag tier-3">Tier 3</span></td>
+                                <td>Ireland, Sweden, Norway, Denmark, Poland, Singapore, Hong Kong, Taiwan, New Zealand</td>
+                                <td class="pts-val" style="color: #c084fc;">300 pts</td>
+                                <td>4.3x vs. Tier 4</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tier-tag tier-4">Tier 4</span></td>
+                                <td>Israel, Argentina, Greece, Czech Republic, Romania, Portugal, Kenya, Slovakia, Finland, Ukraine</td>
+                                <td class="pts-val" style="color: #d1d5db;">70 pts</td>
+                                <td>Base (70 points)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout">
+                    <strong>💡 Why This Methodology? (From Kworb Official Principles):</strong><br>
+                    If the chart used pure commercial dollar sales shares, the US and the UK combined would completely dwarf and erase all other nations. The 4-tier model balances global geographic reach while appropriately rewarding dominance in the world's music capital markets.
+                </div>
+
+                <p><strong>Position Decay:</strong><br>
+                Points decay exponentially from position #1 down to position #200. A #1 song secures 100% of tier points, whereas lower chart placements receive fractional points accordingly.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>Antigravity Catalog Intelligence System &copy; 2026 | Built for Temper City & Catalog Management</p>
+        </footer>
+    </div>
+
+    <script>
+        function setLang(lang) {
+            if (lang === 'en') {
+                document.body.classList.add('lang-en');
+                document.documentElement.setAttribute('lang', 'en');
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.getElementById('btn-en').classList.add('active');
+                document.getElementById('btn-he').classList.remove('active');
+            } else {
+                document.body.classList.remove('lang-en');
+                document.documentElement.setAttribute('lang', 'he');
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.getElementById('btn-he').classList.add('active');
+                document.getElementById('btn-en').classList.remove('active');
+            }
+        }
+
+        // Check URL parameters for language preference
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('lang') === 'en') {
+                setLang('en');
+            }
+        })();
+    </script>
+</body>
+</html>
