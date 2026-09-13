@@ -211,7 +211,7 @@
             text-align: right;
         }
 
-        [dir="ltr"] table {
+        body.lang-en table {
             text-align: left;
         }
 
@@ -264,7 +264,7 @@
             font-size: 0.95rem;
         }
 
-        [dir="ltr"] .callout {
+        body.lang-en .callout {
             border-right: none;
             border-left: 4px solid var(--accent-green);
             border-radius: 8px 4px 4px 8px;
@@ -275,14 +275,19 @@
         }
 
         /* Language visibility */
-        .content-he { display: block; }
-        .content-en { display: none; }
+        .lang-container-he { display: block; }
+        .lang-container-en { display: none; }
 
         body.lang-en {
             direction: ltr;
         }
+        body.lang-en .lang-container-he { display: none; }
+        body.lang-en .lang-container-en { display: block; }
+
+        .content-he { display: inline; }
+        .content-en { display: none; }
         body.lang-en .content-he { display: none; }
-        body.lang-en .content-en { display: block; }
+        body.lang-en .content-en { display: inline; }
 
         /* Footer */
         footer {
@@ -310,8 +315,8 @@
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <div class="lang-switch">
-                    <button class="lang-btn active" id="btn-he" onclick="setLang('he')">עברית</button>
-                    <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+                    <button class="lang-btn active" id="btn-he" onclick="switchLangBtn('he')">עברית</button>
+                    <button class="lang-btn" id="btn-en" onclick="switchLangBtn('en')">English</button>
                 </div>
                 <a href="javascript:history.back()" class="back-btn">
                     <span class="content-he">↩ חזרה לדוח</span>
@@ -321,11 +326,11 @@
         </header>
 
         <!-- ==================================================================== -->
-        <!-- SECTION 1: SPOTIFY GLOBAL ARTIST RANK                                -->
+        <!-- HEBREW CONTAINER (_heb)                                              -->
         <!-- ==================================================================== -->
-        <section id="spotify-global-rank" class="section-card">
-            <!-- HEBREW -->
-            <div class="content-he">
+        <div class="lang-container-he">
+            <!-- SECTION 1: SPOTIFY GLOBAL ARTIST RANK (HEBREW) -->
+            <section id="spotify-global-rank_heb" class="section-card">
                 <div class="card-header">
                     <span class="badge-icon">🎧</span>
                     <div>
@@ -368,61 +373,10 @@
                 <p style="margin-top: 18px; padding: 12px 16px; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
                     🔗 לצפייה ברשימה המלאה של כל 25,000 האומנים המדורגים בעולם (מחולקת ל-10 דפים עם 2,500 אומנים בכל דף), <a href="https://kworb.net/spotify/listeners.html" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: underline; font-weight: 600;">לחצו כאן (נפתח בלשונית חדשה) ↗</a>.
                 </p>
-            </div>
+            </section>
 
-            <!-- ENGLISH -->
-            <div class="content-en">
-                <div class="card-header">
-                    <span class="badge-icon">🎧</span>
-                    <div>
-                        <h2 class="card-title">Global Artist Rank (Spotify)</h2>
-                        <span class="card-subtitle">Spotify Monthly Listeners Chart</span>
-                    </div>
-                </div>
-
-                <p>There are over <strong>11 million registered artists</strong> worldwide on Spotify. Among them, Spotify tracks and officially ranks only the <strong>top 25,000 artists</strong> globally (representing roughly <strong>0.2%</strong> of all catalog artists).</p>
-
-                <div class="highlight-stat">
-                    <div class="stat-box">
-                        <div class="stat-number">11M+</div>
-                        <div class="stat-label">Registered Spotify Artists</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number blue">25,000</div>
-                        <div class="stat-label">Ranked Artists (Top 0.2%)</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number gold">~500,000</div>
-                        <div class="stat-label">Monthly Listeners Entry Threshold</div>
-                    </div>
-                </div>
-
-                <p><strong>How is the rank determined?</strong><br>
-                The rank is determined strictly by the number of <strong>Monthly Listeners</strong> over the past 28-day rolling window. Reaching position #25,000 requires an artist to maintain an approximate threshold of 500,000 monthly active listeners.</p>
-
-                <div class="callout">
-                    <strong>🎖️ Spotify Top 500 Artist Profile Badge:</strong><br>
-                    For artists ranked #1 to #500 worldwide, Spotify awards a special ranking badge on the artist's official profile in the Spotify app displaying their exact global position.
-                </div>
-
-                <p><strong>Global Percentile Distribution:</strong></p>
-                <ul>
-                    <li style="margin-bottom: 8px;"><strong>Top 500 Artists:</strong> Represent just <strong>0.004%</strong> of all musical artists worldwide on Spotify.</li>
-                    <li style="margin-bottom: 8px;"><strong>Top 200 Artists:</strong> Represent an elite <strong>0.0018%</strong> of all musical artists worldwide on Spotify.</li>
-                </ul>
-
-                <p style="margin-top: 18px; padding: 12px 16px; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
-                    🔗 To view the complete list of all 25,000 ranked artists globally (organized across 10 pages with 2,500 artists per page), <a href="https://kworb.net/spotify/listeners.html" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: underline; font-weight: 600;">click here (opens in new tab) ↗</a>.
-                </p>
-            </div>
-        </section>
-
-        <!-- ==================================================================== -->
-        <!-- SECTION 2: KWORB WORLDWIDE DIGITAL ARTIST RANK (WEIGHTED)           -->
-        <!-- ==================================================================== -->
-        <section id="worldwide-digital-artist-rank" class="section-card">
-            <!-- HEBREW -->
-            <div class="content-he">
+            <!-- SECTION 2: KWORB WORLDWIDE DIGITAL ARTIST RANK (HEBREW) -->
+            <section id="worldwide-digital-artist-rank_heb" class="section-card">
                 <div class="card-header">
                     <span class="badge-icon">🌐</span>
                     <div>
@@ -488,10 +442,61 @@
 
                 <p><strong>דעיכת הניקוד לפי מיקום במצעד (Position Decay):</strong><br>
                 ככל ששיר יורד בדירוג המצעד (מקום 2, 3 ... 200), הניקוד דועך באופן מעריכי. מקום #1 מעניק את מלוא הניקוד של הדרג, בעוד מקום #100 ומטה מעניק נקודות בודדות בלבד.</p>
-            </div>
+            </section>
+        </div>
 
-            <!-- ENGLISH -->
-            <div class="content-en">
+        <!-- ==================================================================== -->
+        <!-- ENGLISH CONTAINER (_en)                                              -->
+        <!-- ==================================================================== -->
+        <div class="lang-container-en">
+            <!-- SECTION 1: SPOTIFY GLOBAL ARTIST RANK (ENGLISH) -->
+            <section id="spotify-global-rank_en" class="section-card">
+                <div class="card-header">
+                    <span class="badge-icon">🎧</span>
+                    <div>
+                        <h2 class="card-title">Global Artist Rank (Spotify)</h2>
+                        <span class="card-subtitle">Spotify Monthly Listeners Chart</span>
+                    </div>
+                </div>
+
+                <p>There are over <strong>11 million registered artists</strong> worldwide on Spotify. Among them, Spotify tracks and officially ranks only the <strong>top 25,000 artists</strong> globally (representing roughly <strong>0.2%</strong> of all catalog artists).</p>
+
+                <div class="highlight-stat">
+                    <div class="stat-box">
+                        <div class="stat-number">11M+</div>
+                        <div class="stat-label">Registered Spotify Artists</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number blue">25,000</div>
+                        <div class="stat-label">Ranked Artists (Top 0.2%)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number gold">~500,000</div>
+                        <div class="stat-label">Monthly Listeners Entry Threshold</div>
+                    </div>
+                </div>
+
+                <p><strong>How is the rank determined?</strong><br>
+                The rank is determined strictly by the number of <strong>Monthly Listeners</strong> over the past 28-day rolling window. Reaching position #25,000 requires an artist to maintain an approximate threshold of 500,000 monthly active listeners.</p>
+
+                <div class="callout">
+                    <strong>🎖️ Spotify Top 500 Artist Profile Badge:</strong><br>
+                    For artists ranked #1 to #500 worldwide, Spotify awards a special ranking badge on the artist's official profile in the Spotify app displaying their exact global position.
+                </div>
+
+                <p><strong>Global Percentile Distribution:</strong></p>
+                <ul>
+                    <li style="margin-bottom: 8px;"><strong>Top 500 Artists:</strong> Represent just <strong>0.004%</strong> of all musical artists worldwide on Spotify.</li>
+                    <li style="margin-bottom: 8px;"><strong>Top 200 Artists:</strong> Represent an elite <strong>0.0018%</strong> of all musical artists worldwide on Spotify.</li>
+                </ul>
+
+                <p style="margin-top: 18px; padding: 12px 16px; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                    🔗 To view the complete list of all 25,000 ranked artists globally (organized across 10 pages with 2,500 artists per page), <a href="https://kworb.net/spotify/listeners.html" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: underline; font-weight: 600;">click here (opens in new tab) ↗</a>.
+                </p>
+            </section>
+
+            <!-- SECTION 2: KWORB WORLDWIDE DIGITAL ARTIST RANK (ENGLISH) -->
+            <section id="worldwide-digital-artist-rank_en" class="section-card">
                 <div class="card-header">
                     <span class="badge-icon">🌐</span>
                     <div>
@@ -557,8 +562,8 @@
 
                 <p><strong>Position Decay:</strong><br>
                 Points decay exponentially from position #1 down to position #200. A #1 song secures 100% of tier points, whereas lower chart placements receive fractional points accordingly.</p>
-            </div>
-        </section>
+            </section>
+        </div>
 
         <footer>
             <p>Antigravity Catalog Intelligence System &copy; 2026 | Built for Temper City & Catalog Management</p>
@@ -582,13 +587,43 @@
             }
         }
 
-        // Check URL parameters for language preference
-        (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('lang') === 'en') {
-                setLang('en');
+        function switchLangBtn(targetLang) {
+            const hash = window.location.hash;
+            if (hash) {
+                if (targetLang === 'en' && hash.endsWith('_heb')) {
+                    window.location.hash = hash.replace('_heb', '_en');
+                    return;
+                } else if (targetLang === 'he' && hash.endsWith('_en')) {
+                    window.location.hash = hash.replace('_en', '_heb');
+                    return;
+                }
             }
-        })();
+            setLang(targetLang);
+        }
+
+        function handleHashOrQuery() {
+            const hash = window.location.hash;
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (hash.includes('_en') || urlParams.get('lang') === 'en') {
+                setLang('en');
+            } else if (hash.includes('_heb') || urlParams.get('lang') === 'he') {
+                setLang('he');
+            }
+            
+            if (hash) {
+                setTimeout(function() {
+                    const targetEl = document.querySelector(hash);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 50);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', handleHashOrQuery);
+        window.addEventListener('hashchange', handleHashOrQuery);
+        handleHashOrQuery();
     </script>
 </body>
 </html>
