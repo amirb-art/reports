@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8"/>
 <title>Mia Miles - דוח מדדי ביצועים</title>
-
 <style>
     html {
         scroll-behavior: smooth;
@@ -83,28 +82,6 @@
         border-radius: 8px;
         overflow: hidden;
     }
-    .bill-table th {
-        padding: 10px 16px;
-        background-color: #222222;
-        color: #1DB954;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border: none;
-        border-bottom: 2px solid #282828;
-    }
-    .bill-table th.platform {
-        text-align: right;
-    }
-    .bill-table th.counter {
-        text-align: left;
-    }
-    .bill-table th.delta-header {
-        text-align: center;
-    }
-    .bill-table th.unit {
-        text-align: right;
-    }
     .bill-table td {
         padding: 10px 16px;
         border: none;
@@ -121,34 +98,6 @@
         font-size: 15px;
         color: #fff;
         direction: ltr;
-    }
-    .bill-table .delta-cell {
-        text-align: center;
-        white-space: nowrap;
-    }
-    .bill-table .delta {
-        display: inline-block;
-        font-size: 12px;
-        font-weight: 600;
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-        direction: ltr;
-    }
-    .bill-table .delta.positive {
-        color: #10b981;
-        background-color: rgba(16, 185, 129, 0.12);
-        border: 1px solid rgba(16, 185, 129, 0.25);
-    }
-    .bill-table .delta.negative {
-        color: #ef4444;
-        background-color: rgba(239, 68, 68, 0.12);
-        border: 1px solid rgba(239, 68, 68, 0.25);
-    }
-    .bill-table .delta.zero {
-        color: #888888;
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .bill-table .unit {
         color: #aaa;
@@ -294,6 +243,8 @@
         border-top: 1px solid #282828;
         direction: rtl;
     }
+
+
     .sub-accordion {
         background-color: #141721;
         border: 1px solid #282d3d;
@@ -358,7 +309,6 @@
 <h1>Mia Miles - דוח מדדי ביצועים</h1>
 <p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
 <p><strong>תאריך הנתונים:</strong> 2026-09-12 (שבת)</p>
-
 <nav class="sticky-nav">
 <div class="nav-links">
 <a href="#band-overview">סקירת להקה</a>
@@ -371,78 +321,59 @@
 <button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">סגור הכל</button>
 </div>
 </nav><h2 id="band-overview">סקירת להקה</h2>
-<p><strong>עוקבים:</strong> 3,534 (+3)</p>
-<p><strong>מאזינים חודשיים:</strong> 291,735 (-1,390)</p>
-<p>האומן עדיין לא מדורג בספוטיפיי.</p>
-<p class="worldwide-rank"><strong>דירוג אומן עולמי דיגיטלי:</strong> האומן עדיין אינו מדורג בדירוג הדיגיטלי העולמי.</p>
+<p><strong>עוקבים:</strong> 3,534 (שינוי 24 שעות: +3)</p>
+<p><strong>מאזינים חודשיים:</strong> 291,735 (שינוי 24 שעות: -1,390)</p>
+<p>האומן עדיין לא מדורג.</p>
 <div class="restaurant-bill">
 <h3>סיכום השמעות וצפיות לקטלוג (5 שירים ורמיקסים)</h3>
 <table class="bill-table">
-<thead>
-<tr>
-<th class="platform">פלטפורמה</th>
-<th class="counter">מונה כולל</th>
-<th class="delta-header">שינוי ב-24 שעות</th>
-<th class="unit">יחידה</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td class="platform">Spotify</td>
 <td class="counter">1,891,563</td>
-<td class="delta-cell"><span class="delta positive" title="+14,684 ב-24 שעות (+0.78%)">▲ +14.7K (+0.78%)</span></td>
 <td class="unit">השמעות</td>
 </tr>
 <tr>
 <td class="platform">YouTube</td>
 <td class="counter">234,171</td>
-<td class="delta-cell"><span class="delta positive" title="+1,354 ב-24 שעות (+0.58%)">▲ +1,354 (+0.58%)</span></td>
 <td class="unit">צפיות והשמעות</td>
 </tr>
 <tr>
 <td class="platform">SoundCloud</td>
 <td class="counter">22,918</td>
-<td class="delta-cell"><span class="delta positive" title="+238 ב-24 שעות (+1.05%)">▲ +238 (+1.05%)</span></td>
 <td class="unit">השמעות</td>
 </tr>
 <tr>
 <td class="platform">Apple Music, Amazon Music, iTunes, Deezer</td>
-<td colspan="3" style="color: #888; font-size: 13px; text-align: center;">אינם מפרסמים מונה השמעות פומבי</td>
+<td colspan="2" style="color: #888; font-size: 13px;">אינם מפרסמים מונה השמעות פומבי</td>
 </tr>
 <tr class="subtotal-row">
 <td>סה"כ השמעות מוזיקה</td>
 <td class="counter">2,148,652</td>
-<td class="delta-cell"><span class="delta positive" title="+16,276 ב-24 שעות (+0.76%)">▲ +16.3K (+0.76%)</span></td>
 <td class="unit">השמעות</td>
 </tr>
 <tr>
 <td class="platform">TikTok</td>
 <td class="counter">92,646,408</td>
-<td class="delta-cell"><span class="delta positive" title="+3,077,825 ב-24 שעות (+3.44%)">▲ +3.1M (+3.44%)</span></td>
 <td class="unit">צפיות וידאו</td>
 </tr>
 <tr>
 <td class="platform">Instagram Reels</td>
 <td class="counter">233,552</td>
-<td class="delta-cell"><span class="delta zero" title="ללא שינוי ב-24 שעות">0 (0.00%)</span></td>
 <td class="unit">צפיות וידאו</td>
 </tr>
 <tr class="subtotal-row">
 <td>סה"כ צפיות ברשתות חברתיות</td>
 <td class="counter">92,879,960</td>
-<td class="delta-cell"><span class="delta positive" title="+3,077,825 ב-24 שעות (+3.43%)">▲ +3.1M (+3.43%)</span></td>
 <td class="unit">צפיות</td>
 </tr>
 <tr class="grand-row">
 <td>סך-על כולל (מוזיקה + רשתות חברתיות)</td>
 <td class="counter">95,028,612</td>
-<td class="delta-cell"><span class="delta positive" title="+3,094,101 ב-24 שעות (+3.37%)">▲ +3.1M (+3.37%)</span></td>
 <td class="unit">סה"כ כללי</td>
 </tr>
-</tbody>
 </table>
 </div>
-<h2 id="top-cities">ניתוח 5 הערים המובילות</h2>
+<h2 id="top-cities">נתחי 5 הערים המובילות</h2>
 <table>
 <thead>
 <tr>
@@ -484,7 +415,7 @@
 <td>48</td>
 </tr>
 <tr>
-<td>גוודלחרה</td>
+<td>גואדלחרה</td>
 <td>לא ידוע</td>
 <td>2,940</td>
 <td>+253</td>
@@ -507,13 +438,20 @@
 <details class="track-accordion" dir="rtl">
 <summary class="track-summary" dir="rtl"><span class="track-name">7 days a week</span></summary>
 <div class="track-content">
-<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ומהימנים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: מערכות היחסים של הנתונים יציבות ותקינות מבחינה סטטיסטית, מה שמעיד על מערך נתונים אמין לניתוח.</p>
 <p>המומנטום הגלובלי עומד כעת על -9.6%, עם תאוצה של -9.5%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
-<p>גילו של השיר "7 days a week" הוא 40 ימים</p>
+<p><strong>גילו של השיר "7 days a week" הוא 40 ימים</strong></p>
 <p>סך השמעות מצטבר (Spotify): 1,747,047</p>
 <p>השמעות יומיות אחרונות: 14,076 (שינוי: -1,478)</p>
-<p>השמעות יומיות הגבוהות ביותר אי פעם: 21,861</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 21,861</p>
 <p>המחזור הנוכחי נמצא בעיצומו (יום 5 מתוך 7). הממוצע החלקי הנוכחי עומד על 15,763. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 19,201 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 17,173.</p>
+<h3>רדאר מומנטום אזורי</h3>
+<ul>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
+</ul>
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
 <li>טיקטוק: 92,588,725 צפיות, 33,540 סרטונים נוצרו (תוכן משתמשים), 2,806,895 לייקים, 107,633 שיתופים, ושיעור מעורבות של 3.2%.</li>
@@ -539,17 +477,24 @@
 <details class="track-accordion" dir="rtl">
 <summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Dallin Remix</span></summary>
 <div class="track-content">
-<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ומהימנים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: מערכות היחסים של הנתונים יציבות ותקינות מבחינה סטטיסטית, מה שמעיד על מערך נתונים אמין לניתוח.</p>
 <p>המומנטום הגלובלי עומד כעת על -7.5%, עם תאוצה של 6.5%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואטת.</p>
-<p>גילו של השיר "7 days a week - Dallin Remix" הוא 40 ימים</p>
+<p><strong>גילו של השיר "7 days a week - Dallin Remix" הוא 40 ימים</strong></p>
 <p>סך השמעות מצטבר (Spotify): 97,415</p>
 <p>השמעות יומיות אחרונות: 280 (שינוי: +17)</p>
-<p>השמעות יומיות הגבוהות ביותר אי פעם: 2,341</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 2,341</p>
 <p>המחזור הנוכחי נמצא בעיצומו (יום 5 מתוך 7). הממוצע החלקי הנוכחי עומד על 286. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 1,716 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 967.</p>
+<h3>רדאר מומנטום אזורי</h3>
+<ul>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
+</ul>
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
 <li>טיקטוק: 4,504 צפיות, 9 סרטונים נוצרו (תוכן משתמשים), 337 לייקים, 35 שיתופים, ושיעור מעורבות של 8.5%.</li>
-<li>אינסטגרם רילס: נתוני אינסטגרם אינם זמינים.</li>
+<li>אינסטגרם רילס: הנתונים אינם נמדדים / אינם זמינים.</li>
 <li>סאונדקלאוד: 3,010 השמעות, 60 לייקים, 2 שיתופים.</li>
 <li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 6.0/100.</li>
 </ul>
@@ -570,13 +515,20 @@
 <details class="track-accordion" dir="rtl">
 <summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Mizmo Remix</span></summary>
 <div class="track-content">
-<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ומהימנים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: מערכות היחסים של הנתונים יציבות ותקינות מבחינה סטטיסטית, מה שמעיד על מערך נתונים אמין לניתוח.</p>
 <p>המומנטום הגלובלי עומד כעת על -9.5%, עם תאוצה של -4.7%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
-<p>גילו של השיר "7 days a week - Mizmo Remix" הוא 40 ימים</p>
+<p><strong>גילו של השיר "7 days a week - Mizmo Remix" הוא 40 ימים</strong></p>
 <p>סך השמעות מצטבר (Spotify): 29,247</p>
 <p>השמעות יומיות אחרונות: 163 (שינוי: -8)</p>
-<p>השמעות יומיות הגבוהות ביותר אי פעם: 604</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 604</p>
 <p>המחזור הנוכחי נמצא בעיצומו (יום 5 מתוך 7). הממוצע החלקי הנוכחי עומד על 181. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 442 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 200.</p>
+<h3>רדאר מומנטום אזורי</h3>
+<ul>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
+</ul>
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
 <li>טיקטוק: 53,179 צפיות, 11 סרטונים נוצרו (תוכן משתמשים), 4,271 לייקים, 1,388 שיתופים, ושיעור מעורבות של 10.7%.</li>
@@ -601,15 +553,22 @@
 <details class="track-accordion" dir="rtl">
 <summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Olli P Remix</span></summary>
 <div class="track-content">
-<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ומהימנים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: מערכות היחסים של הנתונים יציבות ותקינות מבחינה סטטיסטית, מה שמעיד על מערך נתונים אמין לניתוח.</p>
 <p>המומנטום הגלובלי עומד כעת על 41.6%, עם תאוצה של 102.9%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
-<p>גילו של השיר "7 days a week - Olli P Remix" הוא 16 ימים</p>
+<p><strong>גילו של השיר "7 days a week - Olli P Remix" הוא 16 ימים</strong></p>
 <p>סך השמעות מצטבר (Spotify): 3,368</p>
 <p>השמעות יומיות אחרונות: 69 (שינוי: +35)</p>
-<p>השמעות יומיות הגבוהות ביותר אי פעם: 72</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 72</p>
 <p>המחזור הנוכחי נמצא בעיצומו (יום 5 מתוך 7). הממוצע החלקי הנוכחי עומד על 51. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 54 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 54.</p>
+<h3>רדאר מומנטום אזורי</h3>
+<ul>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
+</ul>
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
-<p>אין נתוני קהל רב-פלטפורמי זמינים עבור שיר זה.</p>
+<p>לא נרשמו נתוני קהל פעילים עבור שיר זה.</p>
 <h3>תובנות מצעדי Apple Music</h3>
 <p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
 <h3>תובנות Shazam</h3>
@@ -625,17 +584,22 @@
 <details class="track-accordion" dir="rtl">
 <summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - AVE Remix</span></summary>
 <div class="track-content">
-<p><strong>אמינות וסבירות נתונים:</strong> גבוהה - קשרי הנתונים יציבים ומהימנים סטטיסטית, מה שמצביע על מערך נתונים אמין לניתוח.</p>
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: גבוהה. תיאור: מערכות היחסים של הנתונים יציבות ותקינות מבחינה סטטיסטית, מה שמעיד על מערך נתונים אמין לניתוח.</p>
 <p>המומנטום הגלובלי עומד כעת על 20.0%, עם תאוצה של 29.7%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
-<p>גילו של השיר "7 days a week - AVE Remix" הוא 16 ימים</p>
+<p><strong>גילו של השיר "7 days a week - AVE Remix" הוא 16 ימים</strong></p>
 <p>סך השמעות מצטבר (Spotify): 14,486</p>
 <p>השמעות יומיות אחרונות: 96 (שינוי: +22)</p>
-<p>השמעות יומיות הגבוהות ביותר אי פעם: 153</p>
-<p>המחזור הנוכחי נמצא בעיצומו (יום 5 מתוך 7). הממוצע החלקי הנוכחי עומד על 83. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 96 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 96.</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 153</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 5 מתוך 7). הממוצע החלקי הנוכחי עומד על 83. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 96 ושווה לממוצע הרצפה של השבוע הקודם שעומד על 96.</p>
+<h3>רדאר מומנטום אזורי</h3>
+<ul>
+<li>צמיחה חזקה: ללא</li>
+<li>צמיחה מתונה: ללא</li>
+<li>התקרבות לרמה קבועה: ללא</li>
+<li>שלב התכווצות: ללא</li>
+</ul>
 <h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
 <ul>
-<li>טיקטוק: נתוני טיקטוק אינם זמינים.</li>
-<li>אינסטגרם רילס: נתוני אינסטגרם אינם זמינים.</li>
 <li>סאונדקלאוד: 747 השמעות, 35 לייקים, 0 שיתופים.</li>
 <li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 3.0/100.</li>
 </ul>
@@ -654,8 +618,7 @@
 </div>
 </details>
 <h2 id="summary">סיכום</h2>
-<p>הרמיקסים המורשים עבור '7 days a week' (רמיקס דאלין, רמיקס מיזמו, רמיקס אולי פ, ורמיקס AVE) תרמו סך משולב של 608 השמעות יומיות היום. נתון זה מהווה תוספת של 4.3% להשמעות היומיות של השיר המקורי.</p>
-
+<p>הרמיקסים המורשים עבור '7 days a week' (רמיקס Dallin, רמיקס Mizmo, רמיקס Olli P ורמיקס AVE) תרמו סך משולב של 608 השמעות יומיות היום. נתון זה מהווה תוספת של 4.3% להשמעות היומיות של השיר המקורי.</p>
 <script>
 function toggleAllTracks(open) {
     document.querySelectorAll('details.track-accordion').forEach(function(d) {
