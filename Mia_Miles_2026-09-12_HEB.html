@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8"/>
 <title>Mia Miles - דוח מדדי ביצועים</title>
-
 <style>
     html {
         scroll-behavior: smooth;
@@ -244,12 +243,72 @@
         border-top: 1px solid #282828;
         direction: rtl;
     }
+
+
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 30px 10px 20px;
+        direction: rtl;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+        direction: rtl;
+    }
 </style></head>
 <body dir="rtl">
 <h1>Mia Miles - דוח מדדי ביצועים</h1>
 <p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
 <p><strong>תאריך הנתונים:</strong> 2026-09-12 (שבת)</p>
-
 <nav class="sticky-nav">
 <div class="nav-links">
 <a href="#band-overview">סקירת להקה</a>
@@ -560,12 +619,16 @@
 </details>
 <h2 id="summary">סיכום</h2>
 <p>הרמיקסים המורשים עבור '7 days a week' (רמיקס Dallin, רמיקס Mizmo, רמיקס Olli P ורמיקס AVE) תרמו סך משולב של 608 השמעות יומיות היום. נתון זה מהווה תוספת של 4.3% להשמעות היומיות של השיר המקורי.</p>
-
 <script>
 function toggleAllTracks(open) {
     document.querySelectorAll('details.track-accordion').forEach(function(d) {
         d.open = open;
     });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
 }
 </script></body>
 </html>

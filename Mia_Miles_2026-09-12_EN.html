@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8"/>
 <title>Mia Miles - Performance Metrics Report</title>
-
 <style>
     html {
         scroll-behavior: smooth;
@@ -235,12 +234,68 @@
         padding: 15px 20px;
         border-top: 1px solid #282828;
     }
+
+
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 20px 10px 30px;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+    }
 </style></head>
 <body>
 <h1>Mia Miles - Performance Metrics Report</h1>
 <p class="spotify-disclaimer"><em>Note: This report is Spotify-centric; unless explicitly stated, all metrics originate from Spotify (e.g. Cities, thermal maps, etc.)</em></p>
 <p><strong>Data Date:</strong> 2026-09-12 (Saturday)</p>
-
 <nav class="sticky-nav">
 <div class="nav-links">
 <a href="#band-overview">Band Overview</a>
@@ -551,11 +606,15 @@
 </details>
 <h2 id="summary">Summary</h2>
 <p>The licensed remixes for '7 days a week' (Dallin Remix and Mizmo Remix and Olli P Remix and AVE Remix) contributed a combined 608 daily streams today. This represents a 4.3% addition to the original track's daily streams.</p>
-
 <script>
 function toggleAllTracks(open) {
     document.querySelectorAll('details.track-accordion').forEach(function(d) {
         d.open = open;
     });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
 }
 </script></body></html>
