@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width,initial-scale=1.0">
+                <title>Reverse Psychology - Dashboard</title>
+                <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js"></script>
+                
+                <style>
+                    div::-webkit-scrollbar { height: 6px; }
+                    div::-webkit-scrollbar-track { background: #141721; border-radius: 4px; }
+                    div::-webkit-scrollbar-thumb { background: #2d303e; border-radius: 4px; }
+                    div::-webkit-scrollbar-thumb:hover { background: #3d4254; }
+
+                    /* Sticky Navigation Bar */
+                    .dashboard-sticky-nav {
+                        position: sticky;
+                        top: 10px;
+                        z-index: 1000;
+                        background: rgba(14, 17, 23, 0.94);
+                        backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
+                        border: 1px solid #2d303e;
+                        border-radius: 12px;
+                        padding: 10px 16px;
+                        margin-bottom: 25px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 12px;
+                        flex-wrap: wrap;
+                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+                    }
+                    .nav-links-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        flex-wrap: wrap;
+                    }
+                    .nav-btn {
+                        background: #141721;
+                        color: #FFD700 !important;
+                        border: 1px solid #2d303e;
+                        padding: 7px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-decoration: none;
+                        transition: all 0.2s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .nav-btn:hover {
+                        background: #FFD700;
+                        color: #000 !important;
+                        border-color: #FFD700;
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+                    }
+                    .nav-controls {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .ctrl-btn {
+                        background: #1a1510;
+                        color: #FF7A00;
+                        border: 1px solid #FF7A00;
+                        padding: 6px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .ctrl-btn:hover {
+                        background: #FF7A00;
+                        color: #000;
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 10px rgba(255, 122, 0, 0.3);
+                    }
+
+                    /* Accordion Styles */
+                    details.dashboard-accordion {
+                        background: #0e1117;
+                        border: 1px solid #2d303e;
+                        border-radius: 10px;
+                        margin-top: 25px;
+                        margin-bottom: 25px;
+                        overflow: hidden;
+                        transition: border-color 0.2s ease;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+                        scroll-margin-top: 80px;
+                    }
+                    details.dashboard-accordion[open] {
+                        border-color: #3e4459;
+                    }
+                    summary.dashboard-summary {
+                        padding: 14px 18px;
+                        cursor: pointer;
+                        user-select: none;
+                        list-style: none;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #141721;
+                        font-size: 15px;
+                        font-weight: 700;
+                        color: #ffffff;
+                        transition: background 0.2s ease;
+                    }
+                    summary.dashboard-summary::-webkit-details-marker {
+                        display: none;
+                    }
+                    summary.dashboard-summary:hover {
+                        background: #1c202d;
+                    }
+                    summary.dashboard-summary::after {
+                        content: "＋";
+                        color: #FF7A00;
+                        font-weight: 900;
+                        font-size: 18px;
+                        margin-left: 10px;
+                        transition: transform 0.2s ease;
+                    }
+                    details.dashboard-accordion[open] > summary.dashboard-summary::after {
+                        content: "−";
+                        color: #FF7A00;
+                    }
+                    .summary-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .accordion-badge {
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: #a3a8b8;
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid #2d303e;
+                        padding: 3px 8px;
+                        border-radius: 12px;
+                    }
+                    .accordion-content {
+                        padding: 15px;
+                        background: #0e1117;
+                    }
+
+                    /* Mobile Nav Toggle Button (Hidden on Desktop) */
+                    .mobile-nav-toggle {
+                        display: none;
+                        background: #141721;
+                        color: #FFD700;
+                        border: 1px solid #2d303e;
+                        padding: 7px 16px;
+                        border-radius: 20px;
+                        font-size: 13px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        align-items: center;
+                        gap: 8px;
+                        user-select: none;
+                        transition: all 0.2s ease;
+                    }
+                    .mobile-nav-toggle:hover, .mobile-nav-toggle:active {
+                        background: #1c202d;
+                        border-color: #FFD700;
+                    }
+
+                    /* Hero Section and Cross Platform Scroll Margins */
+                    .dashboard-hero-section, .cross-platform-wrapper {
+                        scroll-margin-top: 80px;
+                    }
+
+                    @media (max-width: 768px) {
+                        body { padding: 10px !important; }
+
+                        /* Sticky Nav Mobile Optimization */
+                        .dashboard-sticky-nav {
+                            top: 6px;
+                            padding: 8px 12px;
+                            flex-direction: column;
+                            align-items: stretch;
+                            gap: 0;
+                            border-radius: 10px;
+                        }
+                        .mobile-nav-toggle {
+                            display: inline-flex;
+                            justify-content: center;
+                            width: 100%;
+                            box-sizing: border-box;
+                        }
+                        .nav-links-container, .nav-controls {
+                            display: none;
+                        }
+
+                        /* When Menu is Toggled Open on Mobile */
+                        .dashboard-sticky-nav.nav-open {
+                            background: rgba(14, 17, 23, 0.98);
+                            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
+                        }
+                        .dashboard-sticky-nav.nav-open .nav-links-container {
+                            display: flex;
+                            flex-direction: column;
+                            width: 100%;
+                            gap: 8px;
+                            margin-top: 10px;
+                            padding-top: 10px;
+                            border-top: 1px solid #2d303e;
+                        }
+                        .dashboard-sticky-nav.nav-open .nav-controls {
+                            display: flex;
+                            width: 100%;
+                            gap: 8px;
+                            margin-top: 10px;
+                            padding-top: 10px;
+                            border-top: 1px solid #2d303e;
+                        }
+                        .dashboard-sticky-nav.nav-open .nav-btn,
+                        .dashboard-sticky-nav.nav-open .ctrl-btn {
+                            width: 100%;
+                            justify-content: center;
+                            box-sizing: border-box;
+                            padding: 9px 12px;
+                            font-size: 13px;
+                        }
+
+                        summary.dashboard-summary {
+                            padding: 12px 14px;
+                            font-size: 14px;
+                        }
+                    }
+                </style>
+            
+            </head>
+            <body style="background:#000; padding:20px; font-family:sans-serif;">
+                <div style="max-width:1200px; margin:0 auto;">
+                    <div style="margin-bottom:20px;"><a href="../lobby_temper_city.html" style="color:#1DB954; text-decoration:none; font-size:16px; font-weight:bold;">⬅ Back to Temper City Hub</a></div>
+            <nav class="dashboard-sticky-nav" id="dashboard-sticky-nav">
+                <button type="button" id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle Navigation">
+                    <span class="nav-toggle-icon">☰</span> <span class="nav-toggle-text">Menu</span>
+                </button>
+                <div class="nav-links-container" id="nav-links-container">
+                    <a href="#sec-spotify" onclick="jumpToDashboardSection('sec-spotify'); return false;" class="nav-btn">🎵 Spotify Overview</a>
+                        <a href="#sec-audience" onclick="jumpToDashboardSection('sec-audience'); return false;" class="nav-btn">👥 Audience Reach</a>
+                        <a href="#sec-cross-platform" onclick="jumpToDashboardSection('sec-cross-platform'); return false;" class="nav-btn">🌐 Cross-Platform Charts</a>
+                </div>
+                <div class="nav-controls" id="nav-controls">
+                    <button type="button" onclick="toggleAllDashboard(true)" class="ctrl-btn expand-btn">➕ Expand All</button>
+                    <button type="button" onclick="toggleAllDashboard(false)" class="ctrl-btn collapse-btn">➖ Collapse All</button>
+                </div>
+            </nav>
+            
+            <section id="sec-spotify" class="dashboard-hero-section">
+                
+                
+                
+            <div style='text-align: center; margin: 30px 0;'>
+                <a href="../weekly_charts_reverse_psychology.html" style='background-color: #1DB954; color: white; padding: 15px 40px; text-decoration: none; font-size: 1.5em; border-radius: 50px; display: inline-block; font-weight: bold; box-shadow: 0px 4px 15px rgba(29, 185, 84, 0.4); border: 2px solid #fff;'>
+                    📊 Click Here to See All Weekly Charts
+                </a>
+            </div>
+            
+                
+    <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px;color:white;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2d303e; padding-bottom:10px; margin-bottom:20px;">
+            <div>
+                <h3 style="color:#1DB954;margin:0;">📈 Streaming Metrics & Momentum</h3>
+                <div style="color:#a3a8b8; font-size:12px; margin-top:5px;">Last Updated: 18/09/2026</div>
+            </div>
+            
+        <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; justify-content: flex-end;">
+            
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <a href="../global_rank_history_reverse_psychology.html" style="text-decoration: none;" title="All-Platform Worldwide Digital Artist Ranking">
+                <div style="background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%); color: #0e1117; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 800; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); border: 2px solid #FFE066; transition: transform 0.2s;">
+                    #53
+                </div>
+            </a>
+            <div style="color: #FFD700; font-size: 11px; font-weight: bold; margin-top: 5px; font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.5px;">
+                🌍 All-Platform Global
+            </div>
+            <div style="color: #1DB954; font-size: 10px; font-weight: bold; margin-top: 2px; font-family: sans-serif;">
+                ▲ +2 • 627 pts
+            </div>
+            <a href="../global_rank_history_reverse_psychology.html" style="color: #a0a0a0; font-size: 10px; text-decoration: none; margin-top: 2px; font-family: sans-serif; letter-spacing: 0.5px;">
+                View History 📈
+            </a>
+        </div>
+        
+            
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <a href="../global_rank_history_reverse_psychology.html" style="text-decoration: none;" title="Spotify Global Rank">
+                <div style="background-color: #2e77d0; color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s;">
+                    #209
+                </div>
+            </a>
+            <div style="color: #2e77d0; font-size: 11px; font-weight: bold; margin-top: 5px; font-family: sans-serif;">
+                Spotify Rank
+            </div>
+            <a href="../global_rank_history_reverse_psychology.html" style="color: #a0a0a0; font-size: 10px; text-decoration: none; margin-top: 2px; font-family: sans-serif; letter-spacing: 0.5px;">
+                View History 📈
+            </a>
+        </div>
+        
+        </div>
+        
+        </div>
+        
+        <div style="display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap;">
+            
+            <div style="background:#1a1c24; padding:15px; border-radius:8px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e;">
+                <div style="color:#a3a8b8; font-size:12px; margin-bottom:5px;">Total Streams</div>
+                <div style="font-size:22px; font-weight:bold; color:white;">3,503,390</div>
+                <div style="font-size:13px; color:#1DB954; margin-top:5px;">Daily: 185,474</div>
+                <div style="font-size:12px; margin-top:2px;">🔻 4,902</div>
+            </div>
+            
+            <div style="background:#1a1c24; padding:15px; border-radius:8px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e;">
+                <div style="color:#a3a8b8; font-size:12px; margin-bottom:5px;">Monthly Listeners</div>
+                <div style="font-size:22px; font-weight:bold; color:white;">31,060,824</div>
+                <div style="font-size:13px; margin-top:5px;">▲ +14,010</div>
+            </div>
+            
+            <div style="background:#1a1c24; padding:15px; border-radius:8px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e;">
+                <div style="color:#a3a8b8; font-size:12px; margin-bottom:5px;">Followers</div>
+                <div style="font-size:22px; font-weight:bold; color:white;">292,541</div>
+                <div style="font-size:13px; margin-top:5px;">▲ +3,315</div>
+            </div>
+            
+            <div style="background:#1a1c24; padding:15px; border-radius:8px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e;">
+                <div style="color:#a3a8b8; font-size:12px; margin-bottom:5px;">Streams Velocity Ratio</div>
+                <div style="font-size:22px; font-weight:bold; color:#FFD700;">-0.3499</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:5px;">(Δ Streams / Δ Listeners)</div>
+            </div>
+            
+            <div style="background:#1a1c24; padding:15px; border-radius:8px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e;">
+                <div style="color:#a3a8b8; font-size:12px; margin-bottom:5px;">Followers Conversion</div>
+                <div style="font-size:22px; font-weight:bold; color:#1DB954;">0.2366</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:5px;">(Δ Followers / Δ Listeners)</div>
+            </div>
+            
+        </div>
+    </div>
+    
+                
+        <div style="background:#0e1117; padding:20px; border-radius:12px; border:1px solid #2d303e; margin-bottom:25px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <span style="font-size:16px; font-weight:bold; color:#1DB954;">👥 Monthly Listeners Market Benchmark vs. Global Indices</span>
+                    <span style="background:rgba(168,85,247,0.18); color:#a855f7; border:1px solid rgba(168,85,247,0.35); padding:4px 12px; border-radius:12px; font-size:12px; font-weight:bold;">👥 Active Tiers: Peer Cohort (#159-#259) & Top 250 (Rank #209)</span>
+                </div>
+                <div style="display:inline-flex; align-items:center; gap:8px;">
+                    <div style="display:inline-flex; background:#141721; border:1px solid #2d303e; border-radius:20px; padding:3px; gap:4px;">
+                        <button type="button" id="btn-tab-abs" onclick="switchBenchmarkTab('abs')" style="background:#1DB954; color:#000; border:none; padding:5px 14px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:all 0.2s ease;">
+                            Absolute (Δ)
+                        </button>
+                        <button type="button" id="btn-tab-pct" onclick="switchBenchmarkTab('pct')" style="background:transparent; color:#a3a8b8; border:none; padding:5px 14px; border-radius:16px; font-size:12px; font-weight:bold; cursor:pointer; transition:all 0.2s ease;">
+                            Percentage (%)
+                        </button>
+                    </div>
+                    <span style="display:inline-flex; align-items:center; gap:6px; color:#38bdf8; font-size:12px; font-weight:bold; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); padding:5px 12px; border-radius:15px;">
+                        💡 Click legend to toggle
+                    </span>
+                </div>
+            </div>
+            
+            <div id="benchmark-tab-abs" style="display:block;">
+                <div>                            <div id="a01e2ecb-9dca-41d5-8ce3-7fc8a58e049c" class="plotly-graph-div" style="height:450px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("a01e2ecb-9dca-41d5-8ce3-7fc8a58e049c")) {                    Plotly.newPlot(                        "a01e2ecb-9dca-41d5-8ce3-7fc8a58e049c",                        [{"customdata":[207,207,207,211,211],"hovertemplate":"\u003cb\u003e\ud83c\udfb5 Temper City\u003c\u002fb\u003e\u003cbr\u003eDaily Listeners \u0394: %{y:+,d}\u003cbr\u003eGlobal Rank: #%{customdata}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#1DB954","width":3.5},"marker":{"color":"#1DB954","line":{"color":"#ffffff","width":1.5},"size":8},"mode":"lines+markers","name":"\ud83c\udfb5 Temper City","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAAIAF8MAAAAAAUFT2wAAAAAAgVf7AAAAAAPjUBcEAAAAAAIBfwA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udc65 Peer Cohort (#159-#259)\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Listeners \u0394: %{y:+,d}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#a855f7","width":2.5},"marker":{"color":"#a855f7","size":6},"mode":"lines+markers","name":"\ud83d\udc65 Peer Cohort (#159-#259)","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAAAAuwMAAAAAAAC7AwAAAAAAAUIrAAAAAAICXwMAAAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83c\udf10 Top 250 Index Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Listeners \u0394: %{y:+,d}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#38bdf8","width":2},"marker":{"color":"#38bdf8","size":6},"mode":"lines+markers","name":"\ud83c\udf10 Top 250 Index Avg","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAAIC\u002fy8AAAAAAgL\u002fLwAAAAAAAiMLAAAAAAABRxsAAAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udcca Top 500 Market Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Listeners \u0394: %{y:+,d}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2},"marker":{"color":"#f59e0b","size":6},"mode":"lines+markers","name":"\ud83d\udcca Top 500 Market Avg","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAAAAgxMAAAAAAACDEwAAAAAAAL7HAAAAAAACtt8AAAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\u2b50 Top 100 Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Listeners \u0394: %{y:+,d}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#facc15","dash":"dot","width":2},"marker":{"color":"#facc15","size":6},"mode":"lines+markers","name":"\u2b50 Top 100 Avg","visible":"legendonly","x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAAEAM3cAAAAAAQAzdwAAAAADAO9PAAAAAAACM1cAAAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udd25 Top 50 Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Listeners \u0394: %{y:+,d}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#fb923c","dash":"dot","width":2},"marker":{"color":"#fb923c","size":6},"mode":"lines+markers","name":"\ud83d\udd25 Top 50 Avg","visible":"legendonly","x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAAMD65sAAAAAAwPrmwAAAAACAht7AAAAAAEDl3cAAAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udc51 Top 20 Elite Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Listeners \u0394: %{y:+,d}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#ef4444","dash":"dashdot","width":2},"marker":{"color":"#ef4444","size":6},"mode":"lines+markers","name":"\ud83d\udc51 Top 20 Elite Avg","visible":"legendonly","x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"AAAAADAk98AAAAAAMCT3wAAAAADgw\u002fPAAAAAAJBq8MAAAAAAAAAAAA=="},"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0","family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif"},"margin":{"l":70,"r":40,"t":55,"b":40},"hoverlabel":{"font":{"size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0,"bgcolor":"rgba(20,23,33,0.85)","bordercolor":"#2d303e","borderwidth":1},"xaxis":{"title":{"font":{"color":"#a3a8b8","size":12},"text":"Date"},"tickfont":{"color":"#a3a8b8"},"type":"category","showgrid":true,"gridcolor":"#222634","linecolor":"#2d303e"},"yaxis":{"title":{"font":{"color":"#a3a8b8","size":12},"text":"Daily Listeners Net Change (\u0394)"},"tickfont":{"color":"#a3a8b8"},"showgrid":true,"gridcolor":"#222634","linecolor":"#2d303e","zerolinecolor":"#484f58","zerolinewidth":1.5,"tickformat":"+,d"},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"#141721","height":450,"hovermode":"x unified"},                        {"responsive": true, "displaylogo": false, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+            </div>
+            <div id="benchmark-tab-pct" style="display:none;">
+                <div>                            <div id="f7a4ec9d-85c0-49a8-8b2a-2eb7632cab8e" class="plotly-graph-div" style="height:450px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("f7a4ec9d-85c0-49a8-8b2a-2eb7632cab8e")) {                    Plotly.newPlot(                        "f7a4ec9d-85c0-49a8-8b2a-2eb7632cab8e",                        [{"customdata":[207,207,207,211,211],"hovertemplate":"\u003cb\u003e\ud83c\udfb5 Temper City\u003c\u002fb\u003e\u003cbr\u003eDaily Listeners Change: %{y:.2f}%\u003cbr\u003eGlobal Rank: #%{customdata}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#1DB954","width":3.5},"marker":{"color":"#1DB954","line":{"color":"#ffffff","width":1.5},"size":8},"mode":"lines+markers","name":"\ud83c\udfb5 Temper City","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"kwXwcQWpyr+xGRVt\u002fJ3Sv5vn\u002fjkTXdm\u002fh398kgBU4r\u002fmXx8P0Zg6vw=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udc65 Peer Cohort (#159-#259)\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Change: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#a855f7","width":2.5},"marker":{"color":"#a855f7","size":6},"mode":"lines+markers","name":"\ud83d\udc65 Peer Cohort (#159-#259)","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"eekmMQisnL956SYxCKycv\u002fyp8dJNYlC\u002fObTIdr6fmr8AAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83c\udf10 Top 250 Index Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Change: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#38bdf8","width":2},"marker":{"color":"#38bdf8","size":6},"mode":"lines+markers","name":"\ud83c\udf10 Top 250 Index Avg","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"WmQ730+Nl79aZDvfT42Xv3npJjEIrIy\u002f2\u002fl+arx0k78AAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udcca Top 500 Market Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Change: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2},"marker":{"color":"#f59e0b","size":6},"mode":"lines+markers","name":"\ud83d\udcca Top 500 Market Avg","visible":true,"x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"mpmZmZmZmb+amZmZmZmZv\u002fp+arx0k3i\u002fexSuR+F6hL8AAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\u2b50 Top 100 Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Change: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#facc15","dash":"dot","width":2},"marker":{"color":"#facc15","size":6},"mode":"lines+markers","name":"\u2b50 Top 100 Avg","visible":"legendonly","x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"2\u002fl+arx0o7\u002fb+X5qvHSjv\u002fp+arx0k5i\u002fuB6F61G4nr8AAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udd25 Top 50 Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Change: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#fb923c","dash":"dot","width":2},"marker":{"color":"#fb923c","size":6},"mode":"lines+markers","name":"\ud83d\udd25 Top 50 Avg","visible":"legendonly","x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"iUFg5dAiq7+JQWDl0CKrv\u002fyp8dJNYqC\u002fTDeJQWDloL8AAAAAAAAAAA=="},"type":"scatter"},{"hovertemplate":"\u003cb\u003e\ud83d\udc51 Top 20 Elite Avg\u003c\u002fb\u003e\u003cbr\u003eAvg Daily Change: %{y:.2f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#ef4444","dash":"dashdot","width":2},"marker":{"color":"#ef4444","size":6},"mode":"lines+markers","name":"\ud83d\udc51 Top 20 Elite Avg","visible":"legendonly","x":["2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17"],"y":{"dtype":"f8","bdata":"+n5qvHSTuL\u002f6fmq8dJO4v3Noke18P7W\u002f9P3UeOkmsb8AAAAAAAAAAA=="},"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0","family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif"},"margin":{"l":70,"r":40,"t":55,"b":40},"hoverlabel":{"font":{"size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0,"bgcolor":"rgba(20,23,33,0.85)","bordercolor":"#2d303e","borderwidth":1},"xaxis":{"title":{"font":{"color":"#a3a8b8","size":12},"text":"Date"},"tickfont":{"color":"#a3a8b8"},"type":"category","showgrid":true,"gridcolor":"#222634","linecolor":"#2d303e"},"yaxis":{"title":{"font":{"color":"#a3a8b8","size":12},"text":"Daily Listeners Change (%)"},"tickfont":{"color":"#a3a8b8"},"showgrid":true,"gridcolor":"#222634","linecolor":"#2d303e","zerolinecolor":"#484f58","zerolinewidth":1.5,"tickformat":".2f","ticksuffix":"%","hoverformat":".2f"},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"#141721","height":450,"hovermode":"x unified"},                        {"responsive": true, "displaylogo": false, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+            </div>
+        </div>
+
+        <script>
+        function switchBenchmarkTab(tab) {
+            var tabAbs = document.getElementById('benchmark-tab-abs');
+            var tabPct = document.getElementById('benchmark-tab-pct');
+            var btnAbs = document.getElementById('btn-tab-abs');
+            var btnPct = document.getElementById('btn-tab-pct');
+
+            if (tab === 'abs') {
+                if (tabAbs) tabAbs.style.display = 'block';
+                if (tabPct) tabPct.style.display = 'none';
+                if (btnAbs) { btnAbs.style.background = '#1DB954'; btnAbs.style.color = '#000'; }
+                if (btnPct) { btnPct.style.background = 'transparent'; btnPct.style.color = '#a3a8b8'; }
+            } else {
+                if (tabAbs) tabAbs.style.display = 'none';
+                if (tabPct) tabPct.style.display = 'block';
+                if (btnAbs) { btnAbs.style.background = 'transparent'; btnAbs.style.color = '#a3a8b8'; }
+                if (btnPct) { btnPct.style.background = '#1DB954'; btnPct.style.color = '#000'; }
+            }
+            window.dispatchEvent(new Event('resize'));
+            setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 60);
+        }
+        </script>
+        
+                <div style="background:#0e1117;padding:20px;border-radius:10px;color:white;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">📍 Top 5 Cities (Listeners)</h3><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇧🇷</div><div><div style="font-size:15px;font-weight:bold;">São Paulo</div><div style="color:#1DB954;font-weight:bold;">321,747</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇬🇧</div><div><div style="font-size:15px;font-weight:bold;">London</div><div style="color:#1DB954;font-weight:bold;">320,206</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇦🇺</div><div><div style="font-size:15px;font-weight:bold;">Sydney</div><div style="color:#1DB954;font-weight:bold;">301,491</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇲🇽</div><div><div style="font-size:15px;font-weight:bold;">Mexico City</div><div style="color:#1DB954;font-weight:bold;">277,047</div></div></div><div style="flex:1 1 150px;display:flex;align-items:center;background:#1a1c24;padding:12px;border-radius:8px;border:1px solid #2d303e;"><div style="font-size:28px;margin-right:15px;">🇦🇺</div><div><div style="font-size:15px;font-weight:bold;">Melbourne</div><div style="color:#1DB954;font-weight:bold;">253,859</div></div></div></div></div>
+                <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">👥 Monthly Listeners & Daily Velocity</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="dd5ed23b-2a4e-4a7b-9fa1-9715f73332b9" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("dd5ed23b-2a4e-4a7b-9fa1-9715f73332b9")) {                    Plotly.newPlot(                        "dd5ed23b-2a4e-4a7b-9fa1-9715f73332b9",                        [{"marker":{"color":["#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#388bfd","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#1DB954","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#388bfd","#1DB954"]},"name":"Daily Net Change","opacity":0.7,"x":["2026-02-19T00:00:00.000000000","2026-02-20T00:00:00.000000000","2026-02-21T00:00:00.000000000","2026-02-22T00:00:00.000000000","2026-02-23T00:00:00.000000000","2026-02-24T00:00:00.000000000","2026-02-25T00:00:00.000000000","2026-02-26T00:00:00.000000000","2026-02-27T00:00:00.000000000","2026-02-28T00:00:00.000000000","2026-03-01T00:00:00.000000000","2026-03-02T00:00:00.000000000","2026-03-03T00:00:00.000000000","2026-03-04T00:00:00.000000000","2026-03-05T00:00:00.000000000","2026-03-06T00:00:00.000000000","2026-03-07T00:00:00.000000000","2026-03-08T00:00:00.000000000","2026-03-09T00:00:00.000000000","2026-03-10T00:00:00.000000000","2026-03-11T00:00:00.000000000","2026-03-12T00:00:00.000000000","2026-03-13T00:00:00.000000000","2026-03-14T00:00:00.000000000","2026-03-15T00:00:00.000000000","2026-03-16T00:00:00.000000000","2026-03-17T00:00:00.000000000","2026-03-18T00:00:00.000000000","2026-03-19T00:00:00.000000000","2026-03-20T00:00:00.000000000","2026-03-21T00:00:00.000000000","2026-03-22T00:00:00.000000000","2026-03-23T00:00:00.000000000","2026-03-24T00:00:00.000000000","2026-03-25T00:00:00.000000000","2026-03-26T00:00:00.000000000","2026-03-27T00:00:00.000000000","2026-03-28T00:00:00.000000000","2026-03-29T00:00:00.000000000","2026-03-30T00:00:00.000000000","2026-03-31T00:00:00.000000000","2026-04-01T00:00:00.000000000","2026-04-02T00:00:00.000000000","2026-04-03T00:00:00.000000000","2026-04-04T00:00:00.000000000","2026-04-05T00:00:00.000000000","2026-04-06T00:00:00.000000000","2026-04-07T00:00:00.000000000","2026-04-08T00:00:00.000000000","2026-04-09T00:00:00.000000000","2026-04-10T00:00:00.000000000","2026-04-11T00:00:00.000000000","2026-04-12T00:00:00.000000000","2026-04-13T00:00:00.000000000","2026-04-14T00:00:00.000000000","2026-04-15T00:00:00.000000000","2026-04-16T00:00:00.000000000","2026-04-17T00:00:00.000000000","2026-04-18T00:00:00.000000000","2026-04-19T00:00:00.000000000","2026-04-20T00:00:00.000000000","2026-04-21T00:00:00.000000000","2026-04-22T00:00:00.000000000","2026-04-23T00:00:00.000000000","2026-04-24T00:00:00.000000000","2026-04-25T00:00:00.000000000","2026-04-26T00:00:00.000000000","2026-04-27T00:00:00.000000000","2026-04-28T00:00:00.000000000","2026-04-29T00:00:00.000000000","2026-04-30T00:00:00.000000000","2026-05-01T00:00:00.000000000","2026-05-02T00:00:00.000000000","2026-05-03T00:00:00.000000000","2026-05-04T00:00:00.000000000","2026-05-05T00:00:00.000000000","2026-05-06T00:00:00.000000000","2026-05-07T00:00:00.000000000","2026-05-08T00:00:00.000000000","2026-05-09T00:00:00.000000000","2026-05-10T00:00:00.000000000","2026-05-11T00:00:00.000000000","2026-05-12T00:00:00.000000000","2026-05-13T00:00:00.000000000","2026-05-14T00:00:00.000000000","2026-05-15T00:00:00.000000000","2026-05-16T00:00:00.000000000","2026-05-17T00:00:00.000000000","2026-05-18T00:00:00.000000000","2026-05-19T00:00:00.000000000","2026-05-20T00:00:00.000000000","2026-05-21T00:00:00.000000000","2026-05-22T00:00:00.000000000","2026-05-23T00:00:00.000000000","2026-05-24T00:00:00.000000000","2026-05-25T00:00:00.000000000","2026-05-26T00:00:00.000000000","2026-05-27T00:00:00.000000000","2026-05-28T00:00:00.000000000","2026-05-29T00:00:00.000000000","2026-05-30T00:00:00.000000000","2026-05-31T00:00:00.000000000","2026-06-01T00:00:00.000000000","2026-06-02T00:00:00.000000000","2026-06-03T00:00:00.000000000","2026-06-04T00:00:00.000000000","2026-06-05T00:00:00.000000000","2026-06-06T00:00:00.000000000","2026-06-07T00:00:00.000000000","2026-06-08T00:00:00.000000000","2026-06-09T00:00:00.000000000","2026-06-10T00:00:00.000000000","2026-06-11T00:00:00.000000000","2026-06-12T00:00:00.000000000","2026-06-13T00:00:00.000000000","2026-06-14T00:00:00.000000000","2026-06-15T00:00:00.000000000","2026-06-16T00:00:00.000000000","2026-06-17T00:00:00.000000000","2026-06-18T00:00:00.000000000","2026-06-19T00:00:00.000000000","2026-06-20T00:00:00.000000000","2026-06-21T00:00:00.000000000","2026-06-22T00:00:00.000000000","2026-06-23T00:00:00.000000000","2026-06-24T00:00:00.000000000","2026-06-25T00:00:00.000000000","2026-06-26T00:00:00.000000000","2026-06-27T00:00:00.000000000","2026-06-28T00:00:00.000000000","2026-06-29T00:00:00.000000000","2026-06-30T00:00:00.000000000","2026-07-01T00:00:00.000000000","2026-07-02T00:00:00.000000000","2026-07-03T00:00:00.000000000","2026-07-04T00:00:00.000000000","2026-07-05T00:00:00.000000000","2026-07-06T00:00:00.000000000","2026-07-07T00:00:00.000000000","2026-07-08T00:00:00.000000000","2026-07-09T00:00:00.000000000","2026-07-10T00:00:00.000000000","2026-07-11T00:00:00.000000000","2026-07-12T00:00:00.000000000","2026-07-13T00:00:00.000000000","2026-07-14T00:00:00.000000000","2026-07-15T00:00:00.000000000","2026-07-16T00:00:00.000000000","2026-07-17T00:00:00.000000000","2026-07-18T00:00:00.000000000","2026-07-19T00:00:00.000000000","2026-07-20T00:00:00.000000000","2026-07-21T00:00:00.000000000","2026-07-22T00:00:00.000000000","2026-07-23T00:00:00.000000000","2026-07-24T00:00:00.000000000","2026-07-25T00:00:00.000000000","2026-07-26T00:00:00.000000000","2026-07-27T00:00:00.000000000","2026-07-28T00:00:00.000000000","2026-07-29T00:00:00.000000000","2026-07-30T00:00:00.000000000","2026-07-31T00:00:00.000000000","2026-08-01T00:00:00.000000000","2026-08-02T00:00:00.000000000","2026-08-03T00:00:00.000000000","2026-08-04T00:00:00.000000000","2026-08-05T00:00:00.000000000","2026-08-06T00:00:00.000000000","2026-08-07T00:00:00.000000000","2026-08-08T00:00:00.000000000","2026-08-09T00:00:00.000000000","2026-08-10T00:00:00.000000000","2026-08-11T00:00:00.000000000","2026-08-12T00:00:00.000000000","2026-08-13T00:00:00.000000000","2026-08-14T00:00:00.000000000","2026-08-15T00:00:00.000000000","2026-08-16T00:00:00.000000000","2026-08-17T00:00:00.000000000","2026-08-18T00:00:00.000000000","2026-08-19T00:00:00.000000000","2026-08-20T00:00:00.000000000","2026-08-21T00:00:00.000000000","2026-08-22T00:00:00.000000000","2026-08-23T00:00:00.000000000","2026-08-24T00:00:00.000000000","2026-08-25T00:00:00.000000000","2026-08-26T00:00:00.000000000","2026-08-27T00:00:00.000000000","2026-08-28T00:00:00.000000000","2026-08-29T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-08-31T00:00:00.000000000","2026-09-01T00:00:00.000000000","2026-09-02T00:00:00.000000000","2026-09-03T00:00:00.000000000","2026-09-04T00:00:00.000000000","2026-09-05T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000","2026-09-08T00:00:00.000000000","2026-09-09T00:00:00.000000000","2026-09-10T00:00:00.000000000","2026-09-11T00:00:00.000000000","2026-09-12T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-14T00:00:00.000000000","2026-09-15T00:00:00.000000000","2026-09-16T00:00:00.000000000","2026-09-17T00:00:00.000000000","2026-09-18T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAgIjLQAAAAAAAiMtAAAAAAICIy0AAAAAAAIjLQAAAAAAAiMtAAAAAAGBs6kAAAAAAgAnsQAAAAABAxexAAAAAAGCe+0AAAAAAcA30QAAAAACQ+ftAAAAAAODJ+EAAAAAAcD7+QAAAAABAAABBAAAAALAS\u002f0AAAAAAQGr9QAAAAADwiflAAAAAAHAd+0AAAAAAYHr8QAAAAACIOQJBAAAAABg6AEEAAAAAyGcAQQAAAACYBABBAAAAAKDV\u002fUAAAAAAsNX9QAAAAADw7f5AAAAAAGB6AEEAAAAAaLsHQQAAAAB4xgpBAAAAAMDYCEEAAAAAIKoDQQAAAADwPgFBAAAAABDkAkEAAAAA0HQAQQAAAABYHwNBAAAAACDi\u002f0AAAAAAgEf+QAAAAACAif9AAAAAALCe9EAAAAAAcFD\u002fQAAAAABgnfxAAAAAAPB9+0AAAAAAwLz7QAAAAABYhwFBAAAAAEhTBEEAAAAA4CL\u002fQAAAAACATv9AAAAAAAAzAEEAAAAAqFwEQQAAAAAALgZBAAAAAEDCBkEAAAAACCQDQQAAAAAImgFBAAAAADilAkEAAAAAyDIGQQAAAAAYwQFBAAAAAMD3\u002fEAAAAAA4KwAQQAAAABYLwZBAAAAACD8AkEAAAAA+BsBQQAAAACYrAZBAAAAACi4A0EAAAAAMLIIQQAAAABwrwhBAAAAALCCBkEAAAAAuBkGQQAAAAAoYARBAAAAACBdCUEAAAAAkL4OQQAAAABoKw1BAAAAAETlIEEAAAAAQBMdQQAAAAA0mxpBAAAAAGzeGUEAAAAAbHgbQQAAAAB0jBZBAAAAAPzzFEEAAAAAOIwTQQAAAAA4bh1BAAAAAByoI0EAAAAAuI0hQQAAAACs5h5BAAAAALSJEUEAAAAA\u002fK4RQQAAAACkghFBAAAAANSJEEEAAAAA4FYNQQAAAACMCxBBAAAAAOjzEkEAAAAAOMMVQQAAAACYhRhBAAAAALDtF0EAAAAAwNYVQQAAAACgtxNBAAAAAGRKE0EAAAAARLMUQQAAAABkVhBBAAAAAGj2EEEAAAAAMEgCQQAAAABwEgdBAAAAAIB6BEEAAAAA0KADQQAAAADAowhBAAAAAJjDD0EAAAAAuJkQQQAAAACg1QlBAAAAACj3CUEAAAAAIKkMQQAAAABoJA1BAAAAACCuDkEAAAAAACEPQQAAAADYkw9BAAAAALh5B0EAAAAACHQCQQAAAACgCP9AAAAAADCzBEEAAAAA0BkDQQAAAAAwfgpBAAAAAOi7DUEAAAAAwKQHQQAAAABAMQVBAAAAAIDJA0EAAAAAyMEIQQAAAADo\u002fQNBAAAAAKjBAkEAAAAAVNIQQQAAAAAIQAdBAAAAADiWAkEAAAAA8OEBQQAAAACo6QRBAAAAAPjSBkEAAAAASLwIQQAAAAAABAhBAAAAAKgkBkEAAAAA0LIEQQAAAAB4+AJBAAAAAOAtA0EAAAAAIN4GQQAAAACgkwhBAAAAAEyJEEEAAAAAeGQRQQAAAAAoBARBAAAAAMgqB0EAAAAAYOwKQQAAAACQUwFBAAAAAOCq\u002f8AAAAAAgM3\u002fwAAAAAAg9PnAAAAAABCo9cAAAAAAMAD7wAAAAADAtwLBAAAAAOiuCUEAAAAA4EX\u002fQAAAAADAeOpAAAAAAABty0AAAAAA8HTxQAAAAADAKthAAAAAAACb2cAAAAAA0H30QAAAAAAgSedAAAAAAAApsEAAAAAAELbyQAAAAABAx\u002fJAAAAAAAAwwEAAAAAAQFXQQAAAAACAfN9AAAAAAOBR50AAAAAAMHfwQAAAAABQS\u002fVAAAAAALh+BEEAAAAAYCoDQQAAAACAq\u002fJAAAAAAFgBAkEAAAAAOLEQQQAAAABgmxFBAAAAAGAYFEEAAAAAJL0TQQAAAAAErxNBAAAAANgoF0EAAAAA0HbyQAAAAAAgJf1AAAAAAOBa9EAAAAAAwPb+QAAAAAAQEPxAAAAAAPCzAEEAAAAAQK36QAAAAAAgtfZAAAAAAHBeAUEAAAAAgNr5QAAAAADA4vZAAAAAADCF+EAAAAAAwEfsQAAAAAAA4+VAAAAAAACY7kAAAAAAgMPWQAAAAAAAAdTAAAAAAODU88AAAAAAwMP0wAAAAABgv\u002fDAAAAAAIDC9MAAAAAAoDDvwAAAAAAASfTAAAAAAGDq7sAAAAAAgL7vwAAAAACABfDAAAAAAFBU9sAAAAAAIFX+wAAAAAD41AXBAAAAAACAX8AAAAAAAF3LQA=="},"type":"bar","xaxis":"x","yaxis":"y"},{"line":{"color":"#ffffff","width":3},"marker":{"color":"#ffffff","size":6},"mode":"lines+markers","name":"Monthly Listeners","x":["2026-02-19T00:00:00.000000000","2026-02-20T00:00:00.000000000","2026-02-21T00:00:00.000000000","2026-02-22T00:00:00.000000000","2026-02-23T00:00:00.000000000","2026-02-24T00:00:00.000000000","2026-02-25T00:00:00.000000000","2026-02-26T00:00:00.000000000","2026-02-27T00:00:00.000000000","2026-02-28T00:00:00.000000000","2026-03-01T00:00:00.000000000","2026-03-02T00:00:00.000000000","2026-03-03T00:00:00.000000000","2026-03-04T00:00:00.000000000","2026-03-05T00:00:00.000000000","2026-03-06T00:00:00.000000000","2026-03-07T00:00:00.000000000","2026-03-08T00:00:00.000000000","2026-03-09T00:00:00.000000000","2026-03-10T00:00:00.000000000","2026-03-11T00:00:00.000000000","2026-03-12T00:00:00.000000000","2026-03-13T00:00:00.000000000","2026-03-14T00:00:00.000000000","2026-03-15T00:00:00.000000000","2026-03-16T00:00:00.000000000","2026-03-17T00:00:00.000000000","2026-03-18T00:00:00.000000000","2026-03-19T00:00:00.000000000","2026-03-20T00:00:00.000000000","2026-03-21T00:00:00.000000000","2026-03-22T00:00:00.000000000","2026-03-23T00:00:00.000000000","2026-03-24T00:00:00.000000000","2026-03-25T00:00:00.000000000","2026-03-26T00:00:00.000000000","2026-03-27T00:00:00.000000000","2026-03-28T00:00:00.000000000","2026-03-29T00:00:00.000000000","2026-03-30T00:00:00.000000000","2026-03-31T00:00:00.000000000","2026-04-01T00:00:00.000000000","2026-04-02T00:00:00.000000000","2026-04-03T00:00:00.000000000","2026-04-04T00:00:00.000000000","2026-04-05T00:00:00.000000000","2026-04-06T00:00:00.000000000","2026-04-07T00:00:00.000000000","2026-04-08T00:00:00.000000000","2026-04-09T00:00:00.000000000","2026-04-10T00:00:00.000000000","2026-04-11T00:00:00.000000000","2026-04-12T00:00:00.000000000","2026-04-13T00:00:00.000000000","2026-04-14T00:00:00.000000000","2026-04-15T00:00:00.000000000","2026-04-16T00:00:00.000000000","2026-04-17T00:00:00.000000000","2026-04-18T00:00:00.000000000","2026-04-19T00:00:00.000000000","2026-04-20T00:00:00.000000000","2026-04-21T00:00:00.000000000","2026-04-22T00:00:00.000000000","2026-04-23T00:00:00.000000000","2026-04-24T00:00:00.000000000","2026-04-25T00:00:00.000000000","2026-04-26T00:00:00.000000000","2026-04-27T00:00:00.000000000","2026-04-28T00:00:00.000000000","2026-04-29T00:00:00.000000000","2026-04-30T00:00:00.000000000","2026-05-01T00:00:00.000000000","2026-05-02T00:00:00.000000000","2026-05-03T00:00:00.000000000","2026-05-04T00:00:00.000000000","2026-05-05T00:00:00.000000000","2026-05-06T00:00:00.000000000","2026-05-07T00:00:00.000000000","2026-05-08T00:00:00.000000000","2026-05-09T00:00:00.000000000","2026-05-10T00:00:00.000000000","2026-05-11T00:00:00.000000000","2026-05-12T00:00:00.000000000","2026-05-13T00:00:00.000000000","2026-05-14T00:00:00.000000000","2026-05-15T00:00:00.000000000","2026-05-16T00:00:00.000000000","2026-05-17T00:00:00.000000000","2026-05-18T00:00:00.000000000","2026-05-19T00:00:00.000000000","2026-05-20T00:00:00.000000000","2026-05-21T00:00:00.000000000","2026-05-22T00:00:00.000000000","2026-05-23T00:00:00.000000000","2026-05-24T00:00:00.000000000","2026-05-25T00:00:00.000000000","2026-05-26T00:00:00.000000000","2026-05-27T00:00:00.000000000","2026-05-28T00:00:00.000000000","2026-05-29T00:00:00.000000000","2026-05-30T00:00:00.000000000","2026-05-31T00:00:00.000000000","2026-06-01T00:00:00.000000000","2026-06-02T00:00:00.000000000","2026-06-03T00:00:00.000000000","2026-06-04T00:00:00.000000000","2026-06-05T00:00:00.000000000","2026-06-06T00:00:00.000000000","2026-06-07T00:00:00.000000000","2026-06-08T00:00:00.000000000","2026-06-09T00:00:00.000000000","2026-06-10T00:00:00.000000000","2026-06-11T00:00:00.000000000","2026-06-12T00:00:00.000000000","2026-06-13T00:00:00.000000000","2026-06-14T00:00:00.000000000","2026-06-15T00:00:00.000000000","2026-06-16T00:00:00.000000000","2026-06-17T00:00:00.000000000","2026-06-18T00:00:00.000000000","2026-06-19T00:00:00.000000000","2026-06-20T00:00:00.000000000","2026-06-21T00:00:00.000000000","2026-06-22T00:00:00.000000000","2026-06-23T00:00:00.000000000","2026-06-24T00:00:00.000000000","2026-06-25T00:00:00.000000000","2026-06-26T00:00:00.000000000","2026-06-27T00:00:00.000000000","2026-06-28T00:00:00.000000000","2026-06-29T00:00:00.000000000","2026-06-30T00:00:00.000000000","2026-07-01T00:00:00.000000000","2026-07-02T00:00:00.000000000","2026-07-03T00:00:00.000000000","2026-07-04T00:00:00.000000000","2026-07-05T00:00:00.000000000","2026-07-06T00:00:00.000000000","2026-07-07T00:00:00.000000000","2026-07-08T00:00:00.000000000","2026-07-09T00:00:00.000000000","2026-07-10T00:00:00.000000000","2026-07-11T00:00:00.000000000","2026-07-12T00:00:00.000000000","2026-07-13T00:00:00.000000000","2026-07-14T00:00:00.000000000","2026-07-15T00:00:00.000000000","2026-07-16T00:00:00.000000000","2026-07-17T00:00:00.000000000","2026-07-18T00:00:00.000000000","2026-07-19T00:00:00.000000000","2026-07-20T00:00:00.000000000","2026-07-21T00:00:00.000000000","2026-07-22T00:00:00.000000000","2026-07-23T00:00:00.000000000","2026-07-24T00:00:00.000000000","2026-07-25T00:00:00.000000000","2026-07-26T00:00:00.000000000","2026-07-27T00:00:00.000000000","2026-07-28T00:00:00.000000000","2026-07-29T00:00:00.000000000","2026-07-30T00:00:00.000000000","2026-07-31T00:00:00.000000000","2026-08-01T00:00:00.000000000","2026-08-02T00:00:00.000000000","2026-08-03T00:00:00.000000000","2026-08-04T00:00:00.000000000","2026-08-05T00:00:00.000000000","2026-08-06T00:00:00.000000000","2026-08-07T00:00:00.000000000","2026-08-08T00:00:00.000000000","2026-08-09T00:00:00.000000000","2026-08-10T00:00:00.000000000","2026-08-11T00:00:00.000000000","2026-08-12T00:00:00.000000000","2026-08-13T00:00:00.000000000","2026-08-14T00:00:00.000000000","2026-08-15T00:00:00.000000000","2026-08-16T00:00:00.000000000","2026-08-17T00:00:00.000000000","2026-08-18T00:00:00.000000000","2026-08-19T00:00:00.000000000","2026-08-20T00:00:00.000000000","2026-08-21T00:00:00.000000000","2026-08-22T00:00:00.000000000","2026-08-23T00:00:00.000000000","2026-08-24T00:00:00.000000000","2026-08-25T00:00:00.000000000","2026-08-26T00:00:00.000000000","2026-08-27T00:00:00.000000000","2026-08-28T00:00:00.000000000","2026-08-29T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-08-31T00:00:00.000000000","2026-09-01T00:00:00.000000000","2026-09-02T00:00:00.000000000","2026-09-03T00:00:00.000000000","2026-09-04T00:00:00.000000000","2026-09-05T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000","2026-09-08T00:00:00.000000000","2026-09-09T00:00:00.000000000","2026-09-10T00:00:00.000000000","2026-09-11T00:00:00.000000000","2026-09-12T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-14T00:00:00.000000000","2026-09-15T00:00:00.000000000","2026-09-16T00:00:00.000000000","2026-09-17T00:00:00.000000000","2026-09-18T00:00:00.000000000"],"y":{"dtype":"i4","bdata":"rIoAAL3BAADN+AAA3i8BAO5mAQD+nQEAYXECAK1RAwDXNwQAvfEFAJQyBwAt8ggAy34KALJiDAC6Yg4A5VMQAIkqEgAowxMA\u002f3QVAKU8FwDWgxkAGYsbABKYHQClmB8A\u002f3UhAFpTIwA5QiUAhVEnAPJIKgDBoS0A2bwwAB0yMwD7WTUAfbY3ABfFOQACKTwAJCc+AJwLQAA0BEIAH05DACZDRQD8DEcA28RIAKeASgCSsUwA+ztPACkuUQARI1MAcSlVAAa1VwDGeloADlNdAI+3XwDQ6mEAdz9kANAFZwDzPWkAbw1rAAsjbQD26G8AekhyAPlrdACMQXcAkbh5ANfOfADF5H8AG7WCAFJ4hQBXBIgA+y+LAM0HjwA6rZIA3B+bAKxkogB5C6kAFIOvAC9htgBMBLwAS0HBAFkkxgBZJMYAZ\u002fjPAGf4zwASstcAfxTcAD6A4ADn4OQAXAPpADiu7AAbsfAAFW71AOPe+gBJAAEBtfsGAWVxDAFNXxEB5jEWAbdeGwFQdB8B6rEjAfD6JQE+3SgBjmwrAajgLQEg9TABk+00AQEUOQG1TjwBmo0\u002fAb4iQwFLx0YBD51KAQ+dSgGKj04BwX5RAULNUwHMvVUBMlRYAWy3WgEyB14Br75hAUezZAFvWWcBn9JpAdjqbAGVam8BysJxAV\u002f3dQFg33gBJzJ7AWVufQGaC4ABmguAASMjgwGjI4YBOOiIAZJ+iwGh3Y0BXUOQASEfkwGVMZYB6FOaAQatngGLLaEB5BKkAXBwpwHimqkBNKCnAVyjpQEaBKQBmamiAZb5oAGeop4Be9ihAdnMowGfoKQBedekAcjupQFzT6YBB+mlAeQwpwEt66cBVvunAbcmqQErU6oBi3OqAeC0qgHgtKoBb2+rAeJ2rAGXy60BbluwAbrAsgFy67MBnSu2AetXugHDvr4B28TDASS0yAHln80BG2rTAYiR1AHaY9YBiKnXAfSY2QH1WdsBc3DdAUcb3wGZhuABZ7LiAQ9Q5AE7vuUBjkbnAcwo6AHk1+gBpMzpAbIn6gGu1+kBYJroASRO5wEuQuYBBvbkAYH84wHxt+IBnsDhAarC4AFSwt8BDV3eAbt33AEcvdkBnrzZAVjz2QE="},"type":"scatter","xaxis":"x","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.94],"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Daily Net Change (Listeners \u002f Day)"},"showgrid":false},"yaxis2":{"anchor":"x","overlaying":"y","side":"right","title":{"text":"Total Monthly Listeners"},"showgrid":true,"gridcolor":"#2d303e"},"font":{"color":"#a3a8b8"},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":20,"r":20,"t":60,"b":20},"paper_bgcolor":"#1a1c24","plot_bgcolor":"#1a1c24","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div></div>
+                <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px;"><h3 style="color:#1DB954;margin-top:0;">📊 Streaming Velocity & Total Trends</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="39214a86-3919-409a-8542-592a658b0a49" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("39214a86-3919-409a-8542-592a658b0a49")) {                    Plotly.newPlot(                        "39214a86-3919-409a-8542-592a658b0a49",                        [{"marker":{"color":"#1DB954"},"name":"Daily Streams","opacity":0.6,"x":["2026-08-28T00:00:00.000000000","2026-08-29T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-08-31T00:00:00.000000000","2026-09-01T00:00:00.000000000","2026-09-02T00:00:00.000000000","2026-09-03T00:00:00.000000000","2026-09-04T00:00:00.000000000","2026-09-05T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000","2026-09-08T00:00:00.000000000","2026-09-09T00:00:00.000000000","2026-09-10T00:00:00.000000000","2026-09-11T00:00:00.000000000","2026-09-12T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-14T00:00:00.000000000","2026-09-15T00:00:00.000000000","2026-09-16T00:00:00.000000000","2026-09-17T00:00:00.000000000","2026-09-18T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAeCQFQQAAAADgJ\u002fZAAAAAAKBh9EAAAAAAQB\u002f1QAAAAABA0PRAAAAAADC690AAAAAAoF\u002f6QAAAAACIKQJBAAAAAADp\u002fEAAAAAA0BD7QAAAAAA47wBBAAAAACD9AEEAAAAA4DsJQQAAAAB4kQtBAAAAADi8EkEAAAAA+MYPQQAAAACA6ApBAAAAAMiDDkEAAAAAHJoQQQAAAABAPQdBAAAAABCkBkE="},"type":"bar","xaxis":"x","yaxis":"y"},{"line":{"color":"#ffffff","width":3},"marker":{"color":"#ffffff","size":6},"mode":"lines+markers","name":"Total Streams","x":["2026-08-28T00:00:00.000000000","2026-08-29T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-08-31T00:00:00.000000000","2026-09-01T00:00:00.000000000","2026-09-02T00:00:00.000000000","2026-09-03T00:00:00.000000000","2026-09-04T00:00:00.000000000","2026-09-05T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-07T00:00:00.000000000","2026-09-08T00:00:00.000000000","2026-09-09T00:00:00.000000000","2026-09-10T00:00:00.000000000","2026-09-11T00:00:00.000000000","2026-09-12T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-14T00:00:00.000000000","2026-09-15T00:00:00.000000000","2026-09-16T00:00:00.000000000","2026-09-17T00:00:00.000000000","2026-09-18T00:00:00.000000000"],"y":{"dtype":"i4","bdata":"NxMAAMa3AgBEGgQAXmAFAFKyBgBW\u002fwcA+XoJAPMgCwAkZg0AtDQPAMHlEACoAxMATCMVAMhKGAD3vBsABWwgAORkJAD0wScAbZIrAPS4LwCcoDIAHnU1AA=="},"type":"scatter","xaxis":"x","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.94],"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Daily Streams"},"showgrid":false},"yaxis2":{"anchor":"x","overlaying":"y","side":"right","title":{"text":"Total Streams"},"showgrid":true,"gridcolor":"#2d303e"},"font":{"color":"#a3a8b8"},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":20,"r":20,"t":60,"b":20},"paper_bgcolor":"#1a1c24","plot_bgcolor":"#1a1c24","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div></div>
+                <div style="background:#0e1117;padding:20px;border-radius:10px;margin-bottom:20px; border:1px solid #2d303e;"><h3 style="color:#1DB954;margin-top:0;margin-bottom:15px; font-size:18px;">⚡ Global Momentum Trackers (Interactive)</h3><div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="f3399c87-1ca9-4af3-8714-c1c1d7cb89a9" class="plotly-graph-div" style="height:380px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("f3399c87-1ca9-4af3-8714-c1c1d7cb89a9")) {                    Plotly.newPlot(                        "f3399c87-1ca9-4af3-8714-c1c1d7cb89a9",                        [{"line":{"color":"#FFD700","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Streams Vel","x":["2026-08-28","2026-08-29","2026-08-30","2026-08-31","2026-09-01","2026-09-02","2026-09-03","2026-09-04","2026-09-05","2026-09-06","2026-09-07","2026-09-08","2026-09-09","2026-09-10","2026-09-11","2026-09-12","2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17","2026-09-18"],"y":[0.0,0.0,-0.2736396674466072,-0.3154689202983401,-0.29290660249240286,-0.02599148390517593,0.18650843961722763,-0.012435444289080702,-0.17296847678305916,-0.2246178428400817,-0.011524807989406948,0.04649546662452823,-0.07484800924533627,-0.38253322470595513,-0.37397242958831683,-0.7875683452493876,-0.27969448069600683,-0.033648175756122445,0.303002567321454,0.02504314552957558,215.83469980723794,215.79733617320468],"type":"scatter","xaxis":"x","yaxis":"y"},{"line":{"color":"#1DB954","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Followers Vel","x":["2026-08-28","2026-08-29","2026-08-30","2026-08-31","2026-09-01","2026-09-02","2026-09-03","2026-09-04","2026-09-05","2026-09-06","2026-09-07","2026-09-08","2026-09-09","2026-09-10","2026-09-11","2026-09-12","2026-09-13","2026-09-14","2026-09-15","2026-09-16","2026-09-17","2026-09-18"],"y":[0.0,0.0,0.006315859345181793,0.016859501505937804,0.02869839733555289,0.031139347660102113,0.04507732998097059,0.0036380956757973426,-0.012734947733520857,-0.04468651217344536,-0.02353151224031312,-0.022410872316387494,-0.023050267486537462,-0.02135680647155233,-0.02415337617691002,-0.024980852713998695,-0.027691976527530724,-0.025226037663286866,-0.02042899623110997,-0.013994654396120854,-3.9833589059298213,-3.9003469015779726],"type":"scatter","xaxis":"x2","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.46],"gridcolor":"#333"},"yaxis":{"anchor":"x","domain":[0.0,1.0],"gridcolor":"#333"},"xaxis2":{"anchor":"y2","domain":[0.54,1.0],"gridcolor":"#333"},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"gridcolor":"#333"},"annotations":[{"font":{"size":16},"showarrow":false,"text":"Streams Velocity Trend","x":0.23,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Followers Conversion Trend","x":0.77,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"font":{"color":"#a3a8b8"},"margin":{"l":30,"r":30,"t":50,"b":80},"paper_bgcolor":"#0e1117","plot_bgcolor":"#0e1117","height":380,"showlegend":false,"sliders":[{"active":1,"bgcolor":"#1a1c24","bordercolor":"#2d303e","currentvalue":{"prefix":"Smoothing: "},"font":{"color":"#a3a8b8"},"pad":{"t":50},"steps":[{"args":[{"y":[[0.0,0.0,-0.8209190023398217,-0.12548775855519873,0.06768695341781189,-0.02017364657814096,0.512012012012012,-0.5291446983011131,-0.5017727440600763,0.3570639138409444,0.1101344062509111,-0.3277119202182708,-0.006966513768649122,-0.8129212401309455,-0.3020295348653558,-1.2477542607518612,0.7107003535291966,0.43610937995429744,-0.237802031519132,-0.12317791184643857,647.8650793650794,-0.34989293361884366],[0.0,0.0,0.01894757803554538,0.031630926482268035,0.03551668748884526,0.026270429009193054,0.07344487344487345,-0.08880101542667448,-0.022848701218761543,-0.02240981987490006,-0.025336015627277764,-0.019486781446984666,-0.02432800538534997,-0.020255632582322356,-0.027876490563057726,-0.02681043499661601,-0.028389004022918444,-0.02047867397032615,-0.012419310700085317,-0.009085978517951098,-11.928571428571429,0.2366167023554604]]}],"label":"Raw (Noise)","method":"restyle"},{"args":[{"y":[[0.0,0.0,-0.2736396674466072,-0.3154689202983401,-0.29290660249240286,-0.02599148390517593,0.18650843961722763,-0.012435444289080702,-0.17296847678305916,-0.2246178428400817,-0.011524807989406948,0.04649546662452823,-0.07484800924533627,-0.38253322470595513,-0.37397242958831683,-0.7875683452493876,-0.27969448069600683,-0.033648175756122445,0.303002567321454,0.02504314552957558,215.83469980723794,215.79733617320468],[0.0,0.0,0.006315859345181793,0.016859501505937804,0.02869839733555289,0.031139347660102113,0.04507732998097059,0.0036380956757973426,-0.012734947733520857,-0.04468651217344536,-0.02353151224031312,-0.022410872316387494,-0.023050267486537462,-0.02135680647155233,-0.02415337617691002,-0.024980852713998695,-0.027691976527530724,-0.025226037663286866,-0.02042899623110997,-0.013994654396120854,-3.9833589059298213,-3.9003469015779726]]}],"label":"3-Day MA","method":"restyle"},{"args":[{"y":[[0.0,0.0,-0.2736396674466072,-0.2366016902237551,-0.17574396149544172,-0.14981557567589157,-0.0552687774347625,-0.13086087719206438,-0.20254269777207526,-0.034259424031965836,-0.0005991147739501439,-0.05708466815053338,-0.05519793489203455,-0.24447411376959988,-0.2120290904216346,-0.31859787852046095,-0.268078387136425,-0.22151053375022695,-0.20866626393606422,-0.2252678922328913,92.44301790851145,92.43618028011808],[0.0,0.0,0.006315859345181793,0.012644626129453353,0.017219038401331734,0.018727603502641955,0.026544356351532166,0.013858497004864384,0.010594396830755594,0.004686197129263387,-0.0034519374578145844,-0.011309575877218859,-0.01853792364786786,-0.031923710223181544,-0.0232202066712363,-0.023786168639501223,-0.02464033780350385,-0.023946431852510757,-0.02293679317438228,-0.020759360764753872,-1.7219473316203404,-1.6841625897748378]]}],"label":"7-Day MA","method":"restyle"},{"args":[{"y":[[0.0,0.0,-0.2736396674466072,-0.2366016902237551,-0.17574396149544172,-0.14981557567589157,-0.0552687774347625,-0.11450326754305633,-0.15753320937828075,-0.10607349705635824,-0.08641823311933378,-0.10652604037757851,-0.09886761525381473,-0.1498714456021812,-0.17144498380684947,-0.26057028814626815,-0.1511689055841954,-0.11105482426208854,-0.1328754660432988,-0.14023291356246292,46.09927189737092,46.11207559484823],[0.0,0.0,0.006315859345181793,0.012644626129453353,0.017219038401331734,0.018727603502641955,0.026544356351532166,0.012126184879256336,0.008240086423921017,0.005175095794038909,0.0024013583921010293,0.0005773467388438879,-0.0013384495784017935,-0.0026896769358246905,-0.004680854833185957,-0.006595885904372815,-0.00997707033712023,-0.013699184655162674,-0.017123184525800573,-0.01964864220631087,-0.8769355209217611,-0.8536913982230371]]}],"label":"14-Day MA","method":"restyle"}]}]},                        {"responsive": true}                    )                };            </script>        </div></div>
+            </section>
+            
+                <details id="sec-audience" class="dashboard-accordion">
+                    <summary class="dashboard-summary">
+                        <span class="summary-title">👥 Multi-Platform Audience & Social Reach</span>
+                        <span class="accordion-badge">Cross-Platform KPI</span>
+                    </summary>
+                    <div class="accordion-content">
+                        
+    <div style="background:#0e1117; padding:20px; border-radius:10px; margin-bottom:25px; border:1px solid #2d303e; color:white; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2d303e; padding-bottom:12px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+            <div>
+                <h3 style="color:#00F2FE; margin:0; font-size:1.35em; display:flex; align-items:center; gap:8px;">
+                    🌐 Multi-Platform Audience & Social Reach
+                </h3>
+                <div style="color:#a3a8b8; font-size:12px; margin-top:5px;">
+                    Cross-network video creations, global viral exposure & streaming audience • Updated: 2026-09-19
+                </div>
+            </div>
+        </div>
+        
+        <div style="display:flex; gap:15px; flex-wrap:wrap;">
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:200px; text-align:center; border:1px solid #2d303e; border-top:3px solid #00F2FE;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#00F2FE;">🎵 TikTok</span>
+                    <span style="font-size:11px; color:#FE2C55; font-weight:bold;">7.3% Eng.</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">43.0M</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">43,003,576 Views</div>
+                <div style="font-size:12px; font-weight:bold; color:#1DB954; margin-top:5px;" title="+229,922 today (+0.54%)">Daily: ▲ +229.9K <span style="font-size:11px; opacity:0.9;">(+0.54%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; display:flex; justify-content:space-around; font-size:11px;">
+                    <div><span style="color:#00F2FE; font-weight:bold;">1,463</span> <span style="color:#888;">Videos</span></div>
+                    <div><span style="color:#FE2C55; font-weight:bold;">2.6M</span> <span style="color:#888;">Likes</span></div>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:200px; text-align:center; border:1px solid #2d303e; border-top:3px solid #FF0000;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#FF4B4B;">📺 YouTube</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Total Views</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">1.2M</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">1,240,162 Views</div>
+                <div style="font-size:12px; font-weight:bold; color:#1DB954; margin-top:5px;" title="+45,048 today (+3.77%)">Daily: ▲ +45.0K <span style="font-size:11px; opacity:0.9;">(+3.77%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; display:flex; justify-content:space-around; font-size:11px;">
+                    <div><span style="color:#FFD700; font-weight:bold;">49</span> <span style="color:#888;">Shorts</span></div>
+                    <div><span style="color:#FF4B4B; font-weight:bold;">37.4K</span> <span style="color:#888;">Likes</span></div>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:200px; text-align:center; border:1px solid #2d303e; border-top:3px solid #E1306C;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#E1306C;">📸 Instagram</span>
+                    <span style="font-size:11px; color:#E1306C; font-weight:bold;">6.0% Eng.</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">736.4K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">736,373 Reels Views</div>
+                <div style="font-size:12px; font-weight:bold; color:#a3a8b8; margin-top:5px;" title="No change today">Daily: 0 <span style="font-size:11px; opacity:0.9;">(0.00%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; display:flex; justify-content:space-around; font-size:11px;">
+                    <div><span style="color:#FF8A00; font-weight:bold;">50</span> <span style="color:#888;">Reels</span></div>
+                    <div><span style="color:#E1306C; font-weight:bold;">43.2K</span> <span style="color:#888;">Likes</span></div>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #FF5500;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#FF5500;">☁️ SoundCloud</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Streams</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">18.7K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">Audio Plays</div>
+                <div style="font-size:12px; font-weight:bold; color:#1DB954; margin-top:5px;" title="+1,683 today (+9.90%)">Daily: ▲ +1,683 <span style="font-size:11px; opacity:0.9;">(+9.90%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#FFD700; font-weight:bold;">628</span> <span style="color:#888;">Likes</span>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #0088FF;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#0088FF;">⚡ Shazam</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Recognition</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">13.2K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">13,176 Tags</div>
+                <div style="font-size:12px; font-weight:bold; color:#1DB954; margin-top:5px;" title="+949 today (+7.76%)">Daily: ▲ +949 <span style="font-size:11px; opacity:0.9;">(+7.76%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#0088FF; font-weight:bold;">Global Discovery</span>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #FFB800;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#FFB800;">📻 Radio Airplay</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Global Broadcast</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">990</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">Total Radio Spins</div>
+                <div style="font-size:12px; font-weight:bold; color:#1DB954; margin-top:5px;" title="+161 today (+19.42%)">Daily: ▲ +161 <span style="font-size:11px; opacity:0.9;">(+19.42%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#1DB954; font-weight:bold;">124</span> <span style="color:#888;">Stations</span>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #A238FF;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#A238FF;">🎧 Deezer</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Reach & Pop</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">188.7K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">Playlist Reach</div>
+                <div style="font-size:12px; font-weight:bold; color:#1DB954; margin-top:5px;" title="+22 today (+0.01%)">Daily: ▲ +22 <span style="font-size:11px; opacity:0.9;">(+0.01%)</span></div>
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#A238FF; font-weight:bold;">Popularity: 73/100</span>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div style="margin-top:25px; text-align:center;">
+            <a href="../audience_history_reverse_psychology.html" target="_self" style="background: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%); color: #000; padding: 13px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 15px; display: inline-block; box-shadow: 0 4px 18px rgba(0,201,255,0.35); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+                📊 View Multi-Platform Historical Audience Trends ➔
+            </a>
+        </div>
+    </div>
+    
+                    </div>
+                </details>
+                
+                <section id="sec-cross-platform" class="cross-platform-wrapper" style="margin-top:35px;">
+                    <div style="margin-bottom:15px; border-bottom:1px solid #2d303e; padding-bottom:10px;">
+                        <h2 style="color:#FFD700; margin:0 0 6px 0; font-size:1.5em; display:flex; align-items:center; gap:10px;">
+                            🌐 Multi-Platform Chart Positions
+                        </h2>
+                        <p style="color:#a3a8b8; margin:0; font-size:13px;">Daily performance and peak rankings across Apple Music, Shazam, iTunes, YouTube, and Amazon Music.</p>
+                    </div>
+                    
+            <details id="platform-applemusic-reversepsychology" class="dashboard-accordion platform-accordion" style="border-left: 4px solid #FA243C; margin-top:16px; margin-bottom:16px;">
+                <summary class="dashboard-summary">
+                    <span class="summary-title" style="color:#FA243C;">
+                        <span style="font-size:1.15em; margin-right:6px;">🍎</span> Apple Music Charts
+                    </span>
+                    <span class="accordion-badge" style="border-color:#FA243C55; color:#FA243C;">
+                        1 entry
+                    </span>
+                </summary>
+                <div class="accordion-content">
+                    <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <h3 style="color:#FA243C; margin:0; font-size:1.25em; display:flex; align-items:center; gap:8px;">
+                                <span>🍎</span> Apple Music Chart Positions
+                            </h3>
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
+                                    👈 Swipe table horizontally 👉
+                                </span>
+                                <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
+                                    📅 Crawl Date: <span style="color:#fff;">19/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 19/09/2026 vs 18/09/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
+                            <table id="table_applemusic_reversepsychology" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
+                        <thead>
+                            <tr style="background:#1a1c24; color:#a3a8b8; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">
+                                <th onclick="sortCrossPlatformTable('table_applemusic_reversepsychology', 0, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; position:sticky; left:0; background:#1a1c24; z-index:3; border-bottom:2px solid #2d303e; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px;" title="Click to sort by Country">Country <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_applemusic_reversepsychology', 1, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:90px;" title="Click to sort by Today's Rank">Today's Rank <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_applemusic_reversepsychology', 2, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:90px;" title="Click to sort by Trend">Trend <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_applemusic_reversepsychology', 3, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:85px;" title="Click to sort by Peak Rank">Peak Rank <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_applemusic_reversepsychology', 4, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:100px;" title="Click to sort by Chart Type">Chart Type <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            
+                            <tr style="background:#141721; transition: background 0.2s;" onmouseover="this.style.background='#1f2333'; this.children[0].style.background='#1f2333';" onmouseout="this.style.background='#141721'; this.children[0].style.background='#141721';">
+                                <td data-sort="Maldives" style="padding:10px 14px; font-size:13px; font-weight:bold; color:#fff; position:sticky; left:0; background:#141721; z-index:2; border-bottom:1px solid #222634; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                    <span style="margin-right:8px; font-size:16px;">🇲🇻</span>Maldives
+                                </td>
+                                <td data-sort="81" style="padding:10px 14px; text-align:center; font-weight:bold; font-size:14px; color:#fff; border-bottom:1px solid #222634; min-width:90px;">
+                                    #81
+                                </td>
+                                <td data-sort="500" style="padding:10px 14px; text-align:center; border-bottom:1px solid #222634; min-width:90px;">
+                                    <span style="color:#00FFFF; font-size:12px; font-weight:bold;">🔄 RE-ENTRY</span>
+                                </td>
+                                <td data-sort="28" style="padding:10px 14px; text-align:center; color:#a3a8b8; font-size:13px; font-weight:bold; border-bottom:1px solid #222634; min-width:85px;">
+                                    #28
+                                </td>
+                                <td data-sort="Alternative" style="padding:10px 14px; text-align:center; border-bottom:1px solid #222634; min-width:100px;">
+                                    <span style="background:#2d303e; color:#e0e0e0; padding:4px 10px; border-radius:4px; font-size:11px; font-weight:bold; letter-spacing:0.3px;">Alternative</span>
+                                </td>
+                            </tr>
+                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </details>
+    
+            <details id="platform-shazam-reversepsychology" class="dashboard-accordion platform-accordion" style="border-left: 4px solid #0088FF; margin-top:16px; margin-bottom:16px;">
+                <summary class="dashboard-summary">
+                    <span class="summary-title" style="color:#0088FF;">
+                        <span style="font-size:1.15em; margin-right:6px;">⚡</span> Shazam Charts
+                    </span>
+                    <span class="accordion-badge" style="border-color:#0088FF55; color:#0088FF;">
+                        1 entry
+                    </span>
+                </summary>
+                <div class="accordion-content">
+                    <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <h3 style="color:#0088FF; margin:0; font-size:1.25em; display:flex; align-items:center; gap:8px;">
+                                <span>⚡</span> Shazam Chart Positions
+                            </h3>
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
+                                    👈 Swipe table horizontally 👉
+                                </span>
+                                <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
+                                    📅 Crawl Date: <span style="color:#fff;">19/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 19/09/2026 vs 18/09/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
+                            <table id="table_shazam_reversepsychology" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
+                        <thead>
+                            <tr style="background:#1a1c24; color:#a3a8b8; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">
+                                <th onclick="sortCrossPlatformTable('table_shazam_reversepsychology', 0, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; position:sticky; left:0; background:#1a1c24; z-index:3; border-bottom:2px solid #2d303e; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px;" title="Click to sort by Country">Country <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_shazam_reversepsychology', 1, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:90px;" title="Click to sort by Today's Rank">Today's Rank <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_shazam_reversepsychology', 2, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:90px;" title="Click to sort by Trend">Trend <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_shazam_reversepsychology', 3, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:85px;" title="Click to sort by Peak Rank">Peak Rank <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_shazam_reversepsychology', 4, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:100px;" title="Click to sort by Chart Type">Chart Type <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            
+                            <tr style="background:#141721; transition: background 0.2s;" onmouseover="this.style.background='#1f2333'; this.children[0].style.background='#1f2333';" onmouseout="this.style.background='#141721'; this.children[0].style.background='#141721';">
+                                <td data-sort="Poland" style="padding:10px 14px; font-size:13px; font-weight:bold; color:#fff; position:sticky; left:0; background:#141721; z-index:2; border-bottom:1px solid #222634; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                    <span style="margin-right:8px; font-size:16px;">🇵🇱</span>Poland
+                                </td>
+                                <td data-sort="112" style="padding:10px 14px; text-align:center; font-weight:bold; font-size:14px; color:#fff; border-bottom:1px solid #222634; min-width:90px;">
+                                    #112
+                                </td>
+                                <td data-sort="34" style="padding:10px 14px; text-align:center; border-bottom:1px solid #222634; min-width:90px;">
+                                    <span style="color:#1DB954; font-size:12px; font-weight:bold;">▲ +34</span>
+                                </td>
+                                <td data-sort="112" style="padding:10px 14px; text-align:center; color:#a3a8b8; font-size:13px; font-weight:bold; border-bottom:1px solid #222634; min-width:85px;">
+                                    #112
+                                </td>
+                                <td data-sort="General" style="padding:10px 14px; text-align:center; border-bottom:1px solid #222634; min-width:100px;">
+                                    <span style="background:#2d303e; color:#e0e0e0; padding:4px 10px; border-radius:4px; font-size:11px; font-weight:bold; letter-spacing:0.3px;">General</span>
+                                </td>
+                            </tr>
+                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </details>
+    
+            <details id="platform-itunes-reversepsychology" class="dashboard-accordion platform-accordion" style="border-left: 4px solid #EA4CC0; margin-top:16px; margin-bottom:16px;">
+                <summary class="dashboard-summary">
+                    <span class="summary-title" style="color:#EA4CC0;">
+                        <span style="font-size:1.15em; margin-right:6px;">🎵</span> iTunes Charts
+                    </span>
+                    <span class="accordion-badge" style="border-color:#EA4CC055; color:#EA4CC0;">
+                        1 entry
+                    </span>
+                </summary>
+                <div class="accordion-content">
+                    <div style="background:#0e1117; padding:15px; border-radius:10px; color:white; border:1px solid #2d303e; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #2d303e; padding-bottom:12px; flex-wrap:wrap; gap:10px;">
+                            <h3 style="color:#EA4CC0; margin:0; font-size:1.25em; display:flex; align-items:center; gap:8px;">
+                                <span>🎵</span> iTunes Chart Positions
+                            </h3>
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <span style="display:inline-flex; align-items:center; gap:4px; color:#1DB954; font-size:11px; font-weight:bold; background:rgba(29,185,84,0.12); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:20px;">
+                                    👈 Swipe table horizontally 👉
+                                </span>
+                                <div style="color:#a3a8b8; font-size:12px; font-weight:bold;">
+                                    📅 Crawl Date: <span style="color:#fff;">19/09/2026</span> <span style="color:#777; font-size:11px; margin-left:6px;">• Comparing 19/09/2026 vs 18/09/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:6px;">
+                            <table id="table_itunes_reversepsychology" style="width:100%; border-collapse:separate; border-spacing:0; text-align:left; font-family:sans-serif; min-width:540px;">
+                        <thead>
+                            <tr style="background:#1a1c24; color:#a3a8b8; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">
+                                <th onclick="sortCrossPlatformTable('table_itunes_reversepsychology', 0, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; position:sticky; left:0; background:#1a1c24; z-index:3; border-bottom:2px solid #2d303e; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px;" title="Click to sort by Country">Country <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_itunes_reversepsychology', 1, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:90px;" title="Click to sort by Today's Rank">Today's Rank <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_itunes_reversepsychology', 2, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:90px;" title="Click to sort by Trend">Trend <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_itunes_reversepsychology', 3, 'number')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:85px;" title="Click to sort by Peak Rank">Peak Rank <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                                <th onclick="sortCrossPlatformTable('table_itunes_reversepsychology', 4, 'text')" style="padding:12px 14px; cursor:pointer; user-select:none; text-align:center; border-bottom:2px solid #2d303e; min-width:100px;" title="Click to sort by Chart Type">Chart Type <span class="sort-arrow" style="font-size:10px; margin-left:4px; opacity:0.6;">⇅</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            
+                            <tr style="background:#141721; transition: background 0.2s;" onmouseover="this.style.background='#1f2333'; this.children[0].style.background='#1f2333';" onmouseout="this.style.background='#141721'; this.children[0].style.background='#141721';">
+                                <td data-sort="Romania" style="padding:10px 14px; font-size:13px; font-weight:bold; color:#fff; position:sticky; left:0; background:#141721; z-index:2; border-bottom:1px solid #222634; border-right:1px solid #2d303e; box-shadow: 3px 0 6px rgba(0,0,0,0.4); min-width:140px; max-width:170px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                    <span style="margin-right:8px; font-size:16px;">🇷🇴</span>Romania
+                                </td>
+                                <td data-sort="69" style="padding:10px 14px; text-align:center; font-weight:bold; font-size:14px; color:#fff; border-bottom:1px solid #222634; min-width:90px;">
+                                    #69
+                                </td>
+                                <td data-sort="-19" style="padding:10px 14px; text-align:center; border-bottom:1px solid #222634; min-width:90px;">
+                                    <span style="color:#ff4b4b; font-size:12px; font-weight:bold;">🔻 -19</span>
+                                </td>
+                                <td data-sort="5" style="padding:10px 14px; text-align:center; color:#a3a8b8; font-size:13px; font-weight:bold; border-bottom:1px solid #222634; min-width:85px;">
+                                    #5
+                                </td>
+                                <td data-sort="Alternative" style="padding:10px 14px; text-align:center; border-bottom:1px solid #222634; min-width:100px;">
+                                    <span style="background:#2d303e; color:#e0e0e0; padding:4px 10px; border-radius:4px; font-size:11px; font-weight:bold; letter-spacing:0.3px;">Alternative</span>
+                                </td>
+                            </tr>
+                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </details>
+    
+        <script>
+        if (typeof sortCrossPlatformTable === 'undefined') {
+            function sortCrossPlatformTable(tableId, colIndex, sortType) {
+                var table = document.getElementById(tableId);
+                if (!table) return;
+                var tbody = table.querySelector('tbody');
+                var rows = Array.from(tbody.querySelectorAll('tr'));
+                var th = table.querySelectorAll('th')[colIndex];
+                
+                var currentDir = th.getAttribute('data-sort-dir') || 'desc';
+                var newDir = currentDir === 'asc' ? 'desc' : 'asc';
+                
+                table.querySelectorAll('th').forEach(function(header) {
+                    header.removeAttribute('data-sort-dir');
+                    var arrow = header.querySelector('.sort-arrow');
+                    if (arrow) { arrow.textContent = '⇅'; arrow.style.opacity = '0.6'; }
+                });
+                
+                th.setAttribute('data-sort-dir', newDir);
+                var arrow = th.querySelector('.sort-arrow');
+                if (arrow) {
+                    arrow.textContent = newDir === 'asc' ? '▲' : '▼';
+                    arrow.style.opacity = '1.0';
+                }
+                
+                rows.sort(function(a, b) {
+                    var cellA = a.children[colIndex];
+                    var cellB = b.children[colIndex];
+                    var valA = cellA.getAttribute('data-sort') || cellA.textContent.trim();
+                    var valB = cellB.getAttribute('data-sort') || cellB.textContent.trim();
+                    
+                    if (sortType === 'number') {
+                        var numA = parseFloat(valA);
+                        if (isNaN(numA)) numA = 999999;
+                        var numB = parseFloat(valB);
+                        if (isNaN(numB)) numB = 999999;
+                        return newDir === 'asc' ? numA - numB : numB - numA;
+                    } else {
+                        return newDir === 'asc' 
+                            ? valA.localeCompare(valB, undefined, {sensitivity: 'base'})
+                            : valB.localeCompare(valA, undefined, {sensitivity: 'base'});
+                    }
+                });
+                
+                rows.forEach(function(r) { tbody.appendChild(r); });
+            }
+        }
+        </script>
+        
+                </section>
+                
+                </div>
+                
+                <script>
+                function toggleAllDashboard(open) {
+                    document.querySelectorAll('details.dashboard-accordion').forEach(function(d) {
+                        d.open = open;
+                    });
+                    if (open) {
+                        window.dispatchEvent(new Event('resize'));
+                        setTimeout(function() {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 60);
+                    }
+                }
+
+                function closeMobileNav() {
+                    var stickyNav = document.getElementById('dashboard-sticky-nav') || document.querySelector('.dashboard-sticky-nav');
+                    var navToggle = document.getElementById('mobile-nav-toggle');
+                    if (stickyNav && stickyNav.classList.contains('nav-open')) {
+                        stickyNav.classList.remove('nav-open');
+                        if (navToggle) {
+                            navToggle.innerHTML = '<span class="nav-toggle-icon">☰</span> <span class="nav-toggle-text">Menu</span>';
+                        }
+                    }
+                }
+
+                function jumpToDashboardSection(id) {
+                    closeMobileNav();
+                    var target = document.getElementById(id);
+                    if (target) {
+                        if (target.tagName.toLowerCase() === 'details') {
+                            target.open = true;
+                        } else {
+                            var parentDetails = target.closest('details');
+                            if (parentDetails) parentDetails.open = true;
+                            target.querySelectorAll('details.dashboard-accordion').forEach(function(d) {
+                                d.open = true;
+                            });
+                        }
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                            window.dispatchEvent(new Event('resize'));
+                        }, 50);
+                        setTimeout(function() {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 150);
+                    }
+                }
+
+                function initMobileNav() {
+                    var navToggle = document.getElementById('mobile-nav-toggle');
+                    var stickyNav = document.getElementById('dashboard-sticky-nav') || document.querySelector('.dashboard-sticky-nav');
+                    if (navToggle && stickyNav) {
+                        navToggle.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var isOpen = stickyNav.classList.toggle('nav-open');
+                            navToggle.innerHTML = isOpen 
+                                ? '<span class="nav-toggle-icon">✕</span> <span class="nav-toggle-text">Close Menu</span>' 
+                                : '<span class="nav-toggle-icon">☰</span> <span class="nav-toggle-text">Menu</span>';
+                        });
+
+                        stickyNav.querySelectorAll('.nav-btn').forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                closeMobileNav();
+                            });
+                        });
+
+                        document.addEventListener('click', function(e) {
+                            if (stickyNav.classList.contains('nav-open') && !stickyNav.contains(e.target)) {
+                                closeMobileNav();
+                            }
+                        });
+                    }
+                }
+
+                function initDashboardAccordionListeners() {
+                    document.querySelectorAll('details.dashboard-accordion').forEach(function(detail) {
+                        detail.addEventListener('toggle', function() {
+                            if (this.open) {
+                                window.dispatchEvent(new Event('resize'));
+                                setTimeout(function() {
+                                    window.dispatchEvent(new Event('resize'));
+                                }, 60);
+                            }
+                        });
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        initDashboardAccordionListeners();
+                        initMobileNav();
+                    });
+                } else {
+                    initDashboardAccordionListeners();
+                    initMobileNav();
+                }
+                </script>
+            
+            </body>
+            </html>
