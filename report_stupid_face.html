@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width,initial-scale=1.0">
+                <title>Stupid Face - Dashboard</title>
+                <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js"></script>
+                
+                <style>
+                    div::-webkit-scrollbar { height: 6px; }
+                    div::-webkit-scrollbar-track { background: #141721; border-radius: 4px; }
+                    div::-webkit-scrollbar-thumb { background: #2d303e; border-radius: 4px; }
+                    div::-webkit-scrollbar-thumb:hover { background: #3d4254; }
+
+                    /* Sticky Navigation Bar */
+                    .dashboard-sticky-nav {
+                        position: sticky;
+                        top: 10px;
+                        z-index: 1000;
+                        background: rgba(14, 17, 23, 0.94);
+                        backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
+                        border: 1px solid #2d303e;
+                        border-radius: 12px;
+                        padding: 10px 16px;
+                        margin-bottom: 25px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 12px;
+                        flex-wrap: wrap;
+                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+                    }
+                    .nav-links-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        flex-wrap: wrap;
+                    }
+                    .nav-btn {
+                        background: #141721;
+                        color: #FFD700 !important;
+                        border: 1px solid #2d303e;
+                        padding: 7px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-decoration: none;
+                        transition: all 0.2s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .nav-btn:hover {
+                        background: #FFD700;
+                        color: #000 !important;
+                        border-color: #FFD700;
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+                    }
+                    .nav-controls {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .ctrl-btn {
+                        background: #1a1510;
+                        color: #FF7A00;
+                        border: 1px solid #FF7A00;
+                        padding: 6px 14px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .ctrl-btn:hover {
+                        background: #FF7A00;
+                        color: #000;
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 10px rgba(255, 122, 0, 0.3);
+                    }
+
+                    /* Accordion Styles */
+                    details.dashboard-accordion {
+                        background: #0e1117;
+                        border: 1px solid #2d303e;
+                        border-radius: 10px;
+                        margin-top: 25px;
+                        margin-bottom: 25px;
+                        overflow: hidden;
+                        transition: border-color 0.2s ease;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+                        scroll-margin-top: 80px;
+                    }
+                    details.dashboard-accordion[open] {
+                        border-color: #3e4459;
+                    }
+                    summary.dashboard-summary {
+                        padding: 14px 18px;
+                        cursor: pointer;
+                        user-select: none;
+                        list-style: none;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #141721;
+                        font-size: 15px;
+                        font-weight: 700;
+                        color: #ffffff;
+                        transition: background 0.2s ease;
+                    }
+                    summary.dashboard-summary::-webkit-details-marker {
+                        display: none;
+                    }
+                    summary.dashboard-summary:hover {
+                        background: #1c202d;
+                    }
+                    summary.dashboard-summary::after {
+                        content: "＋";
+                        color: #FF7A00;
+                        font-weight: 900;
+                        font-size: 18px;
+                        margin-left: 10px;
+                        transition: transform 0.2s ease;
+                    }
+                    details.dashboard-accordion[open] > summary.dashboard-summary::after {
+                        content: "−";
+                        color: #FF7A00;
+                    }
+                    .summary-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .accordion-badge {
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: #a3a8b8;
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid #2d303e;
+                        padding: 3px 8px;
+                        border-radius: 12px;
+                    }
+                    .accordion-content {
+                        padding: 15px;
+                        background: #0e1117;
+                    }
+
+                    /* Mobile Nav Toggle Button (Hidden on Desktop) */
+                    .mobile-nav-toggle {
+                        display: none;
+                        background: #141721;
+                        color: #FFD700;
+                        border: 1px solid #2d303e;
+                        padding: 7px 16px;
+                        border-radius: 20px;
+                        font-size: 13px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        align-items: center;
+                        gap: 8px;
+                        user-select: none;
+                        transition: all 0.2s ease;
+                    }
+                    .mobile-nav-toggle:hover, .mobile-nav-toggle:active {
+                        background: #1c202d;
+                        border-color: #FFD700;
+                    }
+
+                    /* Hero Section and Cross Platform Scroll Margins */
+                    .dashboard-hero-section, .cross-platform-wrapper {
+                        scroll-margin-top: 80px;
+                    }
+
+                    @media (max-width: 768px) {
+                        body { padding: 10px !important; }
+
+                        /* Sticky Nav Mobile Optimization */
+                        .dashboard-sticky-nav {
+                            top: 6px;
+                            padding: 8px 12px;
+                            flex-direction: column;
+                            align-items: stretch;
+                            gap: 0;
+                            border-radius: 10px;
+                        }
+                        .mobile-nav-toggle {
+                            display: inline-flex;
+                            justify-content: center;
+                            width: 100%;
+                            box-sizing: border-box;
+                        }
+                        .nav-links-container, .nav-controls {
+                            display: none;
+                        }
+
+                        /* When Menu is Toggled Open on Mobile */
+                        .dashboard-sticky-nav.nav-open {
+                            background: rgba(14, 17, 23, 0.98);
+                            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
+                        }
+                        .dashboard-sticky-nav.nav-open .nav-links-container {
+                            display: flex;
+                            flex-direction: column;
+                            width: 100%;
+                            gap: 8px;
+                            margin-top: 10px;
+                            padding-top: 10px;
+                            border-top: 1px solid #2d303e;
+                        }
+                        .dashboard-sticky-nav.nav-open .nav-controls {
+                            display: flex;
+                            width: 100%;
+                            gap: 8px;
+                            margin-top: 10px;
+                            padding-top: 10px;
+                            border-top: 1px solid #2d303e;
+                        }
+                        .dashboard-sticky-nav.nav-open .nav-btn,
+                        .dashboard-sticky-nav.nav-open .ctrl-btn {
+                            width: 100%;
+                            justify-content: center;
+                            box-sizing: border-box;
+                            padding: 9px 12px;
+                            font-size: 13px;
+                        }
+
+                        summary.dashboard-summary {
+                            padding: 12px 14px;
+                            font-size: 14px;
+                        }
+                    }
+                </style>
+            
+            </head>
+            <body style="background:#000; padding:20px; font-family:sans-serif;">
+                <div style="max-width:1200px; margin:0 auto;">
+                    <div style="margin-bottom:20px;"><a href="lobby_mia_miles.html" style="color:#1DB954; text-decoration:none; font-size:16px; font-weight:bold;">⬅ Back to Mia Miles Hub</a></div>
+            <nav class="dashboard-sticky-nav" id="dashboard-sticky-nav">
+                <button type="button" id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle Navigation">
+                    <span class="nav-toggle-icon">☰</span> <span class="nav-toggle-text">Menu</span>
+                </button>
+                <div class="nav-links-container" id="nav-links-container">
+                    <a href="#sec-spotify" onclick="jumpToDashboardSection('sec-spotify'); return false;" class="nav-btn">🎵 Spotify Overview</a>
+                        <a href="#sec-audience" onclick="jumpToDashboardSection('sec-audience'); return false;" class="nav-btn">👥 Audience Reach</a>
+                </div>
+                <div class="nav-controls" id="nav-controls">
+                    <button type="button" onclick="toggleAllDashboard(true)" class="ctrl-btn expand-btn">➕ Expand All</button>
+                    <button type="button" onclick="toggleAllDashboard(false)" class="ctrl-btn collapse-btn">➖ Collapse All</button>
+                </div>
+            </nav>
+            
+            <section id="sec-spotify" class="dashboard-hero-section">
+                
+                
+                
+            <div style='text-align: center; margin: 30px 0;'>
+                <a href="weekly_charts_stupid_face.html" style='background-color: #1DB954; color: white; padding: 15px 40px; text-decoration: none; font-size: 1.5em; border-radius: 50px; display: inline-block; font-weight: bold; box-shadow: 0px 4px 15px rgba(29, 185, 84, 0.4); border: 2px solid #fff;'>
+                    📊 Click Here to See All Weekly Charts
+                </a>
+            </div>
+            
+                
+                
+                
+                
+                
+                
+            </section>
+            
+                <details id="sec-audience" class="dashboard-accordion">
+                    <summary class="dashboard-summary">
+                        <span class="summary-title">👥 Multi-Platform Audience & Social Reach</span>
+                        <span class="accordion-badge">Cross-Platform KPI</span>
+                    </summary>
+                    <div class="accordion-content">
+                        
+    <div style="background:#0e1117; padding:20px; border-radius:10px; margin-bottom:25px; border:1px solid #2d303e; color:white; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2d303e; padding-bottom:12px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+            <div>
+                <h3 style="color:#00F2FE; margin:0; font-size:1.35em; display:flex; align-items:center; gap:8px;">
+                    🌐 Multi-Platform Audience & Social Reach
+                </h3>
+                <div style="color:#a3a8b8; font-size:12px; margin-top:5px;">
+                    Cross-network video creations, global viral exposure & streaming audience • Updated: 2026-09-19
+                </div>
+            </div>
+        </div>
+        
+        <div style="display:flex; gap:15px; flex-wrap:wrap;">
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:200px; text-align:center; border:1px solid #2d303e; border-top:3px solid #00F2FE;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#00F2FE;">🎵 TikTok</span>
+                    <span style="font-size:11px; color:#FE2C55; font-weight:bold;">5.7% Eng.</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">3.3M</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">3,292,121 Views</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; display:flex; justify-content:space-around; font-size:11px;">
+                    <div><span style="color:#00F2FE; font-weight:bold;">3,214</span> <span style="color:#888;">Videos</span></div>
+                    <div><span style="color:#FE2C55; font-weight:bold;">176.4K</span> <span style="color:#888;">Likes</span></div>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:200px; text-align:center; border:1px solid #2d303e; border-top:3px solid #FF0000;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#FF4B4B;">📺 YouTube</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Total Views</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">1.2M</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">1,177,206 Views</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; display:flex; justify-content:space-around; font-size:11px;">
+                    <div><span style="color:#FFD700; font-weight:bold;">301</span> <span style="color:#888;">Shorts</span></div>
+                    <div><span style="color:#FF4B4B; font-weight:bold;">35.8K</span> <span style="color:#888;">Likes</span></div>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:200px; text-align:center; border:1px solid #2d303e; border-top:3px solid #E1306C;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#E1306C;">📸 Instagram</span>
+                    <span style="font-size:11px; color:#E1306C; font-weight:bold;">5.6% Eng.</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">153.2K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">153,233 Reels Views</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; display:flex; justify-content:space-around; font-size:11px;">
+                    <div><span style="color:#FF8A00; font-weight:bold;">4,443</span> <span style="color:#888;">Reels</span></div>
+                    <div><span style="color:#E1306C; font-weight:bold;">8,272</span> <span style="color:#888;">Likes</span></div>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #FF5500;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#FF5500;">☁️ SoundCloud</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Streams</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">85.5K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">Audio Plays</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#FFD700; font-weight:bold;">1,940</span> <span style="color:#888;">Likes</span>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #0088FF;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#0088FF;">⚡ Shazam</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Recognition</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">243.2K</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">243,164 Tags</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#0088FF; font-weight:bold;">Global Discovery</span>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #FFB800;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#FFB800;">📻 Radio Airplay</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Global Broadcast</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">421</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">Total Radio Spins</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#1DB954; font-weight:bold;">27</span> <span style="color:#888;">Stations</span>
+                </div>
+            </div>
+            
+            <div style="background:#141721; padding:18px; border-radius:10px; flex:1; min-width:180px; text-align:center; border:1px solid #2d303e; border-top:3px solid #A238FF;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-weight:bold; font-size:14px; color:#A238FF;">🎧 Deezer</span>
+                    <span style="font-size:11px; color:#a3a8b8;">Reach & Pop</span>
+                </div>
+                <div style="font-size:24px; font-weight:900; color:white; letter-spacing:0.5px;">0</div>
+                <div style="font-size:11px; color:#a3a8b8; margin-top:2px;">Playlist Reach</div>
+                
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #222634; text-align:center; font-size:11px;">
+                    <span style="color:#A238FF; font-weight:bold;">Popularity: 4/100</span>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div style="margin-top:25px; text-align:center;">
+            <a href="audience_history_stupid_face.html" target="_self" style="background: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%); color: #000; padding: 13px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 15px; display: inline-block; box-shadow: 0 4px 18px rgba(0,201,255,0.35); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+                📊 View Multi-Platform Historical Audience Trends ➔
+            </a>
+        </div>
+    </div>
+    
+                    </div>
+                </details>
+                
+                </div>
+                
+                <script>
+                function toggleAllDashboard(open) {
+                    document.querySelectorAll('details.dashboard-accordion').forEach(function(d) {
+                        d.open = open;
+                    });
+                    if (open) {
+                        window.dispatchEvent(new Event('resize'));
+                        setTimeout(function() {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 60);
+                    }
+                }
+
+                function closeMobileNav() {
+                    var stickyNav = document.getElementById('dashboard-sticky-nav') || document.querySelector('.dashboard-sticky-nav');
+                    var navToggle = document.getElementById('mobile-nav-toggle');
+                    if (stickyNav && stickyNav.classList.contains('nav-open')) {
+                        stickyNav.classList.remove('nav-open');
+                        if (navToggle) {
+                            navToggle.innerHTML = '<span class="nav-toggle-icon">☰</span> <span class="nav-toggle-text">Menu</span>';
+                        }
+                    }
+                }
+
+                function jumpToDashboardSection(id) {
+                    closeMobileNav();
+                    var target = document.getElementById(id);
+                    if (target) {
+                        if (target.tagName.toLowerCase() === 'details') {
+                            target.open = true;
+                        } else {
+                            var parentDetails = target.closest('details');
+                            if (parentDetails) parentDetails.open = true;
+                            target.querySelectorAll('details.dashboard-accordion').forEach(function(d) {
+                                d.open = true;
+                            });
+                        }
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                            window.dispatchEvent(new Event('resize'));
+                        }, 50);
+                        setTimeout(function() {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 150);
+                    }
+                }
+
+                function initMobileNav() {
+                    var navToggle = document.getElementById('mobile-nav-toggle');
+                    var stickyNav = document.getElementById('dashboard-sticky-nav') || document.querySelector('.dashboard-sticky-nav');
+                    if (navToggle && stickyNav) {
+                        navToggle.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var isOpen = stickyNav.classList.toggle('nav-open');
+                            navToggle.innerHTML = isOpen 
+                                ? '<span class="nav-toggle-icon">✕</span> <span class="nav-toggle-text">Close Menu</span>' 
+                                : '<span class="nav-toggle-icon">☰</span> <span class="nav-toggle-text">Menu</span>';
+                        });
+
+                        stickyNav.querySelectorAll('.nav-btn').forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                closeMobileNav();
+                            });
+                        });
+
+                        document.addEventListener('click', function(e) {
+                            if (stickyNav.classList.contains('nav-open') && !stickyNav.contains(e.target)) {
+                                closeMobileNav();
+                            }
+                        });
+                    }
+                }
+
+                function initDashboardAccordionListeners() {
+                    document.querySelectorAll('details.dashboard-accordion').forEach(function(detail) {
+                        detail.addEventListener('toggle', function() {
+                            if (this.open) {
+                                window.dispatchEvent(new Event('resize'));
+                                setTimeout(function() {
+                                    window.dispatchEvent(new Event('resize'));
+                                }, 60);
+                            }
+                        });
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        initDashboardAccordionListeners();
+                        initMobileNav();
+                    });
+                } else {
+                    initDashboardAccordionListeners();
+                    initMobileNav();
+                }
+                </script>
+            
+            </body>
+            </html>
