@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8"/>
+<title>Temper City - דוח מדדי ביצועים</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Hebrew", "Alef", sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        direction: rtl;
+        text-align: right;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+        direction: rtl;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: right;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-right: 20px;
+        padding-left: 0;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+        direction: rtl;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table th {
+        padding: 10px 16px;
+        background-color: #222222;
+        color: #1DB954;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        border-bottom: 2px solid #282828;
+    }
+    .bill-table th.platform {
+        text-align: right;
+    }
+    .bill-table th.counter {
+        text-align: left;
+    }
+    .bill-table th.delta-header {
+        text-align: center;
+    }
+    .bill-table th.unit {
+        text-align: right;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: right;
+    }
+    .bill-table .counter {
+        text-align: left;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .delta-cell {
+        text-align: center;
+        white-space: nowrap;
+    }
+    .bill-table .delta {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        direction: ltr;
+    }
+    .bill-table .delta.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .bill-table .delta.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .bill-table .delta.zero {
+        color: #888888;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: right;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles (Hebrew / RTL) */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        direction: rtl;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        direction: rtl;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+        direction: rtl;
+    }
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 30px 10px 20px;
+        direction: rtl;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+        direction: rtl;
+    }
+    .expl-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-size: 0.85em;
+        margin-inline-start: 4px;
+        border-bottom: 1px dotted rgba(56, 189, 248, 0.6);
+        transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .expl-link:hover {
+        color: #7dd3fc;
+        border-bottom-color: #7dd3fc;
+    }
+    .market-context-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-right: 4px solid #38bdf8;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #c9d1d9;
+        direction: rtl;
+        text-align: right;
+    }
+    .market-context-box strong {
+        color: #38bdf8;
+    }
+</style></head>
+<body dir="rtl">
+<h1>Temper City - דוח מדדי ביצועים</h1>
+<p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
+<p><strong>תאריך הנתונים:</strong> לא ידוע</p>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">סקירת להקה</a>
+<a href="#top-cities">5 הערים המובילות</a>
+<a href="#track-metrics">מדדי שירים</a>
+<a href="#summary">סיכום</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">פתח הכל</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">סגור הכל</button>
+</div>
+</nav><h2 id="band-overview">סקירת להקה</h2>
+<p><strong>עוקבים:</strong> 296,237 (שינוי 24 שעות: +1,819)</p>
+<p><strong>מאזינים חודשיים:</strong> 31,168,357 (שינוי 24 שעות: +14,477)</p><div class="market-context-box"><strong>הקשר שוק גלובלי (מאקרו Spotify):</strong> ביצועי המאזינים החודשיים של Temper City בולטים לחיוב על רקע מגמת השוק בספוטיפיי (שבה 57.0% מתוך 500 האומנים המובילים חוו ירידה). Temper City תוך שמירה על יציבות בדירוג העולמי (מקום #211). <a class="expl-link" href="../report_self_aware.html#sec-spotify">(לצפייה בגרף השוואת השוק 📊)</a></div>
+
+<p class="spotify-rank"><strong>דירוג אומן עולמי (Spotify):</strong> #211 <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_heb">(ראה הסבר)</a> (אתמול: #211, שבוע שעבר: #207, שיא כל הזמנים: #196).</p>
+<p class="worldwide-rank"><strong>דירוג אומן עולמי דיגיטלי (רב-פלטפורמי משוקלל):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_heb">(ראה הסבר)</a> #54 (נקודות: 630, אתמול: #59, שבוע שעבר: #65, שיא כל הזמנים: #45).</p>
+<div class="restaurant-bill">
+<h3>סיכום השמעות וצפיות לקטלוג (6 שירים ורמיקסים)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">פלטפורמה</th>
+<th class="counter">מונה כולל</th>
+<th class="delta-header">שינוי ב-24 שעות</th>
+<th class="unit">יחידה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">639,073,133</td>
+<td class="delta-cell"><span class="delta positive" title="+4,090,397 ב-24 שעות (+0.64%)">▲ +4.1M (+0.64%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">434,170,615</td>
+<td class="delta-cell"><span class="delta positive" title="+2,570,461 ב-24 שעות (+0.60%)">▲ +2.6M (+0.60%)</span></td>
+<td class="unit">צפיות והשמעות</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">8,368,291</td>
+<td class="delta-cell"><span class="delta positive" title="+39,573 ב-24 שעות (+0.48%)">▲ +39.6K (+0.48%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, Amazon Music, iTunes, Deezer</td>
+<td colspan="3" style="color: #888; font-size: 13px; text-align: center;">אינם מפרסמים מונה השמעות פומבי</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ השמעות מוזיקה</td>
+<td class="counter">1,081,612,039</td>
+<td class="delta-cell"><span class="delta positive" title="+6,700,431 ב-24 שעות (+0.62%)">▲ +6.7M (+0.62%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">TikTok</td>
+<td class="counter">9,815,789,512</td>
+<td class="delta-cell"><span class="delta positive" title="+55,011,376 ב-24 שעות (+0.56%)">▲ +55.0M (+0.56%)</span></td>
+<td class="unit">צפיות וידאו</td>
+</tr>
+<tr>
+<td class="platform">Instagram Reels</td>
+<td class="counter">69,969,373</td>
+<td class="delta-cell"><span class="delta zero" title="ללא שינוי ב-24 שעות">0 (0.00%)</span></td>
+<td class="unit">צפיות וידאו</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ צפיות ברשתות חברתיות</td>
+<td class="counter">9,885,758,885</td>
+<td class="delta-cell"><span class="delta positive" title="+55,011,376 ב-24 שעות (+0.56%)">▲ +55.0M (+0.56%)</span></td>
+<td class="unit">צפיות</td>
+</tr>
+<tr class="grand-row">
+<td>סך-על כולל (מוזיקה + רשתות חברתיות)</td>
+<td class="counter">10,967,370,924</td>
+<td class="delta-cell"><span class="delta positive" title="+61,711,807 ב-24 שעות (+0.57%)">▲ +61.7M (+0.57%)</span></td>
+<td class="unit">סה"כ כללי</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="top-cities">ניתוח 5 הערים המובילות</h2>
+<table>
+<thead>
+<tr>
+<th>שם העיר</th>
+<th>יבשת</th>
+<th>מאזינים נוכחיים</th>
+<th>הפרש טווח קצר (3 ימים)</th>
+<th>הפרש טווח ארוך (14 ימים)</th>
+<th>שיא כל הזמנים</th>
+<th>סך ימים נמדדים</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>לונדון</td>
+<td>אירופה</td>
+<td>321,914</td>
+<td>+1,708</td>
+<td>-651</td>
+<td>334,140</td>
+<td>179</td>
+</tr>
+<tr>
+<td>סאו פאולו</td>
+<td>דרום אמריקה</td>
+<td>320,912</td>
+<td>-835</td>
+<td>-18,171</td>
+<td>345,916</td>
+<td>136</td>
+</tr>
+<tr>
+<td>סידני</td>
+<td>אוקיאניה</td>
+<td>304,946</td>
+<td>+3,455</td>
+<td>+7,611</td>
+<td>304,946</td>
+<td>148</td>
+</tr>
+<tr>
+<td>מקסיקו סיטי</td>
+<td>צפון אמריקה</td>
+<td>281,641</td>
+<td>+4,594</td>
+<td>-14,697</td>
+<td>332,233</td>
+<td>120</td>
+</tr>
+<tr>
+<td>מלבורן</td>
+<td>אוקיאניה</td>
+<td>256,426</td>
+<td>+2,567</td>
+<td>+2,047</td>
+<td>256,426</td>
+<td>76</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">מדדי שירים</h2>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -1.0, מאזינים Z: +0.6, עוקבים Z: +0.1), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="../data_integrity_temper_city.html#streams-self-aware">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -7.3%, עם תאוצה של -8.8%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>בגלובלי, השיר שומר על דירוג מרשים #7. מיקום זה נשמר במשך 1 ימים ברציפות. מתוך 173 ימי מצעד שנמדדו, השיר בילה 110 ימים בטופ 20 ו-61 ימים בטופ 10. השיר נמצא כעת ברצף של 5 ימים בתוך הטופ 10.</p>
+<ul>
+<li>שוויץ: מקום #2 (עלייה של 1 מקומות).</li>
+<li>אוסטריה: מקום #3 (עלייה של 2 מקומות).</li>
+<li>בלגיה: מקום #3 (עלייה של 3 מקומות).</li>
+<li>גרמניה: מקום #3 (עלייה של 3 מקומות).</li>
+<li>לוקסמבורג: מקום #9 (ללא שינוי).</li>
+<li>קנדה: מקום #10 (עלייה של 1 מקומות).</li>
+</ul>
+<p>גילו של השיר "Self Aware" הוא 215 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 507,156,533</p>
+<p>השמעות יומיות אחרונות: 2,813,396 (שינוי: -272,816)</p><div class="market-context-box"><strong>הקשר שוק גלובלי (Spotify Global Top 200):</strong> הירידה בהשמעות אינה מעידה על חולשה של השיר, אלא נובעת מיום שפל רוחבי חסר תקדים בספוטיפיי — 85% משירי הטופ 20 (ו-82% מכלל הטופ 200) ספגו ירידות חדות היום, עם אובדן כולל של כ-10.7 מיליון השמעות. הירידה של Self Aware תואמת במדויק את ממוצע הירידה של שירי העילית (73K- בממוצע לשיר), ומסבירה את המשך היציבות במקום #8 בעולם.</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 3,550,611</p>
+<p>הרצפה השבועית החדשה ננעלה על 3,038,780. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 3,323,146 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 2,953,799.</p>
+<h3>צמיחה חזקה — 3 מדינות</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (3)</summary><ul>
+<li>טייוואן: 9.0%</li>
+<li>הונג קונג: 7.7%</li>
+<li>מרוקו: 6.1%</li>
+</ul></details>
+<h3>צמיחה מתונהמדינה — מדינה אחת</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (1)</summary><ul>
+<li>אירלנד: 4.0%</li>
+</ul></details>
+<h3>התקרבות לרמה קבועה — 2 מדינות</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (2)</summary><ul>
+<li>מלזיה: 0.6%</li>
+<li>בלארוס: -2.0%</li>
+</ul></details>
+<h3>שלב התכווצות — 32 מדינות</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (32)</summary><ul>
+<li>סינגפור: -3.7%</li>
+<li>בולגריה: -3.9%</li>
+<li>איחוד האמירויות הערביות: -4.0%</li>
+<li>אסטוניה: -4.1%</li>
+<li>אוקראינה: -4.5%</li>
+<li>בלגיה: -4.9%</li>
+<li>בריטניה: -4.9%</li>
+<li>ערב הסעודית: -5.4%</li>
+<li>צ'כיה: -6.2%</li>
+<li>קנדה: -6.3%</li>
+<li>רומניה: -6.5%</li>
+<li>צרפת: -6.8%</li>
+<li>אוסטריה: -7.3%</li>
+<li>קזחסטן: -7.5%</li>
+<li>סלובקיה: -7.7%</li>
+<li>הולנד: -7.9%</li>
+<li>ארצות הברית: -8.0%</li>
+<li>גרמניה: -8.3%</li>
+<li>הונגריה: -8.4%</li>
+<li>שוויץ: -9.2%</li>
+<li>שוודיה: -9.2%</li>
+<li>פינלנד: -10.2%</li>
+<li>ליטא: -10.4%</li>
+<li>דנמרק: -10.6%</li>
+<li>לטביה: -11.9%</li>
+<li>איטליה: -12.0%</li>
+<li>פורטוגל: -12.6%</li>
+<li>ניקרגואה: -13.0%</li>
+<li>נורווגיה: -13.0%</li>
+<li>פולין: -13.0%</li>
+<li>לוקסמבורג: -14.0%</li>
+<li>ישראל: -29.7%</li>
+</ul></details>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>דיזר: 31,389,805 חשיפה בפלייליסטים על פני 95 פלייליסטים, עם ציון פופולריות של 98/100.</li>
+<li>אינסטגרם רילס: 46,288,136 צפיות על פני 206,043 רילסים שנוצרו, 2,738,160 לייקים, ושיעור מעורבות של 5.9%.</li>
+<li>השמעות רדיו: 234,300 השמעות (ספינים) סך הכל על פני 3,038 תחנות רדיו.</li>
+<li>Shazam: 4,431,891 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>סאונדקלאוד: 6,293,746 השמעות, 132,798 לייקים, 787 שיתופים.</li>
+<li>טיקטוק: 7,794,394,014 צפיות, 3,459,329 סרטונים נוצרו (תוכן משתמשים), 716,881,946 לייקים, 92,148,623 שיתופים, ושיעור מעורבות של 10.4%.</li>
+<li>קהל ומעורבות: 366,793,755 צפיות סך הכל, 350,090 סרטוני Shorts נוצרו, 6,531,855 לייקים, ושיעור מעורבות של 1.6%.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-142 מצעדים ב-96 מדינות היום, עם 67 מיקומים בטופ 10 (מתוכם 7 במקום הראשון). עוגן היסטורי: נמדד במשך 135 ימים, הגיע ל-118 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 באוסטריה (אלטרנטיבי), גרמניה (אלטרנטיבי), לוקסמבורג (אלטרנטיבי), שוויץ (אלטרנטיבי), אורוגוואי (אלטרנטיבי) ועוד 12 נוספות.</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (67)</summary><ul>
+<li>תימן (כללי): מקום #1 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>תימן (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>מלטה (אלטרנטיבי): מקום #1 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>סלובקיה (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>גרמניה (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>אוסטריה (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>שוויץ (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>סורינאם (אלטרנטיבי): מקום #2 (עלייה של 3 מקומות, שיא: #1)</li>
+<li>בחריין (אלטרנטיבי): מקום #2 (עלייה של 3 מקומות, שיא: #1)</li>
+<li>סלובניה (אלטרנטיבי): מקום #2 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>הונגריה (אלטרנטיבי): מקום #2 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>עומאן (אלטרנטיבי): מקום #2 (עלייה של 3 מקומות, שיא: #1)</li>
+<li>קפריסין (אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>טורקמניסטן (אלטרנטיבי): מקום #2 (עלייה של 8 מקומות, שיא: #1)</li>
+<li>האיים המלדיביים (אלטרנטיבי): מקום #2 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>לוקסמבורג (אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>פולין (אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>מולדובה (אלטרנטיבי): מקום #3 (ללא שינוי, שיא: #1)</li>
+<li>אורוגוואי (אלטרנטיבי): מקום #3 (עלייה של 5 מקומות, שיא: #1)</li>
+<li>לטביה (אלטרנטיבי): מקום #3 (ללא שינוי, שיא: #1)</li>
+<li>אנטיגואה וברבודה (אלטרנטיבי): מקום #3 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>ליטא (אלטרנטיבי): מקום #3 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>בלגיה (אלטרנטיבי): מקום #3 (ללא שינוי, שיא: #2)</li>
+<li>פינלנד (אלטרנטיבי): מקום #3 (ללא שינוי, שיא: #1)</li>
+<li>צ'כיה (אלטרנטיבי): מקום #3 (ללא שינוי, שיא: #1)</li>
+<li>טג'יקיסטן (אלטרנטיבי): מקום #4 (עלייה של 6 מקומות, שיא: #1)</li>
+<li>שוויץ (כללי): מקום #4 (עלייה של 1 מקומות, שיא: #3)</li>
+<li>איטליה (אלטרנטיבי): מקום #4 (ללא שינוי, שיא: #1)</li>
+<li>אוסטריה (כללי): מקום #4 (ללא שינוי, שיא: #3)</li>
+<li>שוודיה (אלטרנטיבי): מקום #4 (ירידה של 1 מקומות, שיא: #2)</li>
+<li>קוסובו (אלטרנטיבי): מקום #4 (עלייה של 2 מקומות, שיא: #2)</li>
+<li>כווית (אלטרנטיבי): מקום #4 (ירידה של 1 מקומות, שיא: #2)</li>
+<li>בוסניה והרצגובינה (אלטרנטיבי): מקום #4 (עלייה של 3 מקומות, שיא: #1)</li>
+<li>לבנון (אלטרנטיבי): מקום #4 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>אסטוניה (אלטרנטיבי): מקום #4 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>אוקראינה (אלטרנטיבי): מקום #5 (ללא שינוי, שיא: #2)</li>
+<li>מונטנגרו (אלטרנטיבי): מקום #5 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>יוון (אלטרנטיבי): מקום #5 (עלייה של 1 מקומות, שיא: #2)</li>
+<li>בליז (אלטרנטיבי): מקום #5 (ירידה של 3 מקומות, שיא: #1)</li>
+<li>צרפת (אלטרנטיבי): מקום #5 (ללא שינוי, שיא: #4)</li>
+<li>הונג קונג (אלטרנטיבי): מקום #5 (ללא שינוי, שיא: #4)</li>
+<li>גאורגיה (אלטרנטיבי): מקום #5 (עלייה של 2 מקומות, שיא: #1)</li>
+<li>מרוקו (אלטרנטיבי): מקום #6 (עלייה של 4 מקומות, שיא: #2)</li>
+<li>גרמניה (כללי): מקום #6 (עלייה של 2 מקומות, שיא: #6)</li>
+<li>ערב הסעודית (אלטרנטיבי): מקום #6 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>ונצואלה (אלטרנטיבי): מקום #7 (ירידה של 2 מקומות, שיא: #2)</li>
+<li>ארמניה (אלטרנטיבי): מקום #7 (עלייה של 5 מקומות, שיא: #1)</li>
+<li>רומניה (אלטרנטיבי): מקום #7 (ללא שינוי, שיא: #1)</li>
+<li>אוסטרליה (אלטרנטיבי): מקום #7 (עלייה של 2 מקומות, שיא: #5)</li>
+<li>קירגיזסטן (אלטרנטיבי): מקום #7 (ירידה של 2 מקומות, שיא: #2)</li>
+<li>טרינידד וטובגו (אלטרנטיבי): מקום #7 (ירידה של 1 מקומות, שיא: #2)</li>
+<li>טייוואן (אלטרנטיבי): מקום #7 (ללא שינוי, שיא: #5)</li>
+<li>איחוד האמירויות הערביות (אלטרנטיבי): מקום #8 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>פיג'י (אלטרנטיבי): מקום #9 (עלייה של 3 מקומות, שיא: #2)</li>
+<li>סרי לנקה (אלטרנטיבי): מקום #9 (ירידה של 2 מקומות, שיא: #1)</li>
+<li>בלארוס (אלטרנטיבי): מקום #9 (עלייה של 8 מקומות, שיא: #2)</li>
+<li>סינגפור (אלטרנטיבי): מקום #9 (ירידה של 1 מקומות, שיא: #4)</li>
+<li>פורטוגל (אלטרנטיבי): מקום #9 (ללא שינוי, שיא: #4)</li>
+<li>נורווגיה (אלטרנטיבי): מקום #9 (עלייה של 3 מקומות, שיא: #2)</li>
+<li>הולנד (אלטרנטיבי): מקום #9 (עלייה של 2 מקומות, שיא: #4)</li>
+<li>אזרבيجן (אלטרנטיבי): מקום #9 (ללא שינוי, שיא: #3)</li>
+<li>ירדן (אלטרנטיבי): מקום #10 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>הודו (אלטרנטיבי): מקום #10 (ללא שינוי, שיא: #6)</li>
+<li>מצרים (אלטרנטיבי): מקום #10 (ירידה של 2 מקומות, שיא: #1)</li>
+<li>סרביה (אלטרנטיבי): מקום #10 (ירידה של 3 מקומות, שיא: #1)</li>
+<li>אוזבקיסטן (אלטרנטיבי): מקום #10 (ללא שינוי, שיא: #2)</li>
+<li>קזחסטן (אלטרנטיבי): מקום #10 (עלייה של 1 מקומות, שיא: #3)</li>
+</ul></details>
+<h3>תובנות Shazam</h3>
+<p>מדד קהל: 4,431,891 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
+<p>פעיל כעת ב-57 מצעדים ב-56 מדינות היום, עם 13 מיקומים בטופ 10. עוגן היסטורי: נמדד במשך 126 ימים, הגיע ל-85 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 בבחריין (כללי), צ'כיה (כללי), אסטוניה (כללי), ישראל (כללי), לטביה (כללי) ועוד 3 נוספות.</p>
+<p>בשזאם גלובלי (אלטרנטיבי), השיר מחזיק בדירוג #[2] (ללא שינוי, שיא: #[1]). נמדד במשך 15 ימים (רצף במיקום הנוכחי: 15 ימים, ימים בטופ 10: 15, ימים בטופ 20: 15).</p>
+<p>בשזאם גלובלי (כללי), השיר מחזיק בדירוג #[12] (עלייה של 1 מקומות, שיא: #[4]). נמדד במשך 119 ימים (רצף במיקום הנוכחי: 1 ימים, ימים בטופ 10: 116, ימים בטופ 20: 119).</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (13)</summary><ul>
+<li>אוסטרליה (כללי): מקום #2 (ללא שינוי, שיא: #2)</li>
+<li>גלובלי (אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>פולין (כללי): מקום #3 (ללא שינוי, שיא: #2)</li>
+<li>בלגיה (כללי): מקום #4 (ירידה של 1 מקומות, שיא: #3)</li>
+<li>צ'כיה (כללי): מקום #4 (ללא שינוי, שיא: #1)</li>
+<li>שוויץ (כללי): מקום #4 (ללא שינוי, שיא: #2)</li>
+<li>אוסטריה (כללי): מקום #5 (ללא שינוי, שיא: #1)</li>
+<li>פורטוגל (כללי): מקום #5 (ללא שינוי, שיא: #3)</li>
+<li>גרמניה (כללי): מקום #7 (ללא שינוי, שיא: #2)</li>
+<li>הולנד (כללי): מקום #8 (עלייה של 1 מקומות, שיא: #6)</li>
+<li>נורווגיה (כללי): מקום #9 (ללא שינוי, שיא: #4)</li>
+<li>סינגפור (כללי): מקום #9 (ללא שינוי, שיא: #4)</li>
+<li>צרפת (כללי): מקום #10 (ללא שינוי, שיא: #2)</li>
+</ul></details>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 366,793,755 צפיות סך הכל, 350,090 סרטוני Shorts נוצרו, 6,531,855 לייקים, ושיעור מעורבות של 1.6%.</p>
+<p>פעיל כעת ב-37 מצעדים ב-26 מדינות היום, עם 1 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 14 ימים, הגיע ל-26 מדינות, עם דירוג שיא של כל הזמנים: מקום 3 באוסטריה (כללי).</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (1)</summary><ul>
+<li>אוסטריה (כללי): מקום #7 (ירידה של 1 מקומות, שיא: #2)</li>
+</ul></details>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-57 מצעדים ב-37 מדינות היום, עם 24 מיקומים בטופ 10 (מתוכם 8 במקום הראשון). עוגן היסטורי: נמדד במשך 14 ימים, הגיע ל-58 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 באוסטריה (אלטרנטיבי), אינדונזיה (אלטרנטיבי), פולין (אלטרנטיבי), בלגיה (אלטרנטיבי), צ'כיה (אלטרנטיבי) ועוד 14 נוספות.</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (24)</summary><ul>
+<li>הונג קונג (אלטרנטיבי): מקום #1 (עלייה של 3 מקומות, שיא: #1)</li>
+<li>אוסטריה (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>פולין (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>אינדונזיה (אלטרנטיבי): מקום #1 (עלייה של 6 מקומות, שיא: #1)</li>
+<li>גרמניה (אלטרנטיבי): מקום #1 (ללא שינוי, שיא: #1)</li>
+<li>צרפת (אלטרנטיבי): מקום #1 (עלייה של 4 מקומות, שיא: #1)</li>
+<li>דנמרק (אלטרנטיבי): מקום #1 (עלייה של 23 מקומות, שיא: #1)</li>
+<li>אקוודור (אלטרנטיבי): מקום #1 (עלייה של 35 מקומות, שיא: #1)</li>
+<li>אוסטרליה (אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>בלארוס (אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>הודו (אלטרנטיבי): מקום #3 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>שוודיה (אלטרנטיבי): מקום #3 (עלייה של 6 מקומות, שיא: #1)</li>
+<li>צ'כיה (אלטרנטיבי): מקום #3 (עלייה של 51 מקומות, שיא: #1)</li>
+<li>אוזבקיסטן (אלטרנטיבי): מקום #3 (ירידה של 1 מקומות, שיא: #1)</li>
+<li>אירלנד (אלטרנטיבי): מקום #4 (עלייה של 15 מקומות, שיא: #2)</li>
+<li>שוויץ (אלטרנטיבי): מקום #4 (ללא שינוי, שיא: #4)</li>
+<li>קנדה (אלטרנטיבי): מקום #5 (עלייה של 3 מקומות, שיא: #1)</li>
+<li>בלגיה (אלטרנטיבי): מקום #5 (עלייה של 2 מקומות, שיא: #1)</li>
+<li>פולין (כללי): מקום #5 (עלייה של 1 מקומות, שיא: #2)</li>
+<li>מקסיקו (אלטרנטיבי): מקום #7 (ירידה של 2 מקומות, שיא: #1)</li>
+<li>שוויץ (כללי): מקום #8 (ירידה של 5 מקומות, שיא: #3)</li>
+<li>גלובלי (אלטרנטיבי): מקום #9 (ללא שינוי, שיא: #4)</li>
+<li>איטליה (אלטרנטיבי): מקום #9 (ללא שינוי, שיא: #1)</li>
+<li>טורקיה (אלטרנטיבי): מקום #10 (עלייה של 2 מקומות, שיא: #3)</li>
+</ul></details>
+<h3>תובנות מצעדי Amazon Music</h3>
+<p>פעיל כעת ב-35 מצעדים ב-14 מדינות היום, עם 14 מיקומים בטופ 10 (מתוכם 1 במקום הראשון). עוגן היסטורי: נמדד במשך 14 ימים, הגיע ל-15 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 באיטליה (רוק אלטרנטיבי), אירופה (רוק אלטרנטיבי), אירופה (רוק), גרמניה (רוק אלטרנטיבי), אוסטרליה (רוק).</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (14)</summary><ul>
+<li>אוסטרליה (רוק): מקום #1 (עלייה של 5 מקומות, שיא: #1)</li>
+<li>אוסטרליה (רוק אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>אירופה (רוק אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>צרפת (רוק אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #2)</li>
+<li>גרמניה (רוק אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>הודו (רוק אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #2)</li>
+<li>איטליה (רוק אלטרנטיבי): מקום #2 (ללא שינוי, שיא: #1)</li>
+<li>אוסטרליה (אינדי): מקום #3 (עלייה של 4 מקומות, שיא: #3)</li>
+<li>אירופה (רוק): מקום #4 (עלייה של 1 מקומות, שיא: #1)</li>
+<li>גרמניה (פופ): מקום #4 (עלייה של 1 מקומות, שיא: #3)</li>
+<li>קנדה (רוק אלטרנטיבי): מקום #5 (עלייה של 1 מקומות, שיא: #3)</li>
+<li>גרמניה (כללי): מקום #5 (עלייה של 1 מקומות, שיא: #4)</li>
+<li>הודו (רוק): מקום #8 (ירידה של 1 מקומות, שיא: #4)</li>
+<li>ברזיל (אינדי): מקום #10 (ירידה של 1 מקומות, שיא: #3)</li>
+</ul></details>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-LUM!X</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -1.7, מאזינים Z: +0.6, עוקבים Z: +0.1), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="../data_integrity_temper_city.html#streams-self-aware-lum-x">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -17.2%, עם תאוצה של -15.8%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-LUM!X" הוא 57 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 58,573,712</p>
+<p>השמעות יומיות אחרונות: 454,777 (שינוי: -85,378)</p>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 773,367</p>
+<p>הרצפה השבועית החדשה ננעלה על 533,667. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 609,407 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 542,546.</p>
+<h3>שלב התכווצות — 3 מדינות</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (3)</summary><ul>
+<li>שוויץ: -15.1%</li>
+<li>אוסטריה: -16.0%</li>
+<li>גרמניה: -17.6%</li>
+</ul></details>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>דיזר: 415,735 חשיפה בפלייליסטים על פני 11 פלייליסטים, עם ציון פופולריות של 83/100.</li>
+<li>אינסטגרם רילס: 3,988,420 צפיות על פני 73,604 רילסים שנוצרו, 156,851 לייקים, ושיעור מעורבות של 4.0%.</li>
+<li>השמעות רדיו: 26,121 השמעות (ספינים) סך הכל על פני 183 תחנות רדיו.</li>
+<li>Shazam: 520,247 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>סאונדקלאוד: 1,303,673 השמעות, 41,092 לייקים, 319 שיתופים.</li>
+<li>טיקטוק: 977,105,090 צפיות, 399,300 סרטונים נוצרו (תוכן משתמשים), 62,905,318 לייקים, 4,598,968 שיתופים, ושיעור מעורבות של 7.0%.</li>
+<li>קהל ומעורבות: 30,380,704 צפיות סך הכל, 2,947 סרטוני Shorts נוצרו, 417,438 לייקים, ושיעור מעורבות של 1.3%.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-54 מצעדים ב-54 מדינות היום, עם 2 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 13 ימים, הגיע ל-101 מדינות, עם דירוג שיא של כל הזמנים: מקום 2 באלג'יריה (אלקטרוני), בורמה (אלקטרוני).</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (2)</summary><ul>
+<li>אלג'יריה (אלקטרוני): מקום #6 (עלייה של 5 מקומות, שיא: #2)</li>
+<li>אוסטריה (אלקטרוני): מקום #8 (עלייה של 1 מקומות, שיא: #6)</li>
+</ul></details>
+<h3>תובנות Shazam</h3>
+<p>מדד קהל: 520,247 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
+<p>פעיל כעת ב-13 מצעדים ב-13 מדינות היום, עם 0 מיקומים בטופ 10. עוגן היסטורי: נמדד במשך 13 ימים, הגיע ל-13 מדינות, עם דירוג שיא של כל הזמנים: מקום 10 בברזיל (דאנס).</p>
+<p>בשזאם גלובלי (דאנס), השיר מחזיק בדירוג #[78] (עלייה של 2 מקומות, שיא: #[18]). נמדד במשך 13 ימים (רצף במיקום הנוכחי: 1 ימים, ימים בטופ 10: 0, ימים בטופ 20: 0).</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 30,380,704 צפיות סך הכל, 2,947 סרטוני Shorts נוצרו, 417,438 לייקים, ושיעור מעורבות של 1.3%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-14 מצעדים ב-14 מדינות היום, עם 5 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 12 ימים, הגיע ל-27 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 במלטה (אלקטרוני), פורטוגל (אלקטרוני).</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (5)</summary><ul>
+<li>ניו זילנד (אלקטרוני): מקום #3 (עלייה של 55 מקומות, שיא: #3)</li>
+<li>אוסטריה (אלקטרוני): מקום #4 (ללא שינוי, שיא: #2)</li>
+<li>בלגיה (אלקטרוני): מקום #4 (ללא שינוי, שיא: #2)</li>
+<li>ברזיל (אלקטרוני): מקום #5 (עלייה של 45 מקומות, שיא: #1)</li>
+<li>צ'כיה (אלקטרוני): מקום #9 (עלייה של 46 מקומות, שיא: #1)</li>
+</ul></details>
+<h3>תובנות מצעדי Amazon Music</h3>
+<p>פעיל כעת ב-1 מצעדים ב-1 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 1 ימים, הגיע ל-1 מדינות, עם דירוג שיא של כל הזמנים: מקום 99 בגרמניה (דאנס ואלקטרוני).</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-Ian Asher</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -0.6, מאזינים Z: +0.6, עוקבים Z: +0.1), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="../data_integrity_temper_city.html#streams-self-aware-ian-asher">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -14.8%, עם תאוצה של -15.1%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-Ian Asher" הוא 57 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 67,409,377</p>
+<p>השמעות יומיות אחרונות: 532,759 (שינוי: -94,406)</p>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 951,713</p>
+<p>הרצפה השבועית החדשה ננעלה על 600,925. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 745,493 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 534,399.</p>
+<h3>שלב התכווצותמדינה — מדינה אחת</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (1)</summary><ul>
+<li>אוסטריה: -14.8%</li>
+</ul></details>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>דיזר: 469 חשיפה בפלייליסטים על פני 2 פלייליסטים, עם ציון פופולריות של 77/100.</li>
+<li>אינסטגרם רילס: 17,831,419 צפיות על פני 243 רילסים שנוצרו, 1,035,073 לייקים, ושיעור מעורבות של 5.9%.</li>
+<li>השמעות רדיו: 1,065 השמעות (ספינים) סך הכל על פני 41 תחנות רדיו.</li>
+<li>Shazam: 4,735 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>סאונדקלאוד: 744,511 השמעות, 22,113 לייקים, 185 שיתופים.</li>
+<li>טיקטוק: 974,637,390 צפיות, 351,011 סרטונים נוצרו (תוכן משתמשים), 75,002,995 לייקים, 6,681,940 שיתופים, ושיעור מעורבות של 8.5%.</li>
+<li>קהל ומעורבות: 33,151,358 צפיות סך הכל, 5,128 סרטוני Shorts נוצרו, 435,164 לייקים, ושיעור מעורבות של 1.5%.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-54 מצעדים ב-54 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 13 ימים, הגיע ל-108 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 בגמביה (אלקטרוני).</p>
+<h3>תובנות Shazam</h3>
+<p>מדד קהל: 4,735 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
+<p>פעיל כעת ב-6 מצעדים ב-6 מדינות היום, עם 0 מיקומים בטופ 10. עוגן היסטורי: נמדד במשך 13 ימים, הגיע ל-10 מדינות, עם דירוג שיא של כל הזמנים: מקום 25 בקנדה (דאנס).</p>
+<p>בשזאם גלובלי (דאנס), השיר מחזיק בדירוג #[88] (ירידה של 1 מקומות, שיא: #[57]). נמדד במשך 13 ימים (רצף במיקום הנוכחי: 1 ימים, ימים בטופ 10: 0, ימים בטופ 20: 0).</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 33,151,358 צפיות סך הכל, 5,128 סרטוני Shorts נוצרו, 435,164 לייקים, ושיעור מעורבות של 1.5%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-8 מצעדים ב-8 מדינות היום, עם 1 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 12 ימים, הגיע ל-21 מדינות, עם דירוג שיא של כל הזמנים: מקום 1 במלזיה (אלקטרוני).</p>
+<p>המצעד המוביל: ניו זילנד (אלקטרוני) במקום #8 (עלייה של 51 מקומות, שיא: #1).</p>
+<h3>תובנות מצעדי Amazon Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Reverse Psychology</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -1.8, מאזינים Z: +0.6, עוקבים Z: +0.1), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="../data_integrity_temper_city.html#streams-reverse-psychology">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -31.5%, עם תאוצה של -11.1%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Reverse Psychology" הוא 25 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 3,989,388</p>
+<p>השמעות יומיות אחרונות: 135,464 (שינוי: -16,953)</p>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 306,958</p>
+<p>הרצפה השבועית החדשה ננעלה על 197,690. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 214,023 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 214,023.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>דיזר: 188,756 חשיפה בפלייליסטים על פני 2 פלייליסטים, עם ציון פופולריות של 73/100.</li>
+<li>אינסטגרם רילס: 736,373 צפיות על פני 50 רילסים שנוצרו, 43,181 לייקים, ושיעור מעורבות של 6.0%.</li>
+<li>השמעות רדיו: 1,209 השמעות (ספינים) סך הכל על פני 136 תחנות רדיו.</li>
+<li>Shazam: 14,269 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>סאונדקלאוד: 20,100 השמעות, 670 לייקים, 13 שיתופים.</li>
+<li>טיקטוק: 43,008,249 צפיות, 1,480 סרטונים נוצרו (תוכן משתמשים), 2,609,376 לייקים, 488,512 שיתופים, ושיעור מעורבות של 7.3%.</li>
+<li>קהל ומעורבות: 1,287,722 צפיות סך הכל, 52 סרטוני Shorts נוצרו, 38,361 לייקים, ושיעור מעורבות של 3.3%.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-3 מצעדים ב-3 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 14 ימים, הגיע ל-17 מדינות, עם דירוג שיא של כל הזמנים: מקום 11 בטורקמניסטן (אלטרנטיבי).</p>
+<h3>תובנות Shazam</h3>
+<p>מדד קהל: 14,269 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
+<p>פעיל כעת ב-1 מצעדים ב-1 מדינות היום, עם 0 מיקומים בטופ 10. עוגן היסטורי: נמדד במשך 10 ימים, הגיע ל-2 מדינות, עם דירוג שיא של כל הזמנים: מקום 103 בישראל (כללי).</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 1,287,722 צפיות סך הכל, 52 סרטוני Shorts נוצרו, 38,361 לייקים, ושיעור מעורבות של 3.3%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-1 מצעדים ב-1 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 13 ימים, הגיע ל-14 מדינות, עם דירוג שיא של כל הזמנים: מקום 2 בפולין (אלטרנטיבי).</p>
+<p>המצעד המוביל: רומניה (אלטרנטיבי) במקום #81 (ירידה של 12 מקומות, שיא: #5).</p>
+<h3>תובנות מצעדי Amazon Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-Gravagerz</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -0.9, מאזינים Z: +0.6, עוקבים Z: +0.1), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="../data_integrity_temper_city.html#streams-self-aware-gravagerz">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -16.2%, עם תאוצה של -16.3%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-Gravagerz" הוא 16 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 1,333,569</p>
+<p>השמעות יומיות אחרונות: 105,171 (שינוי: -20,445)</p>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 154,972</p>
+<p>הרצפה השבועית החדשה ננעלה על 125,481. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 61,404 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 61,404.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>דיזר: 0 חשיפה בפלייליסטים על פני 0 פלייליסטים, עם ציון פופולריות של 56/100.</li>
+<li>Shazam: 851 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</li>
+<li>סאונדקלאוד: 6,261 השמעות, 236 לייקים, 5 שיתופים.</li>
+<li>טיקטוק: 26,644,769 צפיות, 31,183 סרטונים נוצרו (תוכן משתמשים), 2,337,365 לייקים, 287,749 שיתופים, ושיעור מעורבות של 10.0%.</li>
+<li>קהל ומעורבות: 2,557,076 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 21,180 לייקים, ושיעור מעורבות של 0.8%.</li>
+<li>השמעות רדיו: 45 השמעות (ספינים) סך הכל על פני 40 תחנות רדיו.</li>
+<li>אינסטגרם רילס: 1,125,025 צפיות על פני 278 רילסים שנוצרו, 29,025 לייקים, ושיעור מעורבות של 2.6%.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-5 מצעדים ב-5 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 12 ימים, הגיע ל-22 מדינות, עם דירוג שיא של כל הזמנים: מקום 3 בסנט לוסיה (אלקטרוני).</p>
+<h3>תובנות Shazam</h3>
+<p>מדד קהל: 851 סך תיוגי/זיהויי Shazam שנרשמו ברחבי העולם.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 2,557,076 צפיות סך הכל, 0 סרטוני Shorts נוצרו, 21,180 לייקים, ושיעור מעורבות של 0.8%.</p>
+<p>פעיל כעת ב-4 מצעדים ב-4 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 5 ימים, הגיע ל-4 מדינות, עם דירוג שיא של כל הזמנים: מקום 52 באסטוניה (כללי).</p>
+<p>המצעד המוביל: אסטוניה (כללי) במקום #52 (ללא שינוי, שיא: #52).</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-5 מצעדים ב-5 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 12 ימים, הגיע ל-14 מדינות, עם דירוג שיא של כל הזמנים: מקום 2 בסינגפור (אלקטרוני).</p>
+<p>המצעד המוביל: איטליה (אלקטרוני) במקום #19 (כניסה חדשה, שיא: #19).</p>
+<h3>תובנות מצעדי Amazon Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-Ely Oaks</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: +0.0, מאזינים Z: +0.6, עוקבים Z: +0.1), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="../data_integrity_temper_city.html#streams-self-aware-ely-oaks">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>נתונים קינמטיים אינם זמינים (נדרשים 8 ימי היסטוריה).</p>
+<p>גילו של השיר "Self Aware-Ely Oaks" הוא 2 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 610,554</p>
+<p>השמעות יומיות אחרונות: 48,830 (שינוי: 48,830)</p>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 48,830</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 2 מתוך 7). הממוצע החלקי הנוכחי עומד על 24,415. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 0 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 0.</p>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות Shazam</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Shazam היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Amazon Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Amazon Music היום.</p>
+</div>
+</details>
+<h2 id="summary">סיכום</h2>
+<p>הריםיקסים המורשים עבור 'Self Aware' (LUM!X ו-Ian Asher ו-Gravagerz ו-Ely Oaks) תרמו סך משולב של 1,141,537 השמעות יומיות היום. נתון זה מהווה תוספת של 40.6% להשמעות היומיות של השיר המקורי.</p>
+
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
+}
+</script></body>
+</html>
