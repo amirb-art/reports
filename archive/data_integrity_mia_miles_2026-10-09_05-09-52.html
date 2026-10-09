@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mia Miles | 8-Day Velocity & Statistical Diagnostics Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #e6edf3;
+            --text-muted: #8b949e;
+            --accent-green: #1db954;
+            --accent-blue: #38bdf8;
+            --accent-purple: #a78bfa;
+            --accent-gold: #f59e0b;
+            --accent-red: #ef4444;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 80px;
+            direction: ltr;
+            text-align: left;
+        }
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background-color: #21262d;
+            color: var(--text-color);
+            padding: 7px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background-color: #30363d;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 28px 24px;
+        }
+        .page-header {
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 18px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 14.5px;
+            margin-top: 8px;
+        }
+        .methodology-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #c9d1d9;
+        }
+        .section-title {
+            font-size: 22px;
+            color: #ffffff;
+            margin-top: 36px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .card-header h3 {
+            font-size: 18px;
+            color: #ffffff;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .badge-stable {
+            background-color: rgba(29, 185, 84, 0.15);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+        .badge-anomaly {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-box {
+            background-color: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 14px 18px;
+        }
+        .kpi-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .kpi-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .z-score {
+            font-size: 21px;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        }
+        .text-danger {
+            color: var(--accent-red) !important;
+        }
+        .text-success {
+            color: var(--accent-green) !important;
+        }
+        .chart-container {
+            background-color: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 15px;
+        }
+        .track-tabs-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            padding: 14px;
+            background-color: #161b22;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .track-tab-btn {
+            background-color: #21262d;
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .track-tab-btn:hover {
+            background-color: var(--accent-green);
+            color: #000000;
+            font-weight: bold;
+            border-color: var(--accent-green);
+        }
+        .track-section-wrapper {
+            margin-bottom: 45px;
+        }
+        .track-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #1c2333 0%, #161b22 100%);
+            border: 1px solid #30363d;
+            border-bottom: 3px solid var(--accent-green);
+            border-radius: 10px 10px 0 0;
+            padding: 16px 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .track-title-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .track-index {
+            font-size: 11.5px;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .track-headline {
+            font-size: 22px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .track-title-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .back-to-top-btn {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 4px 10px;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .back-to-top-btn:hover {
+            color: #ffffff;
+            border-color: var(--text-color);
+        }
+        .track-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            padding: 24px;
+        }
+        .track-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #30363d, transparent);
+            margin-top: 40px;
+        }
+        /* Plotly dark mode tooltip & modebar enhancements */
+        .hoverlayer .hovertext rect {
+            fill: #161b22 !important;
+            stroke: #30363d !important;
+        }
+        .hoverlayer .hovertext text {
+            fill: #f0f6fc !important;
+        }
+        .js-plotly-plot .plotly .modebar {
+            top: 4px !important;
+            right: 4px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-links">
+            <span style="font-weight: bold; margin-right: 8px;">📊 Statistical Diagnostics:</span>
+            <a href="#followers" class="nav-btn">➕ Followers Gain</a>
+            <a href="#monthly-listeners" class="nav-btn">👥 Monthly Listeners Change</a>
+            <a href="#daily-streams" class="nav-btn">🎵 Daily Streams Velocity</a>
+        </div>
+        <div class="nav-links">
+            <a href="../lobby_mia_miles.html" class="nav-btn">⬅ Back to Mia Miles Hub</a>
+            <a href="../data_integrity_temper_city.html" class="nav-btn" style="border-color: var(--accent-blue); color: var(--accent-blue);">Switch to Temper City ➔</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <header class="page-header">
+            <h1>🔬 Mia Miles — 8-Day Velocity & Anomaly Bar Charts</h1>
+            <p>Target Evaluation Date: <strong>2026-10-07</strong> | Strict Rolling 7-Day Baseline Window (Prior 7 Days vs. Target Day)</p>
+        </header>
+
+        <div class="methodology-box">
+            <strong>📐 Statistical Methodology & Calculation Principles:</strong><br>
+            • <strong>Strict 8-Day Scope:</strong> Only the last 8 daily step changes (Δ) are analyzed. The first 7 days form the statistical baseline (μ<sub>7d</sub>, σ<sub>7d</sub>).<br>
+            • <strong>Unpolluted Target Evaluation:</strong> The 8th day (2026-10-07) is evaluated against the baseline: <strong>Z = (Δ<sub>today</sub> - μ<sub>7d</sub>) / σ<sub>7d</sub></strong> without contaminating the baseline mean.<br>
+            • <strong>Regime Shift Philosophy:</strong> A single-day critical threshold breach (|Z| > 3.0σ) is flagged in red as an anomaly awaiting confirmation. If repeated over 2–3 consecutive daily cycles, it transitions into the new normal baseline.
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 1. BAND METRIC: FOLLOWERS                  -->
+        <!-- ========================================== -->
+        <h2 class="section-title" id="followers">➕ Band Metric: Followers Daily Gain (Δ)</h2>
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h3>Followers — Daily Net Gain (Day-over-Day Δ)</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Cumulative Followers: 3,674 | Today's Gain: +11</p>
+                </div>
+                <span class="status-badge badge-stable">Normal & Stable (Z = +0.9σ)</span>
+            </div>
+            <div class="kpi-grid">
+                <div class="kpi-box">
+                    <span class="kpi-label">Target Day Net Gain</span>
+                    <span class="kpi-value text-success">+11</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                    <span class="kpi-value">+6</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                    <span class="kpi-value">5</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Diff from Baseline Mean</span>
+                    <span class="kpi-value">+4</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Current Rolling Z-Score</span>
+                    <span class="kpi-value z-score text-success">+0.86σ</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="62dc7dbb-0da6-473c-a58c-fbf7aad6fc9c" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("62dc7dbb-0da6-473c-a58c-fbf7aad6fc9c")) {                    Plotly.newPlot(                        "62dc7dbb-0da6-473c-a58c-fbf7aad6fc9c",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["+8.0","+14.0","+0.0","+10.0","+6.0","+0.0","+8.0","+11.0"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[8.0,14.0,0.0,10.0,6.0,0.0,8.0,11.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e +6.6\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = +6.6)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[6.571428571428571,6.571428571428571,6.571428571428571,6.571428571428571,6.571428571428571,6.571428571428571,6.571428571428571],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Daily Followers Growth (\u0394)"},"gridcolor":"#21262d","range":[-50.0,64.0],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 2. BAND METRIC: MONTHLY LISTENERS          -->
+        <!-- ========================================== -->
+        <h2 class="section-title" id="monthly-listeners">👥 Band Metric: Monthly Listeners Daily Change (Δ)</h2>
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h3>Monthly Listeners — Daily Net Change (Day-over-Day Δ)</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Cumulative Monthly Listeners: 181,816 | Today's Change: -4,630</p>
+                </div>
+                <span class="status-badge badge-stable">Normal & Stable (Z = -0.1σ)</span>
+            </div>
+            <div class="kpi-grid">
+                <div class="kpi-box">
+                    <span class="kpi-label">Target Day Net Change</span>
+                    <span class="kpi-value text-success">-4,630</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                    <span class="kpi-value">-4,376</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                    <span class="kpi-value">1,787</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Diff from Baseline Mean</span>
+                    <span class="kpi-value">-253</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Current Rolling Z-Score</span>
+                    <span class="kpi-value z-score text-success">-0.14σ</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div>                            <div id="b0adf1f0-6057-4fa0-b256-00f719adae8b" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("b0adf1f0-6057-4fa0-b256-00f719adae8b")) {                    Plotly.newPlot(                        "b0adf1f0-6057-4fa0-b256-00f719adae8b",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["-3,879","-4,441","-4,930","-7,899","-2,105","-3,933","-3,450","-4,630"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[-3879.0,-4441.0,-4930.0,-7899.0,-2105.0,-3933.0,-3450.0,-4630.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e -4,376\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = -4,376)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[-4376.714285714285,-4376.714285714285,-4376.714285714285,-4376.714285714285,-4376.714285714285,-4376.714285714285,-4376.714285714285],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Daily Listeners Change (\u0394)"},"gridcolor":"#21262d","range":[-9347.5,-656.5],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 3. TRACK METRIC: DAILY STREAMS             -->
+        <!-- ========================================== -->
+        <h2 class="section-title" id="daily-streams">🎵 Track Level Metrics: Daily Stream Velocity Change</h2>
+        
+        <div class="track-tabs-bar">
+            <span style="align-self: center; font-weight: bold; color: #8b949e; margin-right: 8px;">Jump to Song:</span>
+            <a href="#streams-7-days-a-week" class="track-tab-btn">7 days a week</a><a href="#streams-7-days-a-week---ave-remix" class="track-tab-btn">7 days a week - AVE Remix</a><a href="#streams-7-days-a-week---dallin-remix" class="track-tab-btn">7 days a week - Dallin Remix</a><a href="#streams-7-days-a-week---mizmo-remix" class="track-tab-btn">7 days a week - Mizmo Remix</a><a href="#streams-7-days-a-week---olli-p-remix" class="track-tab-btn">7 days a week - Olli P Remix</a><a href="#streams-stupid-face" class="track-tab-btn">Stupid Face</a>
+        </div>
+
+        
+        <div class="track-section-wrapper" id="streams-7-days-a-week">
+            <div class="track-banner">
+                <div class="track-title-left">
+                    <span class="track-index">Track 1 of 6</span>
+                    <h2 class="track-headline">🎵 7 days a week</h2>
+                </div>
+                <div class="track-title-right">
+                    <span class="status-badge badge-stable">Normal & Stable (Z = -0.2σ)</span>
+                    <a href="#daily-streams" class="back-to-top-btn">▲ Back to Songs Index</a>
+                </div>
+            </div>
+
+            <div class="track-card">
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <span class="kpi-label">Today's Daily Streams</span>
+                        <span class="kpi-value">10,623</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Target Day Velocity (Δ)</span>
+                        <span class="kpi-value text-success">-200</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                        <span class="kpi-value">+32</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                        <span class="kpi-value">1,336</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Current Rolling Z-Score</span>
+                        <span class="kpi-value z-score text-success">-0.17σ</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div>                            <div id="d8ac9c0a-6489-40c1-b295-0f24495474ad" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("d8ac9c0a-6489-40c1-b295-0f24495474ad")) {                    Plotly.newPlot(                        "d8ac9c0a-6489-40c1-b295-0f24495474ad",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["+266","+619","+465","+437","-877","-2,447","+1,761","-200"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[266.0,619.0,465.0,437.0,-877.0,-2447.0,1761.0,-200.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e +32.0\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = +32.0)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[32.0,32.0,32.0,32.0,32.0,32.0,32.0],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Change vs Previous Day (Streams)"},"gridcolor":"#21262d","range":[-3499.0,2813.0],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="track-divider"></div>
+        </div>
+        
+        <div class="track-section-wrapper" id="streams-7-days-a-week---ave-remix">
+            <div class="track-banner">
+                <div class="track-title-left">
+                    <span class="track-index">Track 2 of 6</span>
+                    <h2 class="track-headline">🎵 7 days a week - AVE Remix</h2>
+                </div>
+                <div class="track-title-right">
+                    <span class="status-badge badge-anomaly">Statistical Anomaly (Z = +3.1σ)</span>
+                    <a href="#daily-streams" class="back-to-top-btn">▲ Back to Songs Index</a>
+                </div>
+            </div>
+
+            <div class="track-card">
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <span class="kpi-label">Today's Daily Streams</span>
+                        <span class="kpi-value">419</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Target Day Velocity (Δ)</span>
+                        <span class="kpi-value text-danger">+157</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                        <span class="kpi-value">+29</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                        <span class="kpi-value">40</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Current Rolling Z-Score</span>
+                        <span class="kpi-value z-score text-danger">+3.12σ</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div>                            <div id="fc62bf93-c203-4bed-9ec1-945a236d7d68" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("fc62bf93-c203-4bed-9ec1-945a236d7d68")) {                    Plotly.newPlot(                        "fc62bf93-c203-4bed-9ec1-945a236d7d68",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(239, 68, 68, 0.9)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#ef4444"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["-10.0","+52.0","-19.0","-5.0","+76.0","+77.0","+35.0","+157"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[-10.0,52.0,-19.0,-5.0,76.0,77.0,35.0,157.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e +29.4\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = +29.4)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[29.428571428571427,29.428571428571427,29.428571428571427,29.428571428571427,29.428571428571427,29.428571428571427,29.428571428571427],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Change vs Previous Day (Streams)"},"gridcolor":"#21262d","range":[-69.0,207.0],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="track-divider"></div>
+        </div>
+        
+        <div class="track-section-wrapper" id="streams-7-days-a-week---dallin-remix">
+            <div class="track-banner">
+                <div class="track-title-left">
+                    <span class="track-index">Track 3 of 6</span>
+                    <h2 class="track-headline">🎵 7 days a week - Dallin Remix</h2>
+                </div>
+                <div class="track-title-right">
+                    <span class="status-badge badge-stable">Normal & Stable (Z = -0.3σ)</span>
+                    <a href="#daily-streams" class="back-to-top-btn">▲ Back to Songs Index</a>
+                </div>
+            </div>
+
+            <div class="track-card">
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <span class="kpi-label">Today's Daily Streams</span>
+                        <span class="kpi-value">2,068</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Target Day Velocity (Δ)</span>
+                        <span class="kpi-value text-success">-23</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                        <span class="kpi-value">+232</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                        <span class="kpi-value">730</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Current Rolling Z-Score</span>
+                        <span class="kpi-value z-score text-success">-0.35σ</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div>                            <div id="5e6cdad9-96e6-414f-bf3d-3b568eafce4a" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("5e6cdad9-96e6-414f-bf3d-3b568eafce4a")) {                    Plotly.newPlot(                        "5e6cdad9-96e6-414f-bf3d-3b568eafce4a",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["+1,658","+383","-416","-73.0","-121","-388","+584","-23.0"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[1658.0,383.0,-416.0,-73.0,-121.0,-388.0,584.0,-23.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e +232\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = +232)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[232.42857142857142,232.42857142857142,232.42857142857142,232.42857142857142,232.42857142857142,232.42857142857142,232.42857142857142],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Change vs Previous Day (Streams)"},"gridcolor":"#21262d","range":[-934.5,2176.5],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="track-divider"></div>
+        </div>
+        
+        <div class="track-section-wrapper" id="streams-7-days-a-week---mizmo-remix">
+            <div class="track-banner">
+                <div class="track-title-left">
+                    <span class="track-index">Track 4 of 6</span>
+                    <h2 class="track-headline">🎵 7 days a week - Mizmo Remix</h2>
+                </div>
+                <div class="track-title-right">
+                    <span class="status-badge badge-stable">Normal & Stable (Z = +0.2σ)</span>
+                    <a href="#daily-streams" class="back-to-top-btn">▲ Back to Songs Index</a>
+                </div>
+            </div>
+
+            <div class="track-card">
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <span class="kpi-label">Today's Daily Streams</span>
+                        <span class="kpi-value">1,074</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Target Day Velocity (Δ)</span>
+                        <span class="kpi-value text-success">+223</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                        <span class="kpi-value">+67</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                        <span class="kpi-value">817</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Current Rolling Z-Score</span>
+                        <span class="kpi-value z-score text-success">+0.19σ</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div>                            <div id="0500df2c-5436-457b-a8a3-d6207e970107" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("0500df2c-5436-457b-a8a3-d6207e970107")) {                    Plotly.newPlot(                        "0500df2c-5436-457b-a8a3-d6207e970107",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["+1,753","-804","-364","+84.0","-265","-203","+268","+223"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[1753.0,-804.0,-364.0,84.0,-265.0,-203.0,268.0,223.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e +67.0\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = +67.0)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[67.0,67.0,67.0,67.0,67.0,67.0,67.0],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Change vs Previous Day (Streams)"},"gridcolor":"#21262d","range":[-1443.25,2392.25],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="track-divider"></div>
+        </div>
+        
+        <div class="track-section-wrapper" id="streams-7-days-a-week---olli-p-remix">
+            <div class="track-banner">
+                <div class="track-title-left">
+                    <span class="track-index">Track 5 of 6</span>
+                    <h2 class="track-headline">🎵 7 days a week - Olli P Remix</h2>
+                </div>
+                <div class="track-title-right">
+                    <span class="status-badge badge-stable">Normal & Stable (Z = +1.2σ)</span>
+                    <a href="#daily-streams" class="back-to-top-btn">▲ Back to Songs Index</a>
+                </div>
+            </div>
+
+            <div class="track-card">
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <span class="kpi-label">Today's Daily Streams</span>
+                        <span class="kpi-value">52</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Target Day Velocity (Δ)</span>
+                        <span class="kpi-value text-success">+18</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                        <span class="kpi-value">-10</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                        <span class="kpi-value">24</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Current Rolling Z-Score</span>
+                        <span class="kpi-value z-score text-success">+1.16σ</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div>                            <div id="38bf5cd0-816c-4c35-9b68-2818533baca7" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("38bf5cd0-816c-4c35-9b68-2818533baca7")) {                    Plotly.newPlot(                        "38bf5cd0-816c-4c35-9b68-2818533baca7",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["+12.0","-38.0","-26.0","+22.0","-38.0","+6.0","-10.0","+18.0"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[12.0,-38.0,-26.0,22.0,-38.0,6.0,-10.0,18.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e -10.3\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = -10.3)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[-10.285714285714286,-10.285714285714286,-10.285714285714286,-10.285714285714286,-10.285714285714286,-10.285714285714286,-10.285714285714286],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Change vs Previous Day (Streams)"},"gridcolor":"#21262d","range":[-88.0,72.0],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="track-divider"></div>
+        </div>
+        
+        <div class="track-section-wrapper" id="streams-stupid-face">
+            <div class="track-banner">
+                <div class="track-title-left">
+                    <span class="track-index">Track 6 of 6</span>
+                    <h2 class="track-headline">🎵 Stupid Face</h2>
+                </div>
+                <div class="track-title-right">
+                    <span class="status-badge badge-stable">Normal & Stable (Z = -0.4σ)</span>
+                    <a href="#daily-streams" class="back-to-top-btn">▲ Back to Songs Index</a>
+                </div>
+            </div>
+
+            <div class="track-card">
+                <div class="kpi-grid">
+                    <div class="kpi-box">
+                        <span class="kpi-label">Today's Daily Streams</span>
+                        <span class="kpi-value">586</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Target Day Velocity (Δ)</span>
+                        <span class="kpi-value text-success">-267</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Mean (μ)</span>
+                        <span class="kpi-value">+33</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">7-Day Baseline Std (σ)</span>
+                        <span class="kpi-value">756</span>
+                    </div>
+                    <div class="kpi-box">
+                        <span class="kpi-label">Current Rolling Z-Score</span>
+                        <span class="kpi-value z-score text-success">-0.40σ</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div>                            <div id="cb198722-df51-4e28-aae9-288b4c84feb7" class="plotly-graph-div" style="height:370px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("cb198722-df51-4e28-aae9-288b4c84feb7")) {                    Plotly.newPlot(                        "cb198722-df51-4e28-aae9-288b4c84feb7",                        [{"hovertemplate":"\u003cb\u003eDaily Step (\u0394):\u003c\u002fb\u003e %{y:+,}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(56, 189, 248, 0.75)","rgba(29, 185, 84, 0.85)"],"line":{"color":["#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#38bdf8","#1db954"],"width":1.5}},"name":"Daily Delta (\u0394)","text":["+1,002","-535","-72.0","+918","-1,141","+26.0","+34.0","-267"],"textfont":{"color":"#ffffff","size":11},"textposition":"outside","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7 (Target)"],"y":[1002.0,-535.0,-72.0,918.0,-1141.0,26.0,34.0,-267.0],"type":"bar"},{"hovertemplate":"\u003cb\u003eBaseline Mean (\u03bc):\u003c\u002fb\u003e +33.1\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#f59e0b","dash":"dash","width":2.2},"mode":"lines","name":"7-Day Baseline Mean (\u03bc = +33.1)","x":["Sep 30","Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6"],"y":[33.142857142857146,33.142857142857146,33.142857142857146,33.142857142857146,33.142857142857146,33.142857142857146,33.142857142857146],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","color":"#e6edf3"},"margin":{"l":70,"r":40,"t":55,"b":50},"hoverlabel":{"font":{"family":"-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif","size":12,"color":"#f0f6fc"},"bgcolor":"#161b22","bordercolor":"#30363d"},"xaxis":{"gridcolor":"#21262d"},"yaxis":{"title":{"text":"Change vs Previous Day (Streams)"},"gridcolor":"#21262d","range":[-1676.75,1537.75],"zerolinecolor":"#484f58","zerolinewidth":1.5},"legend":{"font":{"size":11.5,"color":"#c9d1d9"},"orientation":"h","yanchor":"bottom","y":1.04,"xanchor":"left","x":0},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","hovermode":"x unified","showlegend":true,"height":370},                        {"responsive": true, "displaylogo": false, "displayModeBar": "hover", "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="track-divider"></div>
+        </div>
+        
+
+    </div>
+</body>
+</html>
