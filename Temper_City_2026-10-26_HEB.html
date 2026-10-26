@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8"/>
+<title>Temper City - דוח מדדי ביצועים</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Hebrew", "Alef", sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        direction: rtl;
+        text-align: right;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+        direction: rtl;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: right;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-right: 20px;
+        padding-left: 0;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+        direction: rtl;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table th {
+        padding: 10px 16px;
+        background-color: #222222;
+        color: #1DB954;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        border-bottom: 2px solid #282828;
+    }
+    .bill-table th.platform {
+        text-align: right;
+    }
+    .bill-table th.counter {
+        text-align: left;
+    }
+    .bill-table th.delta-header {
+        text-align: center;
+    }
+    .bill-table th.unit {
+        text-align: right;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: right;
+    }
+    .bill-table .counter {
+        text-align: left;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .delta-cell {
+        text-align: center;
+        white-space: nowrap;
+    }
+    .bill-table .delta {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        direction: ltr;
+    }
+    .bill-table .delta.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .bill-table .delta.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .bill-table .delta.zero {
+        color: #888888;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: right;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Metric Badges & Performance Highlights (Hebrew / RTL) */
+    .metric-badge {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        margin: 0 3px;
+        direction: ltr;
+        unicode-bidi: isolate;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .metric-badge.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .metric-badge.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .metric-badge.peak {
+        color: #f59e0b;
+        background-color: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        font-weight: bold;
+    }
+    .metric-badge.neutral {
+        color: #94a3b8;
+        background-color: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles (Hebrew / RTL) */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        direction: rtl;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        direction: rtl;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+        direction: rtl;
+    }
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 30px 10px 20px;
+        direction: rtl;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+        direction: rtl;
+    }
+    .expl-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-size: 0.85em;
+        margin-inline-start: 4px;
+        border-bottom: 1px dotted rgba(56, 189, 248, 0.6);
+        transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .expl-link:hover {
+        color: #7dd3fc;
+        border-bottom-color: #7dd3fc;
+    }
+    .market-context-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-right: 4px solid #38bdf8;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #c9d1d9;
+        direction: rtl;
+        text-align: right;
+    }
+    .market-context-box strong {
+        color: #38bdf8;
+    }
+    .forecast-box {
+        background-color: #1a1e29;
+        border: 1px solid #2d3748;
+        border-right: 4px solid #a855f7;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #e2e8f0;
+        direction: rtl;
+        text-align: right;
+    }
+    .forecast-box strong {
+        color: #c084fc;
+    }
+    .forecast-box ul {
+        margin: 6px 0 0 0;
+        padding-right: 18px;
+    }
+    .forecast-box li {
+        margin-bottom: 4px;
+    }
+    .forecast-delta-pos {
+        color: #4ade80;
+        font-weight: 600;
+    }
+    .forecast-delta-neg {
+        color: #f87171;
+        font-weight: 600;
+    }
+</style></head>
+<body dir="rtl">
+<h1>Temper City - דוח מדדי ביצועים</h1>
+<p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
+<p><strong>תאריך הנתונים:</strong> 2026-10-26 (יום שני)</p>
+<p><em>הערה תפעולית: היום הוא יום שני. ירידות בשווקים המערביים היום הן בגדר 'ירידות סוף שבוע' רגילות. שבוע העבודה בישראל / המזרח התיכון מתחיל ביום ראשון. אוסטרליה/אסיה מתחילות מוקדם ביום שני. מאחר ש"כלבני השמירה" של אזורי הזמן הללו מציגים מדדי מומנטום חיוביים, הדבר ממוסגר במפורש כמדד ניבויי להתאוששות גלובלית ביום שלישי.</em></p>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">סקירת להקה</a>
+<a href="#top-cities">5 הערים המובילות</a>
+<a href="#track-metrics">מדדי שירים</a>
+<a href="#summary">סיכום</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">פתח הכל</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">סגור הכל</button>
+</div>
+</nav><h2 id="band-overview">סקירת להקה</h2>
+<p><strong>עוקבים:</strong> 343,148 (שינוי 24 שעות: <span class="metric-badge positive">▲ +1,367</span>)</p>
+<p><strong>מאזינים חודשיים:</strong> 28,990,592 (שינוי 24 שעות: <span class="metric-badge negative">▼ -146,660</span>)</p><div class="market-context-box"><strong>הקשר שוק גלובלי (מאקרו Spotify):</strong> הירידה הנצפית במאזינים החודשיים של Temper City (-146,660 (-0.50%)) הינה חריגה בהשוואה למדד 500 האומנים המדורגים בספוטיפיי (ממוצע -18,051 (-0.05%), כאשר 63.4% מכלל ה-500 חוו ירידה), וכן בהשוואה לאומנים בסביבת הדירוג שלה (קבוצת שווים #188-#288, ממוצע -10,285 (-0.03%)). Temper City תוך ירידה של 4 מקומות בדירוג העולמי (מקום #238, לעומת #234 אתמול). <a class="expl-link" href="report_self_aware.html#sec-spotify">(לצפייה בגרף השוואת השוק 📊)</a></div>
+
+<p class="spotify-rank"><strong>דירוג אומן עולמי (Spotify):</strong> #238 <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_heb">(ראה הסבר)</a> (אתמול: #234, שבוע שעבר: #221, <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #196).</p>
+<p class="worldwide-rank"><strong>דירוג אומן עולמי דיגיטלי (רב-פלטפורמי משוקלל):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_heb">(ראה הסבר)</a> #77 (נקודות: 473, אתמול: #79, שבוע שעבר: #73, <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #45).</p>
+<div class="restaurant-bill">
+<h3>סיכום השמעות מוזיקה לקטלוג (8 שירים ורמיקסים)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">פלטפורמה</th>
+<th class="counter">מונה כולל</th>
+<th class="delta-header">שינוי ב-24 שעות</th>
+<th class="unit">יחידה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">799,740,777</td>
+<td class="delta-cell"><span class="delta positive" title="+3,469,873 ב-24 שעות (+0.44%)">▲ +3.5M (+0.44%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">162,353,184</td>
+<td class="delta-cell"><span class="delta positive" title="+295,215 ב-24 שעות (+0.18%)">▲ +295.2K (+0.18%)</span></td>
+<td class="unit">צפיות והשמעות</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">6,329,435</td>
+<td class="delta-cell"><span class="delta positive" title="+22,415 ב-24 שעות (+0.36%)">▲ +22.4K (+0.36%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, iTunes, Deezer</td>
+<td colspan="3" style="color: #888; font-size: 13px; text-align: center;">אינם מפרסמים מונה השמעות פומבי</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ השמעות מוזיקה</td>
+<td class="counter">968,423,396</td>
+<td class="delta-cell"><span class="delta positive" title="+3,787,503 ב-24 שעות (+0.39%)">▲ +3.8M (+0.39%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="top-cities">נתוני 5 הערים המובילות</h2>
+<table>
+<thead>
+<tr>
+<th>שם העיר</th>
+<th>יבשת</th>
+<th>מאזינים נוכחיים</th>
+<th>הפרש לטווח קצר (3 ימים)</th>
+<th>הפרש לטווח ארוך (14 ימים)</th>
+<th>שיא כל הזמנים</th>
+<th>סך ימים נמדדים</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>לונדון</td>
+<td>אירופה</td>
+<td>293,379 (<span class="metric-badge negative">▼ -3,135</span>)</td>
+<td><span class="metric-badge negative">▼ -8,898</span></td>
+<td><span class="metric-badge negative">▼ -32,597</span></td>
+<td>334,140</td>
+<td>214</td>
+</tr>
+<tr>
+<td>סידני</td>
+<td>אוקיאניה</td>
+<td>292,279 (<span class="metric-badge negative">▼ -1,005</span>)</td>
+<td><span class="metric-badge negative">▼ -3,892</span></td>
+<td><span class="metric-badge negative">▼ -17,228</span></td>
+<td>313,801</td>
+<td>183</td>
+</tr>
+<tr>
+<td>מקסיקו סיטי</td>
+<td>צפון אמריקה</td>
+<td>264,504 (<span class="metric-badge negative">▼ -2,295</span>)</td>
+<td><span class="metric-badge negative">▼ -10,949</span></td>
+<td><span class="metric-badge negative">▼ -39,014</span></td>
+<td>332,233</td>
+<td>155</td>
+</tr>
+<tr>
+<td>מלבורן</td>
+<td>אוקיאניה</td>
+<td>257,278 (<span class="metric-badge negative">▼ -1,308</span>)</td>
+<td><span class="metric-badge negative">▼ -2,731</span></td>
+<td><span class="metric-badge negative">▼ -11,901</span></td>
+<td>269,179</td>
+<td>111</td>
+</tr>
+<tr>
+<td>סאו פאולו</td>
+<td>דרום אמריקה</td>
+<td>248,047 (<span class="metric-badge positive">▲ +813</span>)</td>
+<td><span class="metric-badge negative">▼ -3,938</span></td>
+<td><span class="metric-badge negative">▼ -34,344</span></td>
+<td>345,916</td>
+<td>171</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">מדדי שירים</h2>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong style="color: #ef4444;">נמוכה</strong>. סטטוס: חריגה היסטורית – ממתין לאימות. זוהו חריגות סטטיסטיות או קיפאון דיווח במדדים (השמעות Z: -3.2, מאזינים Z: +0.5, עוקבים Z: +0.9). הפרשנויות הינן זמניות ומותנות ב-1 עד 3 תצפיות יומיות הבאות לצורך אימות בטרם הסקת מסקנות אסטרטגיות. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -10.3%, עם תאוצה של -8.3%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<h3>סטטוס מצעדי Spotify</h3>
+<p>בדירוג הגלובלי (Global), השיר שומר על דירוג מרשים של מקום #24. מיקום זה נשמר במשך 1 יום ברציפות. מתוך 202 ימי מצעד מתועדים, השיר שהה 76 ימים בטופ 10, 137 ימים בטופ 20, ו-163 ימים בטופ 30 (<span class="metric-badge peak">🏆 שיא כל הזמנים</span>: מקום #5). השיר נמצא כעת ברצף של 5 ימים בתוך הטופ 30.</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (4)</summary><ul>
+<li>שוויץ: דירוג #4 (ללא שינוי)</li>
+<li>גרמניה: דירוג #6 (<span class="metric-badge positive">▲ עלייה של 4 מקומות</span>)</li>
+<li>אוסטריה: דירוג #9 (ללא שינוי)</li>
+<li>בלגיה: דירוג #9 (<span class="metric-badge positive">▲ עלייה של 1 מקומות</span>)</li>
+</ul></details>
+<p>גילו של השיר "Self Aware" הוא 250 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 603,404,581</p>
+<p>השמעות יומיות אחרונות: 2,120,659 (שינוי: <span class="metric-badge negative">▼ -191,567</span>)</p><div class="market-context-box"><strong>הקשר שוק גלובלי (Spotify Global Top 200):</strong> הירידה בהשמעות אינה מעידה על חולשה של השיר, אלא נובעת מיום שפל רוחבי חסר תקדים בספוטיפיי — 80% משירי הטופ 20 (ו-80% מכלל הטופ 200) ספגו ירידות חדות היום, עם אובדן כולל של כ-14.1 מיליון השמעות. הירידה של Self Aware תואמת במדויק את ממוצע הירידה של שירי העילית (154K- בממוצע לשיר), ומסבירה את המשך היציבות במקום #26 בעולם.</div><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (2,120,659) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-201,474 (-8.68%) לעומת תחזית אתמול שעמדה על 2,322,133.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>2,241,691</strong> | סך השמעות מצטבר חזוי: <strong>605,646,272</strong>.</li>
+</ul>
+</div>
+
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 3,550,611</p>
+<p>הרצפה השבועית החדשה ננעלה על 2,361,128. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 3,323,146 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 2,596,956.</p>
+<h3>צמיחה חזקהמדינה — מדינה אחת</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (1)</summary><ul>
+<li>טייוואן: 5.9%</li>
+</ul></details>
+<h3>צמיחה מתונהמדינה — מדינה אחת</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (1)</summary><ul>
+<li>הונג קונג: 1.4%</li>
+</ul></details>
+<h3>התקרבות לרמה קבועהמדינה — מדינה אחת</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (1)</summary><ul>
+<li>ישראל: 0.6%</li>
+</ul></details>
+<h3>שלב התכווצות — 32 מדינות</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (32)</summary><ul>
+<li>מלזיה: -2.6%</li>
+<li>אסטוניה: -4.0%</li>
+<li>ערב הסעודית: -5.0%</li>
+<li>אוקראינה: -5.5%</li>
+<li>אוסטרליה: -5.6%</li>
+<li>בלארוס: -6.0%</li>
+<li>איחוד האמירויות הערביות: -6.3%</li>
+<li>בלגיה: -6.6%</li>
+<li>ניו זילנד: -7.0%</li>
+<li>אירלנד: -8.4%</li>
+<li>הונגריה: -8.7%</li>
+<li>ליטא: -8.7%</li>
+<li>קנדה: -9.1%</li>
+<li>גרמניה: -9.1%</li>
+<li>אוסטריה: -9.5%</li>
+<li>פינלנד: -9.5%</li>
+<li>סינגפור: -9.5%</li>
+<li>שוויץ: -9.8%</li>
+<li>צ'כיה: -10.3%</li>
+<li>צרפת: -10.4%</li>
+<li>הממלכה המאוחדת: -11.0%</li>
+<li>סלובקיה: -11.0%</li>
+<li>שוודיה: -11.4%</li>
+<li>ארצות הברית: -11.4%</li>
+<li>איטליה: -11.9%</li>
+<li>הולנד: -13.4%</li>
+<li>לטביה: -13.9%</li>
+<li>לוקסמבורג: -14.0%</li>
+<li>ניקרגואה: -14.4%</li>
+<li>נורווגיה: -14.4%</li>
+<li>פורטוגל: -14.9%</li>
+<li>פולין: -16.4%</li>
+</ul></details>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>ויראליות יוצרי תוכן ו-YouTube Shorts:</strong> השיר מניע סך של 29 סרטוני Shorts ביוטיוב שנוצרו על ידי משתמשים (תוספת של 0 סרטונים ב-24 שעות ו--19 בשבוע האחרון).</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 139,367,068 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +221,318 [+0.16%]</span>, 7 ימים: <span class="metric-badge positive">▲ +5,624,033 [+4.21%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 139,367,068</span>), 29 סרטוני Shorts נוצרו (0 ב-24 שעות, -19 שבועי), 2,109,467 לייקים, ושיעור מעורבות של 1.51%.</li>
+<li>סאונדקלאוד: 4,156,649 השמעות (24 שעות: <span class="metric-badge positive">▲ +13,363 [+0.32%]</span>, 7 ימים: <span class="metric-badge positive">▲ +97,326 [+2.40%]</span>, שיא: 7,025,788 (40.8% משיא כל הזמנים)), 97,699 לייקים (+311), ו-645 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-36 מצעדים ב-36 מדינות היום, עם 3 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 165 ימים, הגיע ל-69 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #1 בתימן.</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (3)</summary><ul>
+<li>שוויץ: דירוג #6 (ללא שינוי, שיא: #3)</li>
+<li>אוסטריה: דירוג #8 (ללא שינוי, שיא: #3)</li>
+<li>גרמניה: דירוג #9 (ללא שינוי, שיא: #6)</li>
+</ul></details>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 139,367,068 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +221,318 [+0.16%]</span>, 7 ימים: <span class="metric-badge positive">▲ +5,624,033 [+4.21%]</span>), 29 סרטוני Shorts נוצרו (0 ב-24 שעות), 2,109,467 לייקים, ושיעור מעורבות של 1.51%.</p>
+<p>פעיל כעת ב-22 מצעדים ב-22 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 44 ימים, הגיע ל-27 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #3 באוסטריה.</p>
+<p>המצעד המוביל: אוסטריה בדירוג #11 (<span class="metric-badge positive">▲ עלייה של 1 מקומות</span>, שיא: #2).</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-16 מצעדים ב-16 מדינות היום, עם 2 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 44 ימים, הגיע ל-65 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #1 בבלארוס, קפריסין.</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (2)</summary><ul>
+<li>בלגיה: דירוג #8 (<span class="metric-badge positive">▲ עלייה של 9 מקומות</span>, שיא: #6)</li>
+<li>אוסטריה: דירוג #10 (כניסה מחדש, שיא: #5)</li>
+</ul></details>
+<h3>תובנות מצעדי Deezer</h3>
+<p>פעיל כעת ב-25 מצעדים ב-25 מדינות היום, עם 1 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 40 ימים, הגיע ל-52 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #1 בליטא, פולין, סלובקיה.</p>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (1)</summary><ul>
+<li>פולין: דירוג #7 (<span class="metric-badge positive">▲ עלייה של 3 מקומות</span>, שיא: #1)</li>
+</ul></details>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-LUM!X</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -1.7, מאזינים Z: +0.5, עוקבים Z: +0.9), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-lum-x">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -8.4%, עם תאוצה של -13.0%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-LUM!X" הוא 92 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 78,330,124</p>
+<p>השמעות יומיות אחרונות: 532,685 (שינוי: <span class="metric-badge negative">▼ -79,513</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (532,685) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-107,539 (-16.80%) לעומת תחזית אתמול שעמדה על 640,224.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>612,909</strong> | סך השמעות מצטבר חזוי: <strong>78,943,033</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 773,367</p>
+<p>הרצפה השבועית החדשה ננעלה על 600,876. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 609,407 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 546,936.</p>
+<h3>שלב התכווצות — 4 מדינות</h3>
+<details class="sub-accordion" dir="rtl"><summary class="sub-summary" dir="rtl">הצג פירוט מדינות (4)</summary><ul>
+<li>בלגיה: -5.0%</li>
+<li>אוסטריה: -6.4%</li>
+<li>שוויץ: -8.6%</li>
+<li>גרמניה: -12.3%</li>
+</ul></details>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 7,516,769 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +11,784 [+0.16%]</span>, 7 ימים: <span class="metric-badge positive">▲ +84,393 [+1.14%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 7,516,769</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות, -48 שבועי), 75,810 לייקים, ושיעור מעורבות של 1.01%.</li>
+<li>סאונדקלאוד: 1,392,066 השמעות (24 שעות: <span class="metric-badge positive">▲ +2,551 [+0.18%]</span>, 7 ימים: <span class="metric-badge positive">▲ +18,429 [+1.34%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 1,392,066</span>), 42,051 לייקים (+68), ו-321 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-1 מצעדים ב-1 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 1 ימים, הגיע ל-1 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #152 באלג'יריה.</p>
+<p>המצעד המוביל: אלג'יריה בדירוג #152 (כניסה חדשה, שיא: #152).</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 7,516,769 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +11,784 [+0.16%]</span>, 7 ימים: <span class="metric-badge positive">▲ +84,393 [+1.14%]</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות), 75,810 לייקים, ושיעור מעורבות של 1.01%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-1 מצעדים ב-1 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 10 ימים, הגיע ל-7 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #13 במלטה.</p>
+<p>המצעד המוביל: צ'כיה בדירוג #99 (כניסה חדשה, שיא: #3).</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-Ian Asher</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong style="color: #ef4444;">נמוכה</strong>. סטטוס: חריגה היסטורית – ממתין לאימות. זוהו חריגות סטטיסטיות או קיפאון דיווח במדדים (השמעות Z: -3.1, מאזינים Z: +0.5, עוקבים Z: +0.9). הפרשנויות הינן זמניות ומותנות ב-1 עד 3 תצפיות יומיות הבאות לצורך אימות בטרם הסקת מסקנות אסטרטגיות. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-ian-asher">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -15.3%, עם תאוצה של -11.2%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-Ian Asher" הוא 92 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 85,126,322</p>
+<p>השמעות יומיות אחרונות: 374,233 (שינוי: <span class="metric-badge negative">▼ -47,339</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (374,233) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-77,157 (-17.09%) לעומת תחזית אתמול שעמדה על 451,390.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>427,244</strong> | סך השמעות מצטבר חזוי: <strong>85,553,566</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 951,713</p>
+<p>הרצפה השבועית החדשה ננעלה על 441,700. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 745,493 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 485,251.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 9,279,655 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +11,368 [+0.12%]</span>, 7 ימים: <span class="metric-badge positive">▲ +312,735 [+3.49%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 9,279,655</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות, -48 שבועי), 111,006 לייקים, ושיעור מעורבות של 1.2%.</li>
+<li>סאונדקלאוד: 496,170 השמעות (24 שעות: <span class="metric-badge positive">▲ +2,795 [+0.57%]</span>, 7 ימים: <span class="metric-badge positive">▲ +21,071 [+4.44%]</span>, שיא: 837,828 (40.8% משיא כל הזמנים)), 14,723 לייקים (+57), ו-133 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 9,279,655 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +11,368 [+0.12%]</span>, 7 ימים: <span class="metric-badge positive">▲ +312,735 [+3.49%]</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות), 111,006 לייקים, ושיעור מעורבות של 1.2%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Reverse Psychology</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -1.8, מאזינים Z: +0.5, עוקבים Z: +0.9), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="data_integrity_temper_city.html#streams-reverse-psychology">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -19.5%, עם תאוצה של -11.3%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Reverse Psychology" הוא 60 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 9,920,706</p>
+<p>השמעות יומיות אחרונות: 148,396 (שינוי: <span class="metric-badge negative">▼ -18,917</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (148,396) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-42,094 (-22.10%) לעומת תחזית אתמול שעמדה על 190,490.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>176,613</strong> | סך השמעות מצטבר חזוי: <strong>10,097,319</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 306,958</p>
+<p>הרצפה השבועית החדשה ננעלה על 184,394. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 214,023 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 160,593.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>ויראליות יוצרי תוכן ו-YouTube Shorts:</strong> השיר מניע סך של 9 סרטוני Shorts ביוטיוב שנוצרו על ידי משתמשים (תוספת של 0 סרטונים ב-24 שעות ו--39 בשבוע האחרון).</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 2,118,606 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +8,478 [+0.40%]</span>, 7 ימים: <span class="metric-badge positive">▲ +110,594 [+5.51%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 2,118,606</span>), 9 סרטוני Shorts נוצרו (0 ב-24 שעות, -39 שבועי), 53,404 לייקים, ושיעור מעורבות של 2.52%.</li>
+<li>סאונדקלאוד: 43,581 השמעות (24 שעות: <span class="metric-badge positive">▲ +576 [+1.34%]</span>, 7 ימים: <span class="metric-badge positive">▲ +3,949 [+9.96%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 43,581</span>), 1,229 לייקים (+11), ו-14 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 2,118,606 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +8,478 [+0.40%]</span>, 7 ימים: <span class="metric-badge positive">▲ +110,594 [+5.51%]</span>), 9 סרטוני Shorts נוצרו (0 ב-24 שעות), 53,404 לייקים, ושיעור מעורבות של 2.52%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-2 מצעדים ב-2 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 2 ימים, הגיע ל-3 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #54 בפולין.</p>
+<p>המצעד המוביל: רומניה בדירוג #160 (כניסה חדשה, שיא: #160).</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-Gravagerz</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -1.6, מאזינים Z: +0.5, עוקבים Z: +0.9), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-gravagerz">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -18.9%, עם תאוצה של -15.4%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-Gravagerz" הוא 51 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 4,168,979</p>
+<p>השמעות יומיות אחרונות: 45,275 (שינוי: <span class="metric-badge negative">▼ -8,262</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (45,275) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-9,270 (-17.00%) לעומת תחזית אתמול שעמדה על 54,545.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>52,180</strong> | סך השמעות מצטבר חזוי: <strong>4,221,159</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 154,972</p>
+<p>הרצפה השבועית החדשה ננעלה על 55,816. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 125,481 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 64,758.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 2,834,703 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +17,400 [+0.62%]</span>, 7 ימים: <span class="metric-badge positive">▲ +66,556 [+2.40%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 2,834,703</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות, -48 שבועי), 20,082 לייקים, ושיעור מעורבות של 0.71%.</li>
+<li>סאונדקלאוד: 87,427 השמעות (24 שעות: <span class="metric-badge positive">▲ +1,191 [+1.38%]</span>, 7 ימים: <span class="metric-badge positive">▲ +8,112 [+10.23%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 87,427</span>), 2,939 לייקים (+37), ו-58 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 2,834,703 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +17,400 [+0.62%]</span>, 7 ימים: <span class="metric-badge positive">▲ +66,556 [+2.40%]</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות), 20,082 לייקים, ושיעור מעורבות של 0.71%.</p>
+<p>פעיל כעת ב-4 מצעדים ב-4 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 5 ימים, הגיע ל-4 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #52 באסטוניה.</p>
+<p>המצעד המוביל: אסטוניה בדירוג #52 (ללא שינוי, שיא: #52).</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-Ely Oaks</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: -0.4, מאזינים Z: +0.5, עוקבים Z: +0.9), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-ely-oaks">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -12.7%, עם תאוצה של -18.0%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-Ely Oaks" הוא 36 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 2,430,194</p>
+<p>השמעות יומיות אחרונות: 31,447 (שינוי: <span class="metric-badge negative">▼ -6,913</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (31,447) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-2,846 (-8.30%) לעומת תחזית אתמול שעמדה על 34,293.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>34,667</strong> | סך השמעות מצטבר חזוי: <strong>2,464,861</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 148,576</p>
+<p>הרצפה השבועית החדשה ננעלה על 36,019. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 73,104 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 37,307.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 160,002 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +428 [+0.27%]</span>, 7 ימים: <span class="metric-badge positive">▲ +4,659 [+3.00%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 160,002</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות, -48 שבועי), 1,129 לייקים, ושיעור מעורבות של 0.71%.</li>
+<li>סאונדקלאוד: 29,072 השמעות (24 שעות: <span class="metric-badge positive">▲ +499 [+1.75%]</span>, 7 ימים: <span class="metric-badge positive">▲ +3,568 [+13.99%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 29,072</span>), 1,310 לייקים (+28), ו-13 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 160,002 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +428 [+0.27%]</span>, 7 ימים: <span class="metric-badge positive">▲ +4,659 [+3.00%]</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות), 1,129 לייקים, ושיעור מעורבות של 0.71%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Self Aware-oskar med k</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong style="color: #ef4444;">נמוכה</strong>. סטטוס: חריגה היסטורית – ממתין לאימות. זוהו חריגות סטטיסטיות או קיפאון דיווח במדדים (השמעות Z: -3.1, מאזינים Z: +0.5, עוקבים Z: +0.9). הפרשנויות הינן זמניות ומותנות ב-1 עד 3 תצפיות יומיות הבאות לצורך אימות בטרם הסקת מסקנות אסטרטגיות. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-oskar-med-k">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על -18.0%, עם תאוצה של -19.6%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואצת.</p>
+<p>גילו של השיר "Self Aware-oskar med k" הוא 20 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 15,460,890</p>
+<p>השמעות יומיות אחרונות: 108,553 (שינוי: <span class="metric-badge negative">▼ -26,388</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (108,553) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-25,287 (-18.89%) לעומת תחזית אתמול שעמדה על 133,840.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>127,405</strong> | סך השמעות מצטבר חזוי: <strong>15,588,295</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 181,164</p>
+<p>הרצפה השבועית החדשה ננעלה על 132,418. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 164,905 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 164,905.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 215,274 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +282 [+0.13%]</span>, 7 ימים: <span class="metric-badge positive">▲ +5,224 [+2.49%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 215,274</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות, 0 שבועי), 4,623 לייקים, ושיעור מעורבות של 2.15%.</li>
+<li>סאונדקלאוד: 117,691 השמעות (24 שעות: <span class="metric-badge positive">▲ +486 [+0.41%]</span>, 7 ימים: <span class="metric-badge positive">▲ +3,574 [+3.13%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 117,691</span>), 3,819 לייקים (+5), ו-85 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 215,274 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +282 [+0.13%]</span>, 7 ימים: <span class="metric-badge positive">▲ +5,224 [+2.49%]</span>), 0 סרטוני Shorts נוצרו (0 ב-24 שעות), 4,623 לייקים, ושיעור מעורבות של 2.15%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Sex &amp; Drugs</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. יחסי הנתונים יציבים ותקינים מבחינה סטטיסטית (השמעות Z: +0.7, מאזינים Z: +0.5, עוקבים Z: +0.9), מה שמצביע על מהימנות גבוהה של הנתונים לניתוח. <a class="expl-link" href="data_integrity_temper_city.html#streams-sex---drugs">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 15.1%, עם תאוצה של -6.6%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואטת.</p>
+<p>גילו של השיר "Sex &amp; Drugs" הוא 11 ימים</p>
+<p>סך השמעות מצטבר (Spotify): 898,981</p>
+<p>השמעות יומיות אחרונות: 108,625 (שינוי: <span class="metric-badge negative">▼ -7,712</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (108,625) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-10,570 (-8.87%) לעומת תחזית אתמול שעמדה על 119,195.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-10-27):</strong> השמעות יומיות חזויות: <strong>122,454</strong> | סך השמעות מצטבר חזוי: <strong>1,021,435</strong>.</li>
+</ul>
+</div>
+
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 126,319</p>
+<p>הרצפה השבועית החדשה ננעלה על 94,368. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 58,434 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 58,434.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>ויראליות יוצרי תוכן ו-YouTube Shorts:</strong> השיר מניע סך של 10 סרטוני Shorts ביוטיוב שנוצרו על ידי משתמשים (תוספת של 0 סרטונים ב-24 שעות ו--38 בשבוע האחרון).</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 861,107 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +24,157 [+2.89%]</span>, 7 ימים: <span class="metric-badge positive">▲ +657,343 [+322.60%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 861,107</span>), 10 סרטוני Shorts נוצרו (0 ב-24 שעות, -38 שבועי), 26,082 לייקים, ושיעור מעורבות של 3.03%.</li>
+<li>סאונדקלאוד: 6,779 השמעות (24 שעות: <span class="metric-badge positive">▲ +954 [+16.38%]</span>, 7 ימים: <span class="metric-badge positive">▲ +5,849 [+628.92%]</span>, <span class="metric-badge peak">🏆 שיא כל הזמנים: 6,779</span>), 387 לייקים (+34), ו-11 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>קהל ומעורבות: 861,107 צפיות סך הכל (24 שעות: <span class="metric-badge positive">▲ +24,157 [+2.89%]</span>, 7 ימים: <span class="metric-badge positive">▲ +657,343 [+322.60%]</span>), 10 סרטוני Shorts נוצרו (0 ב-24 שעות), 26,082 לייקים, ושיעור מעורבות של 3.03%.</p>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-1 מצעדים ב-1 מדינות היום, עם 0 מיקומים בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 3 ימים, הגיע ל-3 מדינות, עם דירוג שיא של כל הזמנים: <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #17 בשוודיה.</p>
+<p>המצעד המוביל: לוקסמבורג בדירוג #55 (כניסה חדשה, שיא: #55).</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<h2 id="summary">סיכום</h2>
+<p>הרמיקסים המורשים עבור 'Self Aware' (LUM!X, Ian Asher, Gravagerz, Ely Oaks ו-oskar med k) תרמו סך משולב של 1,092,193 השמעות יומיות היום. נתון זה מהווה תוספת של 51.5% להשמעות היומיות של השיר המקורי.</p>
+
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
+}
+</script></body>
+</html>
