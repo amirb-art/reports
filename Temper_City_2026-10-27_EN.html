@@ -94,6 +94,9 @@
     .bill-table th.counter {
         text-align: right;
     }
+    .bill-table th.daily-header {
+        text-align: right;
+    }
     .bill-table th.delta-header {
         text-align: center;
     }
@@ -115,6 +118,14 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
         font-size: 15px;
         color: #fff;
+        direction: ltr;
+    }
+    .bill-table .daily-cell {
+        text-align: right;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 14px;
+        color: #e5e5e5;
         direction: ltr;
     }
     .bill-table .delta-cell {
@@ -449,8 +460,8 @@
 <button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">Collapse All</button>
 </div>
 </nav><h2 id="band-overview">Band Overview</h2>
-<p><strong>Followers:</strong> 344,284 (24h Delta: +1,136)</p>
-<p><strong>Monthly Listeners:</strong> 28,764,708 (24h Delta: -225,884)</p><div class="market-context-box"><strong>Global Market Context (Spotify Macro):</strong> The observed decline in monthly listeners for Temper City (-225,884 (-0.78%)) is an outlier compared to the global Spotify Top 500 benchmark (average -19,301 (-0.05%), with 65.4% of the Top 500 experiencing drops), as well as compared to artists in its ranking cohort (Peer Cohort #193-#293, average -12,663 (-0.04%)). Temper City dropping 5 spots in global rank (#243 globally, vs #238 yesterday). <a class="expl-link" href="report_self_aware.html#sec-spotify">(View Market Benchmark Chart 📊)</a></div>
+<p><strong>Followers:</strong> 344,284 (<span class="metric-badge positive">▲ +1,136</span>)</p>
+<p><strong>Monthly Listeners:</strong> 28,764,708 (<span class="metric-badge negative">▼ -225,884</span>)</p><div class="market-context-box"><strong>Global Market Context (Spotify Macro):</strong> The observed decline in monthly listeners for Temper City (-225,884 (-0.78%)) is an outlier compared to the global Spotify Top 500 benchmark (average -19,301 (-0.05%), with 65.4% of the Top 500 experiencing drops), as well as compared to artists in its ranking cohort (Peer Cohort #193-#293, average -12,663 (-0.04%)). Temper City dropping 5 spots in global rank (#243 globally, vs #238 yesterday). <a class="expl-link" href="report_self_aware.html#sec-spotify">(View Market Benchmark Chart 📊)</a></div>
 <p class="spotify-rank"><strong>Global Artist Rank (Spotify):</strong> #243 <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_en">(see explanation)</a> (Yesterday: #238, Last Week: #221, <span class="metric-badge peak">🏆 All-Time Peak</span>: #196).</p>
 <p class="worldwide-rank"><strong>Worldwide Digital Artist Rank (Weighted All-Platform):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_en">(see explanation)</a> #83 (Points: 456, Yesterday: #77, Last Week: #72, <span class="metric-badge peak">🏆 All-Time Peak</span>: #45).</p>
 <div class="restaurant-bill">
@@ -460,7 +471,8 @@
 <tr>
 <th class="platform">Platform</th>
 <th class="counter">Total Counter</th>
-<th class="delta-header">24h Change</th>
+<th class="daily-header">Daily Streams</th>
+<th class="delta-header">24h Momentum</th>
 <th class="unit">Unit</th>
 </tr>
 </thead>
@@ -468,29 +480,33 @@
 <tr>
 <td class="platform">Spotify</td>
 <td class="counter">803,589,767</td>
-<td class="delta-cell"><span class="delta positive" title="+3,848,990 in 24h (+0.48%)">▲ +3.8M (+0.48%)</span></td>
+<td class="daily-cell">3,848,990</td>
+<td class="delta-cell"><span class="delta positive" title="+379,117 vs yesterday (+10.93%)">▲ +379.1K (+10.93%)</span></td>
 <td class="unit">streams</td>
 </tr>
 <tr>
 <td class="platform">YouTube</td>
 <td class="counter">163,374,943</td>
-<td class="delta-cell"><span class="delta positive" title="+1,021,759 in 24h (+0.63%)">▲ +1.0M (+0.63%)</span></td>
+<td class="daily-cell">1,021,759</td>
+<td class="delta-cell"><span class="delta positive" title="+726,544 vs yesterday (+246.11%)">▲ +726.5K (+246.11%)</span></td>
 <td class="unit">views / streams</td>
 </tr>
 <tr>
 <td class="platform">SoundCloud</td>
 <td class="counter">6,351,841</td>
-<td class="delta-cell"><span class="delta positive" title="+22,406 in 24h (+0.35%)">▲ +22.4K (+0.35%)</span></td>
+<td class="daily-cell">22,406</td>
+<td class="delta-cell"><span class="delta negative" title="-9 vs yesterday (-0.04%)">▼ -9 (-0.04%)</span></td>
 <td class="unit">streams</td>
 </tr>
 <tr>
 <td class="platform">Apple Music, iTunes, Deezer</td>
-<td colspan="3" style="color: #888; font-size: 13px; text-align: center;">do not disclose public stream counters</td>
+<td colspan="4" style="color: #888; font-size: 13px; text-align: center;">do not disclose public stream counters</td>
 </tr>
 <tr class="subtotal-row">
 <td>Total Music Streaming</td>
 <td class="counter">973,316,551</td>
-<td class="delta-cell"><span class="delta positive" title="+4,893,155 in 24h (+0.51%)">▲ +4.9M (+0.51%)</span></td>
+<td class="daily-cell">4,893,155</td>
+<td class="delta-cell"><span class="delta positive" title="+1,105,652 vs yesterday (+29.19%)">▲ +1.1M (+29.19%)</span></td>
 <td class="unit">streams</td>
 </tr>
 </tbody>
@@ -572,7 +588,7 @@
 </ul>
 <p>Track Age: 251 days</p>
 <p>All-Time Cumulative Streams (Spotify): 605,680,747</p>
-<p>Latest Daily Streams: 2,276,166 (Delta: <span class="metric-badge positive">▲ +155,507</span>)</p><div class="market-context-box"><strong>Global Market Context (Spotify Global Top 200):</strong> Self Aware exhibits strong resilience on the Spotify Global Chart (Rank #26), outperforming broader market dynamics across the Top 200.</div><div class="forecast-box">
+<p>Latest Daily Streams: 2,276,166 (Delta: 155,507)</p><div class="market-context-box"><strong>Global Market Context (Spotify Global Top 200):</strong> Self Aware exhibits strong resilience on the Spotify Global Chart (Rank #26), outperforming broader market dynamics across the Top 200.</div><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (2,276,166) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +34,475 (+1.54%) compared to yesterday's forecast of 2,241,691.</li>
@@ -582,6 +598,8 @@
 </div>
 <p>Highest Daily Streams Ever: 3,550,611</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 2,276,166. This is lower than the all-time high floor of 3,323,146 and lower than the previous week's floor of 2,361,128.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
 <h3>Moderate Growth — 6 countries</h3>
 <details class="sub-accordion"><summary class="sub-summary">View Countries (6)</summary><ul>
 <li>Taiwan: 4.6%</li>
@@ -627,10 +645,10 @@
 <li>Saudi Arabia: -10.4%</li>
 </ul></details>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
-<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 30 user-generated Shorts on YouTube (an addition of +1 creations in 24 hours and -18 over the past 7 days).</p>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 30 user-generated Shorts on YouTube (an addition of <span class="metric-badge positive">▲ +1</span> in 24 hours and <span class="metric-badge positive">▲ +1</span> over the past 7 days).</p>
 <ul>
-<li>YouTube Content &amp; Shorts: 140,122,776 total views (24h: <span class="metric-badge positive">▲ +755,708 [+0.54%]</span>, 7d: <span class="metric-badge positive">▲ +6,379,741 [+4.77%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 140,122,776</span>), with 30 Shorts created (+1 in 24h, -18 weekly), 2,116,413 likes, and an engagement rate of 1.51%.</li>
-<li>SoundCloud: 4,170,102 streams (24h: <span class="metric-badge positive">▲ +13,453 [+0.32%]</span>, 7d: <span class="metric-badge positive">▲ +105,505 [+2.60%]</span>, Peak: 7,025,788 (40.6% off peak)), 97,964 likes (+265), and 652 shares.</li>
+<li>YouTube Content &amp; Shorts: 140,122,776 total views (Daily: 755,708, 24h Momentum: +534,390 (+241.46%) vs yesterday, 7d: <span class="metric-badge positive">▲ +5,590,262 [+4.16%]</span>), with 30 Shorts created (+1 in 24h, +1 weekly), 2,116,413 likes, and an engagement rate of 1.51%.</li>
+<li>SoundCloud: 4,170,102 streams (Daily: 13,453, 24h Momentum: +90 (+0.67%) vs yesterday, 7d: <span class="metric-badge positive">▲ +105,505 [+2.60%]</span>), 97,964 likes (+265), and 652 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>Active in 41 charts across 41 countries today, with 3 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 166 days, reaching 69 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #1 in Yemen.</p>
@@ -640,7 +658,7 @@
 <li>Germany: Rank #9 (No change, Peak: #6)</li>
 </ul></details>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 140,122,776 total views (24h: <span class="metric-badge positive">▲ +755,708 [+0.54%]</span>, 7d: <span class="metric-badge positive">▲ +6,379,741 [+4.77%]</span>), 30 YouTube Shorts created (<span class="metric-badge positive">▲ +1</span> in 24h), 2,116,413 likes, and an engagement rate of 1.51%.</p>
+<p>Audience &amp; Engagement: 140,122,776 total views (Daily: 755,708, 24h Momentum: +534,390 (+241.46%) vs yesterday, 7d: <span class="metric-badge positive">▲ +5,590,262 [+4.16%]</span>), 30 YouTube Shorts created (<span class="metric-badge positive">▲ +1</span> in 24h), 2,116,413 likes, and an engagement rate of 1.51%.</p>
 <p>Active in 22 charts across 22 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 45 days, reaching 27 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #3 in Austria.</p>
 <p>Best performing chart: Austria at Rank #11 (No change, Peak: #2).</p>
 <h3>iTunes Insights</h3>
@@ -664,7 +682,7 @@
 <p>Global Momentum is currently at -1.2%, with an Acceleration of 13.7%. This indicates the track is in a Decelerating Contraction phase.</p>
 <p>Track Age: 93 days</p>
 <p>All-Time Cumulative Streams (Spotify): 78,935,952</p>
-<p>Latest Daily Streams: 605,828 (Delta: <span class="metric-badge positive">▲ +73,143</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 605,828 (Delta: 73,143)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (605,828) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -7,081 (-1.16%) compared to yesterday's forecast of 612,909.</li>
@@ -674,6 +692,10 @@
 </div>
 <p>Highest Daily Streams Ever: 773,367</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 605,828. This is lower than the all-time high floor of 609,407 and higher than the previous week's floor of 600,876.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
 <h3>Approaching Plateau — 2 countries</h3>
 <details class="sub-accordion"><summary class="sub-summary">View Countries (2)</summary><ul>
 <li>Switzerland: 0.6%</li>
@@ -686,14 +708,14 @@
 </ul></details>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
 <ul>
-<li>YouTube Content &amp; Shorts: 7,553,886 total views (24h: <span class="metric-badge positive">▲ +37,117 [+0.49%]</span>, 7d: <span class="metric-badge positive">▲ +121,510 [+1.63%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 7,553,886</span>), with 0 Shorts created (0 in 24h, -48 weekly), 76,019 likes, and an engagement rate of 1.01%.</li>
-<li>SoundCloud: 1,394,830 streams (24h: <span class="metric-badge positive">▲ +2,764 [+0.20%]</span>, 7d: <span class="metric-badge positive">▲ +20,165 [+1.47%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 1,394,830</span>), 42,120 likes (+69), and 321 shares.</li>
+<li>YouTube Content &amp; Shorts: 7,553,886 total views (Daily: 37,117, 24h Momentum: +25,333 (+214.98%) vs yesterday, 7d: <span class="metric-badge positive">▲ +109,872 [+1.48%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 76,019 likes, and an engagement rate of 1.01%.</li>
+<li>SoundCloud: 1,394,830 streams (Daily: 2,764, 24h Momentum: +213 (+8.35%) vs yesterday, 7d: <span class="metric-badge positive">▲ +20,165 [+1.47%]</span>), 42,120 likes (+69), and 321 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 1 days, reaching 1 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #152 in Algeria.</p>
 <p>Best performing chart: Algeria at Rank #152 (New Entry, Peak: #152).</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 7,553,886 total views (24h: <span class="metric-badge positive">▲ +37,117 [+0.49%]</span>, 7d: <span class="metric-badge positive">▲ +121,510 [+1.63%]</span>), 0 YouTube Shorts created (0 in 24h), 76,019 likes, and an engagement rate of 1.01%.</p>
+<p>Audience &amp; Engagement: 7,553,886 total views (Daily: 37,117, 24h Momentum: +25,333 (+214.98%) vs yesterday, 7d: <span class="metric-badge positive">▲ +109,872 [+1.48%]</span>), 0 YouTube Shorts created (0 in 24h), 76,019 likes, and an engagement rate of 1.01%.</p>
 <p>No active YouTube chart positions tracked today.</p>
 <h3>iTunes Insights</h3>
 <p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 10 days, reaching 7 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #13 in Malta.</p>
@@ -709,7 +731,7 @@
 <p>Global Momentum is currently at -1.3%, with an Acceleration of 15.3%. This indicates the track is in a Decelerating Contraction phase.</p>
 <p>Track Age: 93 days</p>
 <p>All-Time Cumulative Streams (Spotify): 85,557,758</p>
-<p>Latest Daily Streams: 431,436 (Delta: <span class="metric-badge positive">▲ +57,203</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 431,436 (Delta: 57,203)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (431,436) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +4,192 (+0.98%) compared to yesterday's forecast of 427,244.</li>
@@ -719,15 +741,23 @@
 </div>
 <p>Highest Daily Streams Ever: 951,713</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 431,436. This is lower than the all-time high floor of 745,493 and lower than the previous week's floor of 441,700.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
+<h3>Approaching Plateau — 0 countries</h3>
+<ul></ul>
+<h3>Contraction Phase — 0 countries</h3>
+<ul></ul>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
 <ul>
-<li>YouTube Content &amp; Shorts: 9,318,544 total views (24h: <span class="metric-badge positive">▲ +38,889 [+0.42%]</span>, 7d: <span class="metric-badge positive">▲ +351,624 [+3.92%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 9,318,544</span>), with 0 Shorts created (0 in 24h, -48 weekly), 111,266 likes, and an engagement rate of 1.19%.</li>
-<li>SoundCloud: 498,898 streams (24h: <span class="metric-badge positive">▲ +2,728 [+0.55%]</span>, 7d: <span class="metric-badge positive">▲ +22,596 [+4.74%]</span>, Peak: 837,828 (40.5% off peak)), 14,794 likes (+71), and 132 shares.</li>
+<li>YouTube Content &amp; Shorts: 9,318,544 total views (Daily: 38,889, 24h Momentum: +27,521 (+242.09%) vs yesterday, 7d: <span class="metric-badge positive">▲ +305,648 [+3.39%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 111,266 likes, and an engagement rate of 1.19%.</li>
+<li>SoundCloud: 498,898 streams (Daily: 2,728, 24h Momentum: -67 (-2.40%) vs yesterday, 7d: <span class="metric-badge positive">▲ +22,596 [+4.74%]</span>), 14,794 likes (+71), and 132 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>No active Apple Music chart positions tracked today.</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 9,318,544 total views (24h: <span class="metric-badge positive">▲ +38,889 [+0.42%]</span>, 7d: <span class="metric-badge positive">▲ +351,624 [+3.92%]</span>), 0 YouTube Shorts created (0 in 24h), 111,266 likes, and an engagement rate of 1.19%.</p>
+<p>Audience &amp; Engagement: 9,318,544 total views (Daily: 38,889, 24h Momentum: +27,521 (+242.09%) vs yesterday, 7d: <span class="metric-badge positive">▲ +305,648 [+3.39%]</span>), 0 YouTube Shorts created (0 in 24h), 111,266 likes, and an engagement rate of 1.19%.</p>
 <p>No active YouTube chart positions tracked today.</p>
 <h3>iTunes Insights</h3>
 <p>No active iTunes chart positions tracked today.</p>
@@ -742,7 +772,7 @@
 <p>Global Momentum is currently at -5.4%, with an Acceleration of 16.1%. This indicates the track is in a Decelerating Contraction phase.</p>
 <p>Track Age: 61 days</p>
 <p>All-Time Cumulative Streams (Spotify): 10,092,920</p>
-<p>Latest Daily Streams: 172,214 (Delta: <span class="metric-badge positive">▲ +23,818</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 172,214 (Delta: 23,818)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (172,214) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -4,399 (-2.49%) compared to yesterday's forecast of 176,613.</li>
@@ -752,16 +782,24 @@
 </div>
 <p>Highest Daily Streams Ever: 306,958</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 172,214. This is lower than the all-time high floor of 214,023 and lower than the previous week's floor of 184,394.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
+<h3>Approaching Plateau — 0 countries</h3>
+<ul></ul>
+<h3>Contraction Phase — 0 countries</h3>
+<ul></ul>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
-<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 8 user-generated Shorts on YouTube (an addition of -1 creations in 24 hours and -40 over the past 7 days).</p>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 8 user-generated Shorts on YouTube (an addition of -1 creations in 24 hours and -1 over the past 7 days).</p>
 <ul>
-<li>YouTube Content &amp; Shorts: 2,147,909 total views (24h: <span class="metric-badge positive">▲ +29,303 [+1.38%]</span>, 7d: <span class="metric-badge positive">▲ +139,897 [+6.97%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 2,147,909</span>), with 8 Shorts created (-1 in 24h, -40 weekly), 53,989 likes, and an engagement rate of 2.51%.</li>
-<li>SoundCloud: 44,057 streams (24h: <span class="metric-badge positive">▲ +476 [+1.09%]</span>, 7d: <span class="metric-badge positive">▲ +4,223 [+10.60%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 44,057</span>), 1,249 likes (+20), and 14 shares.</li>
+<li>YouTube Content &amp; Shorts: 2,147,909 total views (Daily: 29,303, 24h Momentum: +20,825 (+245.64%) vs yesterday, 7d: <span class="metric-badge positive">▲ +124,164 [+6.14%]</span>), with 8 Shorts created (-1 in 24h, -1 weekly), 53,989 likes, and an engagement rate of 2.51%.</li>
+<li>SoundCloud: 44,057 streams (Daily: 476, 24h Momentum: -100 (-17.36%) vs yesterday, 7d: <span class="metric-badge positive">▲ +4,223 [+10.60%]</span>), 1,249 likes (+20), and 14 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>No active Apple Music chart positions tracked today.</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 2,147,909 total views (24h: <span class="metric-badge positive">▲ +29,303 [+1.38%]</span>, 7d: <span class="metric-badge positive">▲ +139,897 [+6.97%]</span>), 8 YouTube Shorts created (-1 in 24h), 53,989 likes, and an engagement rate of 2.51%.</p>
+<p>Audience &amp; Engagement: 2,147,909 total views (Daily: 29,303, 24h Momentum: +20,825 (+245.64%) vs yesterday, 7d: <span class="metric-badge positive">▲ +124,164 [+6.14%]</span>), 8 YouTube Shorts created (-1 in 24h), 53,989 likes, and an engagement rate of 2.51%.</p>
 <p>No active YouTube chart positions tracked today.</p>
 <h3>iTunes Insights</h3>
 <p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 3 days, reaching 4 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #54 in Poland.</p>
@@ -777,7 +815,7 @@
 <p>Global Momentum is currently at -5.7%, with an Acceleration of 16.1%. This indicates the track is in a Decelerating Contraction phase.</p>
 <p>Track Age: 52 days</p>
 <p>All-Time Cumulative Streams (Spotify): 4,221,526</p>
-<p>Latest Daily Streams: 52,547 (Delta: <span class="metric-badge positive">▲ +7,272</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 52,547 (Delta: 7,272)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (52,547) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +367 (+0.70%) compared to yesterday's forecast of 52,180.</li>
@@ -787,15 +825,23 @@
 </div>
 <p>Highest Daily Streams Ever: 154,972</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 52,547. This is lower than the all-time high floor of 125,481 and lower than the previous week's floor of 55,816.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
+<h3>Approaching Plateau — 0 countries</h3>
+<ul></ul>
+<h3>Contraction Phase — 0 countries</h3>
+<ul></ul>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
 <ul>
-<li>YouTube Content &amp; Shorts: 2,898,202 total views (24h: <span class="metric-badge positive">▲ +63,499 [+2.24%]</span>, 7d: <span class="metric-badge positive">▲ +130,055 [+4.70%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 2,898,202</span>), with 0 Shorts created (0 in 24h, -48 weekly), 20,388 likes, and an engagement rate of 0.7%.</li>
-<li>SoundCloud: 88,486 streams (24h: <span class="metric-badge positive">▲ +1,059 [+1.21%]</span>, 7d: <span class="metric-badge positive">▲ +8,809 [+11.06%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 88,486</span>), 2,961 likes (+22), and 59 shares.</li>
+<li>YouTube Content &amp; Shorts: 2,898,202 total views (Daily: 63,499, 24h Momentum: +46,099 (+264.94%) vs yesterday, 7d: <span class="metric-badge positive">▲ +122,998 [+4.43%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 20,388 likes, and an engagement rate of 0.7%.</li>
+<li>SoundCloud: 88,486 streams (Daily: 1,059, 24h Momentum: -132 (-11.08%) vs yesterday, 7d: <span class="metric-badge positive">▲ +8,809 [+11.06%]</span>), 2,961 likes (+22), and 59 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>No active Apple Music chart positions tracked today.</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 2,898,202 total views (24h: <span class="metric-badge positive">▲ +63,499 [+2.24%]</span>, 7d: <span class="metric-badge positive">▲ +130,055 [+4.70%]</span>), 0 YouTube Shorts created (0 in 24h), 20,388 likes, and an engagement rate of 0.7%.</p>
+<p>Audience &amp; Engagement: 2,898,202 total views (Daily: 63,499, 24h Momentum: +46,099 (+264.94%) vs yesterday, 7d: <span class="metric-badge positive">▲ +122,998 [+4.43%]</span>), 0 YouTube Shorts created (0 in 24h), 20,388 likes, and an engagement rate of 0.7%.</p>
 <p>Active in 4 charts across 4 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 5 days, reaching 4 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #52 in Estonia.</p>
 <p>Best performing chart: Estonia at Rank #52 (No change, Peak: #52).</p>
 <h3>iTunes Insights</h3>
@@ -811,7 +857,7 @@
 <p>Global Momentum is currently at 2.3%, with an Acceleration of 22.3%. This indicates the track is in an Accelerating Expansion phase.</p>
 <p>Track Age: 37 days</p>
 <p>All-Time Cumulative Streams (Spotify): 2,468,642</p>
-<p>Latest Daily Streams: 38,448 (Delta: <span class="metric-badge positive">▲ +7,001</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 38,448 (Delta: 7,001)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (38,448) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +3,781 (+10.91%) compared to yesterday's forecast of 34,667.</li>
@@ -821,15 +867,23 @@
 </div>
 <p>Highest Daily Streams Ever: 148,576</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 38,448. This is lower than the all-time high floor of 73,104 and higher than the previous week's floor of 36,019.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
+<h3>Approaching Plateau — 0 countries</h3>
+<ul></ul>
+<h3>Contraction Phase — 0 countries</h3>
+<ul></ul>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
 <ul>
-<li>YouTube Content &amp; Shorts: 162,174 total views (24h: <span class="metric-badge positive">▲ +2,172 [+1.36%]</span>, 7d: <span class="metric-badge positive">▲ +6,831 [+4.40%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 162,174</span>), with 0 Shorts created (0 in 24h, -48 weekly), 1,142 likes, and an engagement rate of 0.7%.</li>
-<li>SoundCloud: 29,580 streams (24h: <span class="metric-badge positive">▲ +508 [+1.75%]</span>, 7d: <span class="metric-badge positive">▲ +3,874 [+15.07%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 29,580</span>), 1,324 likes (+14), and 13 shares.</li>
+<li>YouTube Content &amp; Shorts: 162,174 total views (Daily: 2,172, 24h Momentum: +1,744 (+407.48%) vs yesterday, 7d: <span class="metric-badge positive">▲ +6,194 [+3.97%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 1,142 likes, and an engagement rate of 0.7%.</li>
+<li>SoundCloud: 29,580 streams (Daily: 508, 24h Momentum: +9 (+1.80%) vs yesterday, 7d: <span class="metric-badge positive">▲ +3,874 [+15.07%]</span>), 1,324 likes (+14), and 13 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>No active Apple Music chart positions tracked today.</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 162,174 total views (24h: <span class="metric-badge positive">▲ +2,172 [+1.36%]</span>, 7d: <span class="metric-badge positive">▲ +6,831 [+4.40%]</span>), 0 YouTube Shorts created (0 in 24h), 1,142 likes, and an engagement rate of 0.7%.</p>
+<p>Audience &amp; Engagement: 162,174 total views (Daily: 2,172, 24h Momentum: +1,744 (+407.48%) vs yesterday, 7d: <span class="metric-badge positive">▲ +6,194 [+3.97%]</span>), 0 YouTube Shorts created (0 in 24h), 1,142 likes, and an engagement rate of 0.7%.</p>
 <p>No active YouTube chart positions tracked today.</p>
 <h3>iTunes Insights</h3>
 <p>No active iTunes chart positions tracked today.</p>
@@ -844,7 +898,7 @@
 <p>Global Momentum is currently at -2.1%, with an Acceleration of 19.6%. This indicates the track is in a Decelerating Contraction phase.</p>
 <p>Track Age: 21 days</p>
 <p>All-Time Cumulative Streams (Spotify): 15,590,757</p>
-<p>Latest Daily Streams: 129,867 (Delta: <span class="metric-badge positive">▲ +21,314</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 129,867 (Delta: 21,314)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (129,867) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +2,462 (+1.93%) compared to yesterday's forecast of 127,405.</li>
@@ -854,15 +908,23 @@
 </div>
 <p>Highest Daily Streams Ever: 181,164</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 129,867. This is lower than the all-time high floor of 164,905 and lower than the previous week's floor of 132,418.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
+<h3>Approaching Plateau — 0 countries</h3>
+<ul></ul>
+<h3>Contraction Phase — 0 countries</h3>
+<ul></ul>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
 <ul>
-<li>YouTube Content &amp; Shorts: 216,263 total views (24h: <span class="metric-badge positive">▲ +989 [+0.46%]</span>, 7d: <span class="metric-badge positive">▲ +6,213 [+2.96%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 216,263</span>), with 0 Shorts created (0 in 24h, 0 weekly), 4,636 likes, and an engagement rate of 2.14%.</li>
-<li>SoundCloud: 118,166 streams (24h: <span class="metric-badge positive">▲ +475 [+0.40%]</span>, 7d: <span class="metric-badge positive">▲ +3,856 [+3.37%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 118,166</span>), 3,830 likes (+11), and 85 shares.</li>
+<li>YouTube Content &amp; Shorts: 216,263 total views (Daily: 989, 24h Momentum: +707 (+250.71%) vs yesterday, 7d: <span class="metric-badge positive">▲ +5,455 [+2.59%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 4,636 likes, and an engagement rate of 2.14%.</li>
+<li>SoundCloud: 118,166 streams (Daily: 475, 24h Momentum: -11 (-2.26%) vs yesterday, 7d: <span class="metric-badge positive">▲ +3,856 [+3.37%]</span>), 3,830 likes (+11), and 85 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>No active Apple Music chart positions tracked today.</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 216,263 total views (24h: <span class="metric-badge positive">▲ +989 [+0.46%]</span>, 7d: <span class="metric-badge positive">▲ +6,213 [+2.96%]</span>), 0 YouTube Shorts created (0 in 24h), 4,636 likes, and an engagement rate of 2.14%.</p>
+<p>Audience &amp; Engagement: 216,263 total views (Daily: 989, 24h Momentum: +707 (+250.71%) vs yesterday, 7d: <span class="metric-badge positive">▲ +5,455 [+2.59%]</span>), 0 YouTube Shorts created (0 in 24h), 4,636 likes, and an engagement rate of 2.14%.</p>
 <p>No active YouTube chart positions tracked today.</p>
 <h3>iTunes Insights</h3>
 <p>No active iTunes chart positions tracked today.</p>
@@ -877,7 +939,7 @@
 <p>Global Momentum is currently at 34.2%, with an Acceleration of 31.2%. This indicates the track is in an Accelerating Expansion phase.</p>
 <p>Track Age: 12 days</p>
 <p>All-Time Cumulative Streams (Spotify): 1,041,465</p>
-<p>Latest Daily Streams: 142,484 (Delta: <span class="metric-badge positive">▲ +33,859</span>)</p><div class="forecast-box">
+<p>Latest Daily Streams: 142,484 (Delta: 33,859)</p><div class="forecast-box">
 <strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
 <ul>
 <li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (142,484) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +20,030 (+16.36%) compared to yesterday's forecast of 122,454.</li>
@@ -887,16 +949,24 @@
 </div>
 <p>Highest Daily Streams Ever: 142,484</p>
 <p>The current cycle is in progress (Day 1 of 7). The current partial average is 142,484. This is higher than the all-time high floor of 94,368 and higher than the previous week's floor of 94,368.</p>
+<h3>Strong Growth — 0 countries</h3>
+<ul></ul>
+<h3>Moderate Growth — 0 countries</h3>
+<ul></ul>
+<h3>Approaching Plateau — 0 countries</h3>
+<ul></ul>
+<h3>Contraction Phase — 0 countries</h3>
+<ul></ul>
 <h3>Multi-Platform Audience &amp; Social Reach</h3>
-<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 10 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and -38 over the past 7 days).</p>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 10 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
 <ul>
-<li>YouTube Content &amp; Shorts: 955,189 total views (24h: <span class="metric-badge positive">▲ +94,082 [+10.93%]</span>, 7d: <span class="metric-badge positive">▲ +751,425 [+368.77%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 955,189</span>), with 10 Shorts created (0 in 24h, -38 weekly), 28,395 likes, and an engagement rate of 2.97%.</li>
-<li>SoundCloud: 7,722 streams (24h: <span class="metric-badge positive">▲ +943 [+13.91%]</span>, 7d: <span class="metric-badge positive">▲ +6,631 [+607.79%]</span>, <span class="metric-badge peak">🏆 All-Time Peak: 7,722</span>), 443 likes (+56), and 11 shares.</li>
+<li>YouTube Content &amp; Shorts: 955,189 total views (Daily: 94,082, 24h Momentum: +69,925 (+289.46%) vs yesterday, 7d: <span class="metric-badge positive">▲ +648,527 [+211.48%]</span>), with 10 Shorts created (0 in 24h, 0 weekly), 28,395 likes, and an engagement rate of 2.97%.</li>
+<li>SoundCloud: 7,722 streams (Daily: 943, 24h Momentum: -11 (-1.15%) vs yesterday, 7d: <span class="metric-badge positive">▲ +6,631 [+607.79%]</span>), 443 likes (+56), and 11 shares.</li>
 </ul>
 <h3>Apple Music Insights</h3>
 <p>No active Apple Music chart positions tracked today.</p>
 <h3>YouTube Insights</h3>
-<p>Audience &amp; Engagement: 955,189 total views (24h: <span class="metric-badge positive">▲ +94,082 [+10.93%]</span>, 7d: <span class="metric-badge positive">▲ +751,425 [+368.77%]</span>), 10 YouTube Shorts created (0 in 24h), 28,395 likes, and an engagement rate of 2.97%.</p>
+<p>Audience &amp; Engagement: 955,189 total views (Daily: 94,082, 24h Momentum: +69,925 (+289.46%) vs yesterday, 7d: <span class="metric-badge positive">▲ +648,527 [+211.48%]</span>), 10 YouTube Shorts created (0 in 24h), 28,395 likes, and an engagement rate of 2.97%.</p>
 <p>No active YouTube chart positions tracked today.</p>
 <h3>iTunes Insights</h3>
 <p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 3 days, reaching 3 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #17 in Sweden.</p>
