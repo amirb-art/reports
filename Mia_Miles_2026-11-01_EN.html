@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mia Miles - Performance Metrics Report</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: left;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table th {
+        padding: 10px 16px;
+        background-color: #222222;
+        color: #1DB954;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        border-bottom: 2px solid #282828;
+    }
+    .bill-table th.platform {
+        text-align: left;
+    }
+    .bill-table th.counter {
+        text-align: right;
+    }
+    .bill-table th.daily-header {
+        text-align: right;
+    }
+    .bill-table th.delta-header {
+        text-align: center;
+    }
+    .bill-table th.unit {
+        text-align: left;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: left;
+    }
+    .bill-table .counter {
+        text-align: right;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .daily-cell {
+        text-align: right;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 14px;
+        color: #e5e5e5;
+        direction: ltr;
+    }
+    .bill-table .delta-cell {
+        text-align: center;
+        white-space: nowrap;
+    }
+    .bill-table .delta {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        direction: ltr;
+    }
+    .bill-table .delta.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .bill-table .delta.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .bill-table .delta.zero {
+        color: #888888;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: left;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Metric Badges & Performance Highlights */
+    .metric-badge {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        margin: 0 3px;
+        direction: ltr;
+        unicode-bidi: isolate;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .metric-badge.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .metric-badge.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .metric-badge.peak {
+        color: #f59e0b;
+        background-color: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        font-weight: bold;
+    }
+    .metric-badge.neutral {
+        color: #94a3b8;
+        background-color: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+    }
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 20px 10px 30px;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+    }
+    .expl-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-size: 0.85em;
+        margin-inline-start: 4px;
+        border-bottom: 1px dotted rgba(56, 189, 248, 0.6);
+        transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .expl-link:hover {
+        color: #7dd3fc;
+        border-bottom-color: #7dd3fc;
+    }
+    .market-context-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-left: 4px solid #38bdf8;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #c9d1d9;
+    }
+    .market-context-box strong {
+        color: #38bdf8;
+    }
+    .forecast-box {
+        background-color: #1a1e29;
+        border: 1px solid #2d3748;
+        border-left: 4px solid #a855f7;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #e2e8f0;
+    }
+    .forecast-box strong {
+        color: #c084fc;
+    }
+    .forecast-box ul {
+        margin: 6px 0 0 0;
+        padding-left: 18px;
+    }
+    .forecast-box li {
+        margin-bottom: 4px;
+    }
+    .forecast-delta-pos {
+        color: #4ade80;
+        font-weight: 600;
+    }
+    .forecast-delta-neg {
+        color: #f87171;
+        font-weight: 600;
+    }
+</style></head>
+<body>
+<h1>Mia Miles - Performance Metrics Report</h1>
+<p class="spotify-disclaimer"><em>Note: This report is Spotify-centric; unless explicitly stated, all metrics originate from Spotify (e.g. Cities, thermal maps, etc.)</em></p>
+<p><strong>Data Date:</strong> 2026-11-01 (Sunday)</p>
+<p><em>Operational Note: Today is Sunday. Drops in Western markets today are normal 'weekend dips'. The workweek in Israel/Middle East starts Sunday. Australia/Asia start Monday early. Because these Timezone Canaries are exhibiting positive momentum indicators, this is explicitly framed as a predictive indicator for a global Tuesday recovery.</em></p>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">Band Overview</a>
+<a href="#top-cities">Top Cities</a>
+<a href="#track-metrics">Track Metrics</a>
+<a href="#summary">Summary</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">Expand All</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">Collapse All</button>
+</div>
+</nav><h2 id="band-overview">Band Overview</h2>
+<p><strong>Followers:</strong> 3,807 (<span class="metric-badge positive">+1</span>)</p>
+<p><strong>Monthly Listeners:</strong> 132,984 (<span class="metric-badge negative">-2,588</span>)</p>
+<p class="spotify-rank"><strong>Global Artist Rank (Spotify):</strong> The artist is not yet ranked on Spotify. <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_en">(see explanation)</a></p>
+<p class="worldwide-rank"><strong>Worldwide Digital Artist Rank (Weighted All-Platform):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_en">(see explanation)</a> The artist is not yet ranked globally across weighted digital platforms.</p>
+<div class="restaurant-bill">
+<h3>Catalog Music Streaming Summary (6 Songs &amp; Remixes)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">Platform</th>
+<th class="counter">Total Counter</th>
+<th class="daily-header">Daily Streams</th>
+<th class="delta-header">24h Momentum</th>
+<th class="unit">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">2,545,361</td>
+<td class="daily-cell">12,588</td>
+<td class="delta-cell"><span class="delta negative" title="-2,118 vs yesterday (-14.40%)">▼ -2,118 (-14.40%)</span></td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">306,087</td>
+<td class="daily-cell">1,185</td>
+<td class="delta-cell"><span class="delta negative" title="-151 vs yesterday (-11.30%)">▼ -151 (-11.30%)</span></td>
+<td class="unit">views / streams</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">35,098</td>
+<td class="daily-cell">126</td>
+<td class="delta-cell"><span class="delta negative" title="-141 vs yesterday (-52.81%)">▼ -141 (-52.81%)</span></td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, iTunes, Deezer</td>
+<td colspan="4" style="color: #888; font-size: 13px; text-align: center;">do not disclose public stream counters</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Music Streaming</td>
+<td class="counter">2,886,546</td>
+<td class="daily-cell">13,899</td>
+<td class="delta-cell"><span class="delta negative" title="-2,410 vs yesterday (-14.78%)">▼ -2,410 (-14.78%)</span></td>
+<td class="unit">streams</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="top-cities">Top 5 Cities Analysis</h2>
+<table>
+<thead>
+<tr>
+<th>City Name</th>
+<th>Continent</th>
+<th>Current Listeners</th>
+<th>Short-Term Diff (3d)</th>
+<th>Long-Term Diff (14d)</th>
+<th>All-Time Peak</th>
+<th>Total Measured Days</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Los Angeles</td>
+<td>North America</td>
+<td>2,323 (<span class="metric-badge negative">▼ -45</span>)</td>
+<td><span class="metric-badge negative">▼ -114</span></td>
+<td><span class="metric-badge negative">▼ -146</span></td>
+<td>3,857</td>
+<td>98</td>
+</tr>
+<tr>
+<td>Sydney</td>
+<td>Oceania</td>
+<td>2,223 (<span class="metric-badge negative">▼ -34</span>)</td>
+<td><span class="metric-badge negative">▼ -143</span></td>
+<td><span class="metric-badge negative">▼ -344</span></td>
+<td>3,315</td>
+<td>98</td>
+</tr>
+<tr>
+<td>Melbourne</td>
+<td>Oceania</td>
+<td>1,701 (<span class="metric-badge negative">▼ -50</span>)</td>
+<td><span class="metric-badge negative">▼ -139</span></td>
+<td><span class="metric-badge negative">▼ -257</span></td>
+<td>2,671</td>
+<td>55</td>
+</tr>
+<tr>
+<td>Chicago</td>
+<td>North America</td>
+<td>1,591 (<span class="metric-badge negative">▼ -30</span>)</td>
+<td><span class="metric-badge negative">▼ -69</span></td>
+<td><span class="metric-badge positive">▲ +1,591</span></td>
+<td>2,749</td>
+<td>61</td>
+</tr>
+<tr>
+<td>Mexico City</td>
+<td>North America</td>
+<td>1,583 (<span class="metric-badge negative">▼ -69</span>)</td>
+<td><span class="metric-badge negative">▼ -138</span></td>
+<td><span class="metric-badge negative">▼ -332</span></td>
+<td>10,263</td>
+<td>78</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">Track Metrics</h2>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.6, Listeners Z: -1.2, Followers Z: -2.1), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -3.9%, with an Acceleration of -7.3%. This indicates the track is in a Accelerating Contraction phase.</p>
+<p>Track Age: 90 days</p>
+<p>All-Time Cumulative Streams (Spotify): 2,230,874</p>
+<p>Latest Daily Streams: 7,586 (Delta: <span class="metric-badge negative">▼ -600</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (7,586) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -673 (-8.15%) compared to yesterday's forecast of 8,259.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-02):</strong> Projected Daily Streams: <strong>8,230</strong> | Projected Total Streams: <strong>2,239,104</strong>.</li>
+</ul>
+</div>
+<p>Highest Daily Streams Ever: 21,861</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 8,101. This is lower than the all-time high floor of 19,201 and lower than the previous week's floor of 8,247.</p>
+<h3>Strong Growth — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>No countries currently in this category.</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 0 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 285,420 total views (Daily: 677, 24h Momentum: +64 (+10.44%) vs yesterday, 7d: <span class="metric-badge positive">▲ +4,571 [+1.63%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 5,019 likes, and an engagement rate of 1.76%.</li>
+<li>SoundCloud: 23,436 streams (Daily: 24, 24h Momentum: -50 (-67.57%) vs yesterday, 7d: <span class="metric-badge positive">▲ +464 [+2.02%]</span>), 756 likes (0), and 10 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 285,420 total views (Daily: 677, 24h Momentum: +64 (+10.44%) vs yesterday, 7d: <span class="metric-badge positive">▲ +4,571 [+1.63%]</span>), 0 YouTube Shorts created (0 in 24h), 5,019 likes, and an engagement rate of 1.76%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - Dallin Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: +0.3, Listeners Z: -1.2, Followers Z: -2.1), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---dallin-remix">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at 5.4%, with an Acceleration of -31.2%. This indicates the track is in a Decelerating Expansion phase.</p>
+<p>Track Age: 90 days</p>
+<p>All-Time Cumulative Streams (Spotify): 175,006</p>
+<p>Latest Daily Streams: 2,672 (Delta: <span class="metric-badge negative">▼ -1,212</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (2,672) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -16 (-0.60%) compared to yesterday's forecast of 2,688.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-02):</strong> Projected Daily Streams: <strong>2,713</strong> | Projected Total Streams: <strong>177,719</strong>.</li>
+</ul>
+</div>
+<p>Highest Daily Streams Ever: 3,884</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 2,681. This is higher than the all-time high floor of 2,289 and higher than the previous week's floor of 2,008.</p>
+<h3>Strong Growth — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>No countries currently in this category.</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 0 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 8,954 total views (Daily: 395, 24h Momentum: -185 (-31.90%) vs yesterday, 7d: <span class="metric-badge positive">▲ +3,695 [+70.26%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 150 likes, and an engagement rate of 1.68%.</li>
+<li>SoundCloud: 9,571 streams (Daily: 96, 24h Momentum: -79 (-45.14%) vs yesterday, 7d: <span class="metric-badge positive">▲ +1,049 [+12.31%]</span>), 172 likes (+5), and 4 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 8,954 total views (Daily: 395, 24h Momentum: -185 (-31.90%) vs yesterday, 7d: <span class="metric-badge positive">▲ +3,695 [+70.26%]</span>), 0 YouTube Shorts created (0 in 24h), 150 likes, and an engagement rate of 1.68%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - Mizmo Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.9, Listeners Z: -1.2, Followers Z: -2.1), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---mizmo-remix">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -17.8%, with an Acceleration of -18.7%. This indicates the track is in a Accelerating Contraction phase.</p>
+<p>Track Age: 90 days</p>
+<p>All-Time Cumulative Streams (Spotify): 72,496</p>
+<p>Latest Daily Streams: 813 (Delta: <span class="metric-badge negative">▼ -187</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (813) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -184 (-18.46%) compared to yesterday's forecast of 997.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-02):</strong> Projected Daily Streams: <strong>973</strong> | Projected Total Streams: <strong>73,469</strong>.</li>
+</ul>
+</div>
+<p>Highest Daily Streams Ever: 2,139</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 1,040. This is lower than the all-time high floor of 1,682 and lower than the previous week's floor of 1,126.</p>
+<h3>Strong Growth — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>No countries currently in this category.</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 0 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 865 total views (Daily: 0, 24h Momentum: -4 (-100.00%) vs yesterday, 7d: <span class="metric-badge positive">▲ +27 [+3.22%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 10 likes, and an engagement rate of 1.16%.</li>
+<li>SoundCloud: 226 streams (Daily: 0, 24h Momentum: -1 (-100.00%) vs yesterday, 7d: <span class="metric-badge positive">▲ +8 [+3.67%]</span>), 14 likes (0), and 1 share.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 865 total views (Daily: 0, 24h Momentum: -4 (-100.00%) vs yesterday, 7d: <span class="metric-badge positive">▲ +27 [+3.22%]</span>), 0 YouTube Shorts created (0 in 24h), 10 likes, and an engagement rate of 1.16%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - Olli P Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.4, Listeners Z: -1.2, Followers Z: -2.1), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---olli-p-remix">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -18.4%, with an Acceleration of -45.1%. This indicates the track is in a Accelerating Contraction phase.</p>
+<p>Track Age: 66 days</p>
+<p>All-Time Cumulative Streams (Spotify): 6,665</p>
+<p>Latest Daily Streams: 50 (Delta: <span class="metric-badge negative">▼ -41</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (50) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -10 (-16.67%) compared to yesterday's forecast of 60.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-02):</strong> Projected Daily Streams: <strong>59</strong> | Projected Total Streams: <strong>6,724</strong>.</li>
+</ul>
+</div>
+<p>Highest Daily Streams Ever: 118</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 65. This is lower than the all-time high floor of 84 and higher than the previous week's floor of 47.</p>
+<h3>Strong Growth — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>No countries currently in this category.</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 0 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 7,292 total views (Daily: 56, 24h Momentum: -3 (-5.08%) vs yesterday, 7d: <span class="metric-badge positive">▲ +457 [+6.69%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 51 likes, and an engagement rate of 0.7%.</li>
+<li>SoundCloud: 343 streams (Daily: 0, 24h Momentum: -5 (-100.00%) vs yesterday, 7d: <span class="metric-badge positive">▲ +33 [+10.65%]</span>), 17 likes (0), and 3 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 7,292 total views (Daily: 56, 24h Momentum: -3 (-5.08%) vs yesterday, 7d: <span class="metric-badge positive">▲ +457 [+6.69%]</span>), 0 YouTube Shorts created (0 in 24h), 51 likes, and an engagement rate of 0.7%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">7 days a week - AVE Remix</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.4, Listeners Z: -1.2, Followers Z: -2.1), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---ave-remix">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -12.0%, with an Acceleration of -6.4%. This indicates the track is in a Accelerating Contraction phase.</p>
+<p>Track Age: 66 days</p>
+<p>All-Time Cumulative Streams (Spotify): 25,934</p>
+<p>Latest Daily Streams: 392 (Delta: <span class="metric-badge negative">▼ -27</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (392) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -101 (-20.49%) compared to yesterday's forecast of 493.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-02):</strong> Projected Daily Streams: <strong>508</strong> | Projected Total Streams: <strong>26,442</strong>.</li>
+</ul>
+</div>
+<p>Highest Daily Streams Ever: 528</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 466. This is higher than the all-time high floor of 341 and higher than the previous week's floor of 322.</p>
+<h3>Strong Growth — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>No countries currently in this category.</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 0 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 1,181 total views (Daily: 5, 24h Momentum: -3 (-37.50%) vs yesterday, 7d: <span class="metric-badge positive">▲ +65 [+5.82%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 15 likes, and an engagement rate of 1.27%.</li>
+<li>SoundCloud: 1,338 streams (Daily: 5, 24h Momentum: -4 (-44.44%) vs yesterday, 7d: <span class="metric-badge positive">▲ +57 [+4.45%]</span>), 45 likes (0), and 0 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 1,181 total views (Daily: 5, 24h Momentum: -3 (-37.50%) vs yesterday, 7d: <span class="metric-badge positive">▲ +65 [+5.82%]</span>), 0 YouTube Shorts created (0 in 24h), 15 likes, and an engagement rate of 1.27%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Stupid Face</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.6, Listeners Z: -1.2, Followers Z: -2.1), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_mia_miles.html#streams-stupid-face">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -25.7%, with an Acceleration of -4.5%. This indicates the track is in a Accelerating Contraction phase.</p>
+<p>Track Age: 42 days</p>
+<p>All-Time Cumulative Streams (Spotify): 34,386</p>
+<p>Latest Daily Streams: 1,075 (Delta: <span class="metric-badge negative">▼ -51</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (1,075) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -832 (-43.63%) compared to yesterday's forecast of 1,907.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-02):</strong> Projected Daily Streams: <strong>2,026</strong> | Projected Total Streams: <strong>36,412</strong>.</li>
+</ul>
+</div>
+<p>Highest Daily Streams Ever: 2,200</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 1,536. This is higher than the all-time high floor of 1,191 and higher than the previous week's floor of 1,191.</p>
+<h3>Strong Growth — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>No countries currently in this category.</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Creator Virality:</strong> The track powers a combined 0 user-generated Shorts on YouTube (an addition of 0 creations in 24 hours and 0 over the past 7 days).</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 2,375 total views (Daily: 52, 24h Momentum: -20 (-27.78%) vs yesterday, 7d: <span class="metric-badge positive">▲ +659 [+38.40%]</span>), with 0 Shorts created (0 in 24h, 0 weekly), 56 likes, and an engagement rate of 2.36%.</li>
+<li>SoundCloud: 184 streams (Daily: 1, 24h Momentum: -2 (-66.67%) vs yesterday, 7d: <span class="metric-badge positive">▲ +26 [+16.46%]</span>), 8 likes (0), and 0 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Audience &amp; Engagement: 2,375 total views (Daily: 52, 24h Momentum: -20 (-27.78%) vs yesterday, 7d: <span class="metric-badge positive">▲ +659 [+38.40%]</span>), 0 YouTube Shorts created (0 in 24h), 56 likes, and an engagement rate of 2.36%.</p>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<h2 id="summary">Summary</h2>
+<p>The licensed remixes for '7 days a week' (Dallin Remix and Mizmo Remix and Olli P Remix and AVE Remix) contributed a combined 3,927 daily streams today. This represents a 51.8% addition to the original track's daily streams.</p>
+
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
+}
+</script></body>
+</html>
