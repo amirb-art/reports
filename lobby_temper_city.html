@@ -10,6 +10,30 @@
             h1 { font-size: 32px; margin-bottom: 10px; }
             summary::-webkit-details-marker { display: none; }
             details[open] summary .chevron { transform: rotate(180deg); }
+            .lobby-ctrl-btn {
+                background: #161922;
+                border: 1px solid #3d4253;
+                color: #c0c5d6;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: bold;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 0.25s ease;
+            }
+            .lobby-ctrl-btn:hover {
+                background: #232736;
+                border-color: #1DB954;
+                color: #1DB954;
+                transform: translateY(-1px);
+            }
+            .lobby-ctrl-btn.collapse-btn:hover {
+                border-color: #ff5555;
+                color: #ff5555;
+            }
         </style>
     </head>
     <body>
@@ -34,9 +58,19 @@
                 </a>
             </div>
 
-            <p style="color: #a3a8b8; margin-top: 10px; margin-bottom: 25px; font-size: 16px;">Select a track to view detailed analytics and performance trends by album release:</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; margin-bottom: 20px;">
+                <p style="color: #a3a8b8; margin: 0; font-size: 15px;">Select a track to view detailed analytics and performance trends by album release:</p>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="document.querySelectorAll('.lobby-album-accordion').forEach(el => el.open = true);" class="lobby-ctrl-btn">
+                        <span>➕</span> Expand All
+                    </button>
+                    <button type="button" onclick="document.querySelectorAll('.lobby-album-accordion').forEach(el => el.open = false);" class="lobby-ctrl-btn collapse-btn">
+                        <span>➖</span> Collapse All
+                    </button>
+                </div>
+            </div>
             
-        <details class="lobby-album-accordion" open style="margin-bottom: 24px; border: 1px solid #2d303e; border-left: 4px solid #1DB954; border-radius: 12px; background: #12141a; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <details class="lobby-album-accordion" style="margin-bottom: 24px; border: 1px solid #2d303e; border-left: 4px solid #1DB954; border-radius: 12px; background: #12141a; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
             <summary style="padding: 18px 24px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: #161922; user-select: none;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 24px;">💿</span>
@@ -93,7 +127,7 @@
             </div>
         </details>
         
-        <details class="lobby-album-accordion" open style="margin-bottom: 24px; border: 1px solid #2d303e; border-left: 4px solid #9b59b6; border-radius: 12px; background: #12141a; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <details class="lobby-album-accordion" style="margin-bottom: 24px; border: 1px solid #2d303e; border-left: 4px solid #9b59b6; border-radius: 12px; background: #12141a; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
             <summary style="padding: 18px 24px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: #161922; user-select: none;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 24px;">🎛️</span>
