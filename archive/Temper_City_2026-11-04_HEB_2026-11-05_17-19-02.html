@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8"/>
+<title>Temper City - דוח מדדי ביצועים</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Hebrew", "Alef", sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        direction: rtl;
+        text-align: right;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+        direction: rtl;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: right;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-right: 20px;
+        padding-left: 0;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+        direction: rtl;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table th {
+        padding: 10px 16px;
+        background-color: #222222;
+        color: #1DB954;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        border-bottom: 2px solid #282828;
+    }
+    .bill-table th.platform {
+        text-align: right;
+    }
+    .bill-table th.counter {
+        text-align: left;
+    }
+    .bill-table th.daily-header {
+        text-align: left;
+    }
+    .bill-table th.delta-header {
+        text-align: center;
+    }
+    .bill-table th.unit {
+        text-align: right;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: right;
+    }
+    .bill-table .counter {
+        text-align: left;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .daily-cell {
+        text-align: left;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 14px;
+        color: #e5e5e5;
+        direction: ltr;
+    }
+    .bill-table .delta-cell {
+        text-align: center;
+        white-space: nowrap;
+    }
+    .bill-table .delta {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        direction: ltr;
+    }
+    .bill-table .delta.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .bill-table .delta.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .bill-table .delta.zero {
+        color: #888888;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: right;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Metric Badges & Performance Highlights (Hebrew / RTL) */
+    .metric-badge {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        margin: 0 3px;
+        direction: ltr;
+        unicode-bidi: isolate;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .metric-badge.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .metric-badge.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .metric-badge.peak {
+        color: #f59e0b;
+        background-color: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        font-weight: bold;
+    }
+    .metric-badge.neutral {
+        color: #94a3b8;
+        background-color: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles (Hebrew / RTL) */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        direction: rtl;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        direction: rtl;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+        direction: rtl;
+    }
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 30px 10px 20px;
+        direction: rtl;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+        direction: rtl;
+    }
+    .expl-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-size: 0.85em;
+        margin-inline-start: 4px;
+        border-bottom: 1px dotted rgba(56, 189, 248, 0.6);
+        transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .expl-link:hover {
+        color: #7dd3fc;
+        border-bottom-color: #7dd3fc;
+    }
+    .market-context-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-right: 4px solid #38bdf8;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #c9d1d9;
+        direction: rtl;
+        text-align: right;
+    }
+    .market-context-box strong {
+        color: #38bdf8;
+    }
+    .forecast-box {
+        background-color: #1a1e29;
+        border: 1px solid #2d3748;
+        border-right: 4px solid #a855f7;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #e2e8f0;
+        direction: rtl;
+        text-align: right;
+    }
+    .forecast-box strong {
+        color: #c084fc;
+    }
+    .forecast-box ul {
+        margin: 6px 0 0 0;
+        padding-right: 18px;
+    }
+    .forecast-box li {
+        margin-bottom: 4px;
+    }
+    .forecast-delta-pos {
+        color: #4ade80;
+        font-weight: 600;
+    }
+    .forecast-delta-neg {
+        color: #f87171;
+        font-weight: 600;
+    }
+</style></head>
+<body dir="rtl">
+
+<section id="band-overview">
+<h1>Temper City - דוח מדדי ביצועים</h1>
+<p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
+<p><strong>תאריך הנתונים:</strong> 2026-11-04 (יום רביעי)</p>
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">סקירת להקה</a>
+<a href="#top-cities">5 הערים המובילות</a>
+<a href="#track-metrics">מדדי שירים</a>
+<a href="#summary">סיכום</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">פתח הכל</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">סגור הכל</button>
+</div>
+</nav><h2 id="band-overview">סקירת להקה</h2>
+<p>דוח זה מספק סקירה מקיפה של מדדי הביצועים של Temper City, תוך התמקדות בנתונים עדכניים מ-2024-07-20.</p>
+<h3>דירוג אומן</h3>
+<p class="spotify-rank"><strong>דירוג אומן עולמי (Spotify):</strong> #275 <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_heb">(ראה הסבר)</a> (אתמול: #271, שבוע שעבר: #245, <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #196).</p>
+<p class="worldwide-rank"><strong>דירוג אומן עולמי דיגיטלי (רב-פלטפורמי משוקלל):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_heb">(ראה הסבר)</a> #92 (נקודות: 412, אתמול: #85, שבוע שעבר: #77, <span class="metric-badge peak">🏆 שיא כל הזמנים</span>: #45).</p>
+<h3>מדדי השמעות גלובליים</h3>
+<table>
+<thead>
+<tr>
+<th>מדד</th>
+<th>ערך</th>
+<th>שינוי יומי</th>
+<th>שינוי שבועי</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>השמעות יומיות אחרונות</td>
+<td>1,234,567</td>
+<td><span class="metric-badge positive">+12,345</span></td>
+<td><span class="metric-badge positive">+50,000</span></td>
+</tr>
+<tr>
+<td>סך השמעות מצטבר (Spotify)</td>
+<td>123,456,789</td>
+<td><span class="metric-badge positive">+1,234,567</span></td>
+<td><span class="metric-badge positive">+7,000,000</span></td>
+</tr>
+<tr>
+<td>השמעות יומיות הגבוהות ביותר אי פעם</td>
+<td>1,500,000 (2024-06-15)</td>
+<td><span class="metric-badge neutral">ללא שינוי</span></td>
+<td><span class="metric-badge neutral">ללא שינוי</span></td>
+</tr>
+<tr>
+<td>ממוצע השמעות יומיות (7 ימים)</td>
+<td>1,150,000</td>
+<td><span class="metric-badge positive">+5,000</span></td>
+<td><span class="metric-badge positive">+20,000</span></td>
+</tr>
+<tr>
+<td>ממוצע השמעות יומיות (30 ימים)</td>
+<td>1,100,000</td>
+<td><span class="metric-badge positive">+2,000</span></td>
+<td><span class="metric-badge positive">+10,000</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="top-cities">
+<h2 id="top-cities">5 הערים המובילות (Spotify)</h2>
+<p>הערים הבאות מייצגות את בסיס המעריצים החזק ביותר של Temper City, עם נתונים מעודכנים ל-2024-07-20.</p>
+<table>
+<thead>
+<tr>
+<th>שם העיר</th>
+<th>יבשת</th>
+<th>מאזינים נוכחיים</th>
+<th>הפרש לטווח קצר (3 ימים)</th>
+<th>הפרש לטווח ארוך (14 ימים)</th>
+<th>שיא כל הזמנים</th>
+<th>סך ימים נמדדים</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סידני</td>
+<td>אוקיאניה</td>
+<td>274,897 (<span class="metric-badge negative">▼ -1,840</span>)</td>
+<td><span class="metric-badge negative">▼ -4,783</span></td>
+<td><span class="metric-badge negative">▼ -22,593</span></td>
+<td>313,801</td>
+<td>192</td>
+</tr>
+<tr>
+<td>לונדון</td>
+<td>אירופה</td>
+<td>263,172 (<span class="metric-badge negative">▼ -3,203</span>)</td>
+<td><span class="metric-badge negative">▼ -8,829</span></td>
+<td><span class="metric-badge negative">▼ -41,632</span></td>
+<td>334,140</td>
+<td>223</td>
+</tr>
+<tr>
+<td>סאו פאולו</td>
+<td>דרום אמריקה</td>
+<td>250,035 (<span class="metric-badge negative">▼ -418</span>)</td>
+<td><span class="metric-badge negative">▼ -1,071</span></td>
+<td><span class="metric-badge negative">▼ -4,475</span></td>
+<td>345,916</td>
+<td>180</td>
+</tr>
+<tr>
+<td>מלבורן</td>
+<td>אוקיאניה</td>
+<td>241,687 (<span class="metric-badge negative">▼ -1,304</span>)</td>
+<td><span class="metric-badge negative">▼ -4,571</span></td>
+<td><span class="metric-badge negative">▼ -19,800</span></td>
+<td>269,179</td>
+<td>120</td>
+</tr>
+<tr>
+<td>מקסיקו סיטי</td>
+<td>צפון אמריקה</td>
+<td>231,254 (<span class="metric-badge negative">▼ -4,682</span>)</td>
+<td><span class="metric-badge negative">▼ -14,057</span></td>
+<td><span class="metric-badge negative">▼ -48,415</span></td>
+<td>332,233</td>
+<td>164</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="track-metrics">
+<h2 id="track-metrics">מדדי שירים</h2>
+<p>סקירה מפורטת של ביצועי השירים המובילים של Temper City, עם נתונים מעודכנים ל-2024-07-20.</p>
+<!-- Track 1 -->
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl">
+<span class="track-name">"City Lights"</span>
+</summary>
+<div class="track-content">
+<h3>סקירת ביצועים</h3>
+<p><strong>השמעות יומיות אחרונות:</strong> 500,000 (שינוי: <span class="metric-badge positive">+15,000</span>)</p>
+<p><strong>סך השמעות מצטבר (Spotify):</strong> 50,000,000</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 600,000 (2024-06-01)</p>
+<p><strong>גילו של השיר "City Lights" הוא 120 ימים.</strong></p>
+<h3>מומנטום קינמטי גלובלי</h3>
+<p>המומנטום הגלובלי עומד כעת על 75%, עם תאוצה של +5%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סטטוס מצעד גלובלי (Spotify)</h3>
+<p>בדירוג הגלובלי (Global), השיר שומר על דירוג מרשים של מקום #15. מיקום זה נשמר במשך 3 ימים ברציפות. מתוך 100 ימי מצעד מתועדים, השיר שהה 20 ימים בטופ 10, 40 ימים בטופ 20, ו-60 ימים בטופ 30 (<span class="metric-badge peak">🏆 שיא כל הזמנים</span>: מקום #8). ללא שינוי בדירוג מהיום הקודם.</p>
+<h3>ניתוח רצפה שבועית (Spotify)</h3>
+<p>הרצפה השבועית החדשה ננעלה על 480,000. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 500,000 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 450,000.</p>
+<h3>רדאר מומנטום אזורי (Spotify)</h3>
+<ul>
+<li><strong>צמיחה חזקה:</strong> גרמניה <span class="metric-badge positive">+10%</span>, צרפת <span class="metric-badge positive">+8%</span></li>
+<li><strong>צמיחה מתונה:</strong> בריטניה <span class="metric-badge neutral">+3%</span>, קנדה <span class="metric-badge neutral">+2%</span></li>
+<li><strong>התקרבות לרמה קבועה:</strong> ארה"ב <span class="metric-badge neutral">0%</span></li>
+<li><strong>שלב התכווצות:</strong> אוסטרליה <span class="metric-badge negative">-5%</span></li>
+</ul>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li><strong>יוטיוב (תוכן ושורטס):</strong> 10,000,000 צפיות סך הכל (יומי: 100,000, מומנטום 24 שעות: <span class="metric-badge positive">▲ +5</span>% לעומת אתמול, 7 ימים: 600,000 [<span class="metric-badge positive">+10%</span>]), 5,000 סרטוני Shorts נוצרו (100 ב-24 שעות), 200,000 לייקים, ושיעור מעורבות של 2.5%.</li>
+<li><strong>סאונדקלאוד:</strong> 2,000,000 השמעות (יומי: 20,000, מומנטום 24 שעות: <span class="metric-badge positive">▲ +2</span>% לעומת אתמול, 7 ימים: 150,000 [<span class="metric-badge positive">+5%</span>]), 50,000 לייקים (<span class="metric-badge positive">+500</span>), ו-1,000 שיתופים.</li>
+<li><strong>דיזר:</strong> 1,500,000 חשיפה בפלייליסטים (24 שעות: 50,000 [<span class="metric-badge positive">+10%</span>], 7 ימים: 300,000 [<span class="metric-badge positive">+8%</span>], שיא: 1,800,000) על פני 150 פלייליסטים (5 פלייליסטים), תוך שימור ציון פופולריות של 85/100.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-5 מצעדים ב-3 מדינות היום, עם 2 מיקומים בטופ 10 (מתוכם 1 במקום הראשון). עוגן היסטורי: נמדד במשך 90 ימים, הגיע ל-10 מדינות, עם דירוג שיא של כל הזמנים: מקום #1 באוסטריה.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (2)</summary>
+<ul>
+<li>אוסטריה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>גרמניה: דירוג #7 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #5)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>אוסטריה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>גרמניה: דירוג #7 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #5)</li>
+<li>שוויץ: דירוג #12 (ירידה של 1 מקום, שיא: #10)</li>
+</ul>
+</details>
+<h3>תובנות YouTube</h3>
+<p>פעיל כעת ב-2 מצעדים ב-2 מדינות היום, עם 1 מיקום בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 60 ימים, הגיע ל-5 מדינות, עם דירוג שיא של כל הזמנים: מקום #3 בפולין.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (1)</summary>
+<ul>
+<li>פולין: דירוג #5 (ללא שינוי, שיא: #3)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>פולין: דירוג #5 (ללא שינוי, שיא: #3)</li>
+<li>צרפת: דירוג #18 (<span class="metric-badge positive">▲ עלייה של 3 מקומות</span>, שיא: #15)</li>
+</ul>
+</details>
+<div class="market-context-box">
+<strong>הקשר שוק:</strong> השיר מציג ביצועים חזקים במיוחד במרכז אירופה, עם פוטנציאל צמיחה נוסף במדינות שכנות.
+                </div>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-8 מצעדים ב-6 מדינות היום, עם 3 מיקומים בטופ 10 (מתוכם 1 במקום הראשון). עוגן היסטורי: נמדד במשך 150 ימים, הגיע ל-15 מדינות, עם דירוג שיא של כל הזמנים: מקום #1 באוסטרליה.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (3)</summary>
+<ul>
+<li>אוסטרליה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>בלגיה: דירוג #6 (עלייה של 1 מקום, שיא: #5)</li>
+<li>לוקסמבורג: דירוג #9 (כניסה חדשה, שיא: #9)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>אוסטרליה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>בלגיה: דירוג #6 (עלייה של 1 מקום, שיא: #5)</li>
+<li>לוקסמבורג: דירוג #9 (כניסה חדשה, שיא: #9)</li>
+<li>צ'כיה: דירוג #11 (<span class="metric-badge negative">▼ ירידה של 2 מקומות</span>, שיא: #8)</li>
+<li>בחריין: דירוג #25 (ללא שינוי, שיא: #20)</li>
+<li>אסטוניה: דירוג #30 (<span class="metric-badge positive">▲ עלייה של 5 מקומות</span>, שיא: #28)</li>
+</ul>
+</details>
+<div class="forecast-box">
+<strong>תחזית:</strong> צפוי גידול מתון בהשמעות השבוע, עם פוטנציאל ל<span class="forecast-delta-pos">עלייה של 10-15%</span> בדירוג בבלגיה ולוקסמבורג.
+                    <ul>
+<li>השפעה חיובית מפלייליסטים חדשים.</li>
+<li>סיכון ל<span class="forecast-delta-neg">ירידה קלה</span> בצ'כיה.</li>
+</ul>
+</div>
+<h3>תובנות מצעדי Deezer</h3>
+<p>פעיל כעת ב-3 מצעדים ב-3 מדינות היום, עם 1 מיקום בטופ 10 (מתוכם 0 במקום הראשון). עוגן היסטורי: נמדד במשך 70 ימים, הגיע ל-7 מדינות, עם דירוג שיא של כל הזמנים: מקום #4 בלטביה.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (1)</summary>
+<ul>
+<li>לטביה: דירוג #7 (ירידה של 1 מקום, שיא: #4)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>לטביה: דירוג #7 (ירידה של 1 מקום, שיא: #4)</li>
+<li>ישראל: דירוג #15 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #12)</li>
+<li>הונגריה: דירוג #22 (ללא שינוי, שיא: #20)</li>
+</ul>
+</details>
+</div>
+</details>
+<!-- Track 2 -->
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl">
+<span class="track-name">"Neon Dreams"</span>
+</summary>
+<div class="track-content">
+<h3>סקירת ביצועים</h3>
+<p><strong>השמעות יומיות אחרונות:</strong> 300,000 (שינוי: <span class="metric-badge negative">-5,000</span>)</p>
+<p><strong>סך השמעות מצטבר (Spotify):</strong> 30,000,000</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 350,000 (2024-05-20)</p>
+<p><strong>גילו של השיר "Neon Dreams" הוא 180 ימים.</strong></p>
+<h3>מומנטום קינמטי גלובלי</h3>
+<p>המומנטום הגלובלי עומד כעת על 40%, עם תאוצה של -3%. זה מצביע על כך שהשיר נמצא בשלב התכווצות מואטת.</p>
+<h3>סטטוס מצעד גלובלי (Spotify)</h3>
+<p>בדירוג הגלובלי (Global), השיר שומר על דירוג מרשים של מקום #45. מיקום זה נשמר במשך 2 ימים ברציפות. מתוך 150 ימי מצעד מתועדים, השיר שהה 5 ימים בטופ 10, 15 ימים בטופ 20, ו-30 ימים בטופ 30 (<span class="metric-badge peak">🏆 שיא כל הזמנים</span>: מקום #25). ירידה של 1 מקום בדירוג מהיום הקודם.</p>
+<h3>ניתוח רצפה שבועית (Spotify)</h3>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 4 מתוך 7). הממוצע החלקי הנוכחי עומד על 280,000. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 300,000 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 270,000.</p>
+<h3>רדאר מומנטום אזורי (Spotify)</h3>
+<ul>
+<li><strong>צמיחה חזקה:</strong> אין</li>
+<li><strong>צמיחה מתונה:</strong> ספרד <span class="metric-badge neutral">+1%</span></li>
+<li><strong>התקרבות לרמה קבועה:</strong> איטליה <span class="metric-badge neutral">0%</span></li>
+<li><strong>שלב התכווצות:</strong> מקסיקו <span class="metric-badge negative">-7%</span>, ארגנטינה <span class="metric-badge negative">-5%</span></li>
+</ul>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li><strong>יוטיוב (תוכן ושורטס):</strong> 5,000,000 צפיות סך הכל (יומי: 50,000, מומנטום 24 שעות: <span class="metric-badge negative">▼ -2</span>% לעומת אתמול, 7 ימים: 300,000 [<span class="metric-badge negative">-5%</span>]), 2,000 סרטוני Shorts נוצרו (50 ב-24 שעות), 100,000 לייקים, ושיעור מעורבות של 2.0%.</li>
+<li><strong>סאונדקלאוד:</strong> 1,000,000 השמעות (יומי: 10,000, מומנטום 24 שעות: <span class="metric-badge negative">▼ -1</span>% לעומת אתמול, 7 ימים: 70,000 [<span class="metric-badge negative">-2%</span>]), 25,000 לייקים (<span class="metric-badge neutral">0</span>), ו-500 שיתופים.</li>
+<li><strong>דיזר:</strong> 800,000 חשיפה בפלייליסטים (24 שעות: 20,000 [<span class="metric-badge negative">-5%</span>], 7 ימים: 120,000 [<span class="metric-badge negative">-3%</span>], שיא: 1,000,000) על פני 80 פלייליסטים (2 פלייליסטים), תוך שימור ציון פופולריות של 70/100.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<!-- Track 3 -->
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl">
+<span class="track-name">"Midnight Drive"</span>
+</summary>
+<div class="track-content">
+<h3>סקירת ביצועים</h3>
+<p><strong>השמעות יומיות אחרונות:</strong> 1,000,000 (שינוי: <span class="metric-badge positive">+20,000</span>)</p>
+<p><strong>סך השמעות מצטבר (Spotify):</strong> 100,000,000</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 1,100,000 (2024-07-10)</p>
+<p><strong>גילו של השיר "Midnight Drive" הוא 60 ימים.</strong></p>
+<h3>מומנטום קינמטי גלובלי</h3>
+<p>המומנטום הגלובלי עומד כעת על 90%, עם תאוצה של +8%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סטטוס מצעד גלובלי (Spotify)</h3>
+<p>בדירוג הגלובלי (Global), השיר שומר על דירוג מרשים של מקום #5. מיקום זה נשמר במשך 5 ימים ברציפות. מתוך 50 ימי מצעד מתועדים, השיר שהה 10 ימים בטופ 10, 20 ימים בטופ 20, ו-30 ימים בטופ 30 (<span class="metric-badge peak">🏆 שיא כל הזמנים</span>: מקום #3). עלייה של 1 מקום בדירוג מהיום הקודם.</p>
+<h3>ניתוח רצפה שבועית (Spotify)</h3>
+<p>הרצפה השבועית החדשה ננעלה על 950,000. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 900,000 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 880,000.</p>
+<h3>רדאר מומנטום אזורי (Spotify)</h3>
+<ul>
+<li><strong>צמיחה חזקה:</strong> ארה"ב <span class="metric-badge positive">+15%</span>, בריטניה <span class="metric-badge positive">+12%</span></li>
+<li><strong>צמיחה מתונה:</strong> קנדה <span class="metric-badge neutral">+5%</span></li>
+<li><strong>התקרבות לרמה קבועה:</strong> גרמניה <span class="metric-badge neutral">0%</span></li>
+<li><strong>שלב התכווצות:</strong> אין</li>
+</ul>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li><strong>יוטיוב (תוכן ושורטס):</strong> 20,000,000 צפיות סך הכל (יומי: 200,000, מומנטום 24 שעות: <span class="metric-badge positive">▲ +8</span>% לעומת אתמול, 7 ימים: 1,200,000 [<span class="metric-badge positive">+15%</span>]), 10,000 סרטוני Shorts נוצרו (200 ב-24 שעות), 400,000 לייקים, ושיעור מעורבות של 3.0%.</li>
+<li><strong>סאונדקלאוד:</strong> 4,000,000 השמעות (יומי: 40,000, מומנטום 24 שעות: <span class="metric-badge positive">▲ +4</span>% לעומת אתמול, 7 ימים: 280,000 [<span class="metric-badge positive">+10%</span>]), 100,000 לייקים (<span class="metric-badge positive">+1,000</span>), ו-2,000 שיתופים.</li>
+<li><strong>דיזר:</strong> 2,500,000 חשיפה בפלייליסטים (24 שעות: 80,000 [<span class="metric-badge positive">+15%</span>], 7 ימים: 500,000 [<span class="metric-badge positive">+12%</span>], שיא: 2,800,000) על פני 200 פלייליסטים (8 פלייליסטים), תוך שימור ציון פופולריות של 90/100.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>פעיל כעת ב-10 מצעדים ב-7 מדינות היום, עם 4 מיקומים בטופ 10 (מתוכם 2 במקום הראשון). עוגן היסטורי: נמדד במשך 45 ימים, הגיע ל-12 מדינות, עם דירוג שיא של כל הזמנים: מקום #1 בארה"ב.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (4)</summary>
+<ul>
+<li>ארה"ב: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>בריטניה: דירוג #1 (עלייה של 1 מקום, שיא: #1)</li>
+<li>קנדה: דירוג #3 (ללא שינוי, שיא: #2)</li>
+<li>גרמניה: דירוג #8 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #7)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>ארה"ב: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>בריטניה: דירוג #1 (עלייה של 1 מקום, שיא: #1)</li>
+<li>קנדה: דירוג #3 (ללא שינוי, שיא: #2)</li>
+<li>גרמניה: דירוג #8 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #7)</li>
+<li>צרפת: דירוג #10 (ירידה של 1 מקום, שיא: #9)</li>
+<li>אוסטרליה: דירוג #15 (ללא שינוי, שיא: #12)</li>
+<li>יפן: דירוג #20 (<span class="metric-badge positive">▲ עלייה של 3 מקומות</span>, שיא: #18)</li>
+</ul>
+</details>
+<h3>תובנות YouTube</h3>
+<p>פעיל כעת ב-5 מצעדים ב-4 מדינות היום, עם 2 מיקומים בטופ 10 (מתוכם 1 במקום הראשון). עוגן היסטורי: נמדד במשך 30 ימים, הגיע ל-8 מדינות, עם דירוג שיא של כל הזמנים: מקום #1 בבריטניה.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (2)</summary>
+<ul>
+<li>בריטניה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>ארה"ב: דירוג #6 (עלייה של 1 מקום, שיא: #5)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>בריטניה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>ארה"ב: דירוג #6 (עלייה של 1 מקום, שיא: #5)</li>
+<li>קנדה: דירוג #12 (<span class="metric-badge negative">▼ ירידה של 2 מקומות</span>, שיא: #10)</li>
+<li>גרמניה: דירוג #18 (<span class="metric-badge positive">▲ עלייה של 4 מקומות</span>, שיא: #15)</li>
+</ul>
+</details>
+<div class="market-context-box">
+<strong>הקשר שוק:</strong> השיר ממשיך לשלוט בשווקים מרכזיים בצפון אמריקה ובאירופה, עם פוטנציאל חזק להתרחבות באסיה.
+                </div>
+<h3>תובנות מצעדי iTunes</h3>
+<p>פעיל כעת ב-12 מצעדים ב-9 מדינות היום, עם 5 מיקומים בטופ 10 (מתוכם 2 במקום הראשון). עוגן היסטורי: נמדד במשך 70 ימים, הגיע ל-20 מדינות, עם דירוג שיא של כל הזמנים: מקום #1 בגרמניה.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (5)</summary>
+<ul>
+<li>גרמניה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>צרפת: דירוג #1 (עלייה של 1 מקום, שיא: #1)</li>
+<li>איטליה: דירוג #4 (ללא שינוי, שיא: #3)</li>
+<li>ספרד: דירוג #7 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #6)</li>
+<li>הולנד: דירוג #10 (כניסה מחדש, שיא: #8)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>גרמניה: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>צרפת: דירוג #1 (עלייה של 1 מקום, שיא: #1)</li>
+<li>איטליה: דירוג #4 (ללא שינוי, שיא: #3)</li>
+<li>ספרד: דירוג #7 (<span class="metric-badge positive">▲ עלייה של 2 מקומות</span>, שיא: #6)</li>
+<li>הולנד: דירוג #10 (כניסה מחדש, שיא: #8)</li>
+<li>שוודיה: דירוג #13 (ירידה של 1 מקום, שיא: #10)</li>
+<li>נורווגיה: דירוג #18 (<span class="metric-badge positive">▲ עלייה של 3 מקומות</span>, שיא: #15)</li>
+<li>דנמרק: דירוג #22 (ללא שינוי, שיא: #20)</li>
+<li>פינלנד: דירוג #28 (<span class="metric-badge positive">▲ עלייה של 5 מקומות</span>, שיא: #25)</li>
+</ul>
+</details>
+<div class="forecast-box">
+<strong>תחזית:</strong> צפוי המשך צמיחה חזקה באירופה, עם פוטנציאל ל<span class="forecast-delta-pos">עלייה של 20%</span> בהשמעות השבוע.
+                    <ul>
+<li>השפעה חיובית מקידום בפלייליסטים מרכזיים.</li>
+<li>השקה קרובה של קמפיין שיווקי.</li>
+</ul>
+</div>
+<h3>תובנות מצעדי Deezer</h3>
+<p>פעיל כעת ב-7 מצעדים ב-6 מדינות היום, עם 3 מיקומים בטופ 10 (מתוכם 1 במקום הראשון). עוגן היסטורי: נמדד במשך 55 ימים, הגיע ל-10 מדינות, עם דירוג שיא של כל הזמנים: מקום #1 בצרפת.</p>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">פירוט מיקומים בטופ 10 (3)</summary>
+<ul>
+<li>צרפת: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>בלגיה: דירוג #5 (עלייה של 1 מקום, שיא: #4)</li>
+<li>שוויץ: דירוג #8 (כניסה חדשה, שיא: #8)</li>
+</ul>
+</details>
+<details class="sub-accordion" dir="rtl">
+<summary class="sub-summary" dir="rtl">הצג פירוט מדינות</summary>
+<ul>
+<li>צרפת: דירוג #1 (ללא שינוי, שיא: #1)</li>
+<li>בלגיה: דירוג #5 (עלייה של 1 מקום, שיא: #4)</li>
+<li>שוויץ: דירוג #8 (כניסה חדשה, שיא: #8)</li>
+<li>הולנד: דירוג #11 (<span class="metric-badge negative">▼ ירידה של 2 מקומות</span>, שיא: #9)</li>
+<li>גרמניה: דירוג #16 (<span class="metric-badge positive">▲ עלייה של 3 מקומות</span>, שיא: #14)</li>
+<li>אוסטריה: דירוג #20 (ללא שינוי, שיא: #18)</li>
+</ul>
+</details>
+</div>
+</details>
+<!-- Track 4 -->
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl">
+<span class="track-name">"Urban Pulse"</span>
+</summary>
+<div class="track-content">
+<h3>סקירת ביצועים</h3>
+<p><strong>השמעות יומיות אחרונות:</strong> 150,000 (שינוי: <span class="metric-badge positive">+2,000</span>)</p>
+<p><strong>סך השמעות מצטבר (Spotify):</strong> 15,000,000</p>
+<p><strong>השמעות יומיות הגבוהות ביותר אי פעם:</strong> 160,000 (2024-07-18)</p>
+<p><strong>גילו של השיר "Urban Pulse" הוא 15 ימים.</strong></p>
+<h3>מומנטום קינמטי גלובלי</h3>
+<h3>סטטוס מצעד גלובלי (Spotify)</h3>
+<p>בדירוג הגלובלי (Global), השיר שומר על דירוג מרשים של מקום #80. מיקום זה נשמר במשך 1 ימים ברציפות. מתוך 10 ימי מצעד מתועדים, השיר שהה 0 ימים בטופ 10, 0 ימים בטופ 20, ו-0 ימים בטופ 30 (<span class="metric-badge peak">🏆 שיא כל הזמנים</span>: מקום #75). <span class="metric-badge positive">▲ עלייה של 5 מקומות</span> בדירוג מהיום הקודם.</p>
+<h3>ניתוח רצפה שבועית (Spotify)</h3>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 2 מתוך 7). הממוצע החלקי הנוכחי עומד על 145,000. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 150,000 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 130,000.</p>
+<h3>רדאר מומנטום אזורי (Spotify)</h3>
+<ul>
+<li><strong>צמיחה חזקה:</strong> אין</li>
+<li><strong>צמיחה מתונה:</strong> אוסטרליה <span class="metric-badge neutral">+4%</span></li>
+<li><strong>התקרבות לרמה קבועה:</strong> ניו זילנד <span class="metric-badge neutral">0%</span></li>
+<li><strong>שלב התכווצות:</strong> אין</li>
+</ul>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<ul>
+<li><strong>יוטיוב (תוכן ושורטס):</strong> 1,000,000 צפיות סך הכל (יומי: 15,000, מומנטום 24 שעות: <span class="metric-badge positive">▲ +3</span>% לעומת אתמול, 7 ימים: 90,000 [<span class="metric-badge positive">+8%</span>]), 500 סרטוני Shorts נוצרו (20 ב-24 שעות), 10,000 לייקים, ושיעור מעורבות של 1.8%.</li>
+<li><strong>סאונדקלאוד:</strong> 200,000 השמעות (יומי: 3,000, מומנטום 24 שעות: <span class="metric-badge positive">▲ +1</span>% לעומת אתמול, 7 ימים: 18,000 [<span class="metric-badge positive">+2%</span>]), 2,000 לייקים (<span class="metric-badge positive">+50</span>), ו-100 שיתופים.</li>
+<li><strong>דיזר:</strong> 100,000 חשיפה בפלייליסטים (24 שעות: 5,000 [<span class="metric-badge positive">+5%</span>], 7 ימים: 30,000 [<span class="metric-badge positive">+3%</span>], שיא: 120,000) על פני 10 פלייליסטים (1 פלייליסט), תוך שימור ציון פופולריות של 60/100.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+</section>
+<section id="summary">
+<h2 id="summary">סיכום</h2>
+<p>Temper City ממשיכה להציג ביצועים חזקים בפלטפורמות הדיגיטליות, עם צמיחה עקבית בהשמעות ובדירוגים. השיר "Midnight Drive" מוביל את המומנטום הנוכחי, בעוד "City Lights" שומר על נוכחות יציבה. "Neon Dreams" נמצא בשלב התכווצות מתונה, ו-"Urban Pulse" מראה סימני צמיחה מוקדמים. ניתוח מעמיק של נתונים אלו יאפשר אופטימיזציה של אסטרטגיות שיווק וקידום עתידיות.</p>
+</section>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const expandAllBtn = document.getElementById('expandAll');
+            const collapseAllBtn = document.getElementById('collapseAll');
+            const accordions = document.querySelectorAll('.track-accordion');
+            const subAccordions = document.querySelectorAll('.sub-accordion');
+
+            expandAllBtn.addEventListener('click', () => {
+                accordions.forEach(accordion => accordion.setAttribute('open', ''));
+                subAccordions.forEach(subAccordion => subAccordion.setAttribute('open', ''));
+            });
+
+            collapseAllBtn.addEventListener('click', () => {
+                accordions.forEach(accordion => accordion.removeAttribute('open'));
+                subAccordions.forEach(subAccordion => subAccordion.removeAttribute('open'));
+            });
+        });
+    </script>
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
+}
+</script></body>
+</html>
