@@ -34,14 +34,22 @@
         }
         .badge-header {
             display: inline-block;
-            background: rgba(210, 153, 34, 0.15);
-            color: #d29922;
-            border: 1px solid rgba(210, 153, 34, 0.4);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 20px;
+        }
+        .badge-cyan {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+        .badge-yellow {
+            background: rgba(210, 153, 34, 0.15);
+            color: #d29922;
+            border: 1px solid rgba(210, 153, 34, 0.4);
         }
         h1 {
             color: #1DB954;
@@ -66,25 +74,25 @@
             border-radius: 10px;
             padding: 16px 18px;
         }
-        .status-card.phase1 {
+        .status-card.phase-done {
             border-left: 4px solid #3fb950;
         }
-        .status-card.phase2 {
+        .status-card.phase-pending {
             border-left: 4px solid #d29922;
         }
-        .status-card.ai {
+        .status-card.phase-ai {
             border-left: 4px solid #58a6ff;
             background: rgba(56, 139, 253, 0.05);
         }
-        html[dir='rtl'] .status-card.phase1 {
+        html[dir='rtl'] .status-card.phase-done {
             border-left: none;
             border-right: 4px solid #3fb950;
         }
-        html[dir='rtl'] .status-card.phase2 {
+        html[dir='rtl'] .status-card.phase-pending {
             border-left: none;
             border-right: 4px solid #d29922;
         }
-        html[dir='rtl'] .status-card.ai {
+        html[dir='rtl'] .status-card.phase-ai {
             border-left: none;
             border-right: 4px solid #58a6ff;
         }
@@ -106,15 +114,25 @@
         }
         .btn {
             display: inline-flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 12px 22px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 12px 24px;
             border-radius: 8px;
             text-decoration: none;
             transition: all 0.2s ease;
             cursor: pointer;
+            line-height: 1.3;
+        }
+        .btn span {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .btn .btn-subtext {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-top: 2px;
         }
         .btn-primary {
             background-color: #1DB954;
@@ -146,33 +164,41 @@
 </head>
 <body>
     <div class="standby-container">
-        <div class="badge-header">🟡 סנכרון נתונים חלקי (שלב 1) — דוח ה-AI המלא בהמתנה</div>
+        <div class="badge-header badge-cyan">🔵 סנכרון נתונים 66% (שלבים 1 ו-2 פעילים) — דוח ה-AI יושלם בסיום שלב 3</div>
         <h1>דוח תובנות יומי (AI) — Temper City</h1>
         <div class="subheadline">תאריך סנכרון נתונים: 2026-11-06</div>
 
         <div class="status-cards">
-            <div class="status-card phase1">
+            <div class="status-card phase-done">
                 <h3>🟢 שלב 1: מדדים ישירים עודכנו בהצלחה</h3>
                 <p>נתוני ההשמעות הישירות בספוטיפיי, צפיות יוטיוב והשמעות סאונדקלאוד מעודכנים וזמינים לצפייה מלאה בדשבורד החזותי.</p>
             </div>
-            <div class="status-card phase2">
-                <h3>🟡 שלב 2: מצעדים ודירוגים גלובליים (בהמתנה)</h3>
-                <p>בהמתנה לעליית מצעדי ספוטיפיי העולמיים (Spotify Top 200) ודירוגי האומן הגלובליים (Kworb).</p>
+            <div class="status-card phase-done">
+                <h3>🟢 שלב 2: מצעדי ספוטיפיי טופ 200 עודכנו בהצלחה</h3>
+                <p>מצעדי ספוטיפיי טופ 200 הרשמיים, מיקומי השירים, מפות החום והתפלגויות המצעד מעודכנים וזמינים לצפייה בדשבורד.</p>
             </div>
-            <div class="status-card ai">
-                <h3>🤖 ניתוח מעמיק ומודל ה-AI</h3>
-                <p>דוח התובנות האנליטי המלא של ה-AI יחולל ויעלה לאתר באופן אוטומטי ברגע שכל נתוני המצעדים והמדדים הגלובליים יהיו זמינים.</p>
+            <div class="status-card phase-pending">
+                <h3>🟡 שלב 3: מצעדי השוואה ומדדי קוורב גלובליים (בהמתנה)</h3>
+                <p>בהמתנה לעדכון נתוני קוורב (Kworb) הרב-פלטפורמיים, מדדי דירוג אומן עולמיים ומבחני השוואת שוק.</p>
+            </div>
+            <div class="status-card phase-ai">
+                <h3>🤖 מחולל תובנות ה-AI המלא</h3>
+                <p>דוח התובנות האנליטי המלא של ה-AI מחולל ומתפרסם באופן אוטומטי אך ורק לאחר סנכרון מלא של כל 3 השלבים, כדי להבטיח אמינות ושלמות אנליטית מרבית ומניעת פערי נתונים בין המדדים הישירים, המצעדים וההשוואות העולמיות.</p>
             </div>
         </div>
 
         <div class="actions">
-            <a href="Temper_City.html" class="btn btn-primary">לצפייה במדדים המעודכנים בדשבורד החזותי 📊</a>
-            <a href="lobby_temper_city.html" class="btn btn-secondary">חזרה ללובי הראשי 🏛️</a>
-            <a href="archive_hub.html" class="btn btn-secondary">לארכיון הדוחות 🗄️</a>
+            <a href="lobby_temper_city.html" class="btn btn-primary">
+                <span>חזרה ללובי הראשי 🏛️</span>
+                <span class="btn-subtext">צפייה בדשבורד החזותי המסונכרן חלקית</span>
+            </a>
+            <a href="archive_hub.html?q=AI" class="btn btn-secondary">
+                <span>לארכיון דוחות ה-AI 🗄️</span>
+            </a>
         </div>
 
         <div class="footer-note">
-            הערה: כדי להבטיח את אמינות הניתוח ומניעת סתירות, דוח ה-AI מופק רק כאשר כל מקורות המידע העולמיים מסונכרנים במלואם.
+            הערה: כדי להבטיח את אמינות הניתוח ומניעת סתירות, דוח ה-AI מופק אך ורק לאחר סנכרון מלא של כל 3 הפאזות.
         </div>
     </div>
 </body>

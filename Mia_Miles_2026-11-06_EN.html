@@ -34,14 +34,22 @@
         }
         .badge-header {
             display: inline-block;
-            background: rgba(210, 153, 34, 0.15);
-            color: #d29922;
-            border: 1px solid rgba(210, 153, 34, 0.4);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 20px;
+        }
+        .badge-cyan {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+        .badge-yellow {
+            background: rgba(210, 153, 34, 0.15);
+            color: #d29922;
+            border: 1px solid rgba(210, 153, 34, 0.4);
         }
         h1 {
             color: #1DB954;
@@ -66,25 +74,25 @@
             border-radius: 10px;
             padding: 16px 18px;
         }
-        .status-card.phase1 {
+        .status-card.phase-done {
             border-left: 4px solid #3fb950;
         }
-        .status-card.phase2 {
+        .status-card.phase-pending {
             border-left: 4px solid #d29922;
         }
-        .status-card.ai {
+        .status-card.phase-ai {
             border-left: 4px solid #58a6ff;
             background: rgba(56, 139, 253, 0.05);
         }
-        html[dir='rtl'] .status-card.phase1 {
+        html[dir='rtl'] .status-card.phase-done {
             border-left: none;
             border-right: 4px solid #3fb950;
         }
-        html[dir='rtl'] .status-card.phase2 {
+        html[dir='rtl'] .status-card.phase-pending {
             border-left: none;
             border-right: 4px solid #d29922;
         }
-        html[dir='rtl'] .status-card.ai {
+        html[dir='rtl'] .status-card.phase-ai {
             border-left: none;
             border-right: 4px solid #58a6ff;
         }
@@ -106,15 +114,25 @@
         }
         .btn {
             display: inline-flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 12px 22px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 12px 24px;
             border-radius: 8px;
             text-decoration: none;
             transition: all 0.2s ease;
             cursor: pointer;
+            line-height: 1.3;
+        }
+        .btn span {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .btn .btn-subtext {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-top: 2px;
         }
         .btn-primary {
             background-color: #1DB954;
@@ -146,33 +164,41 @@
 </head>
 <body>
     <div class="standby-container">
-        <div class="badge-header">🟡 Partial Sync (Phase 1) — Full AI Insights Pending</div>
+        <div class="badge-header badge-cyan">🔵 66% Partial Sync (Phase 1 & Phase 2 Live) — Full AI Insights Pending Phase 3</div>
         <h1>Daily AI Insights Report — Mia Miles</h1>
         <div class="subheadline">Cycle Date: 2026-11-06</div>
 
         <div class="status-cards">
-            <div class="status-card phase1">
+            <div class="status-card phase-done">
                 <h3>🟢 Phase 1: Direct Metrics Completed</h3>
                 <p>Spotify direct streams, YouTube views, and SoundCloud metrics are updated and viewable in the visual dashboard.</p>
             </div>
-            <div class="status-card phase2">
-                <h3>🟡 Phase 2: Global Charts & Benchmarks (Pending)</h3>
-                <p>Awaiting the release of official Spotify Top 200 charts and Kworb global artist benchmarks.</p>
+            <div class="status-card phase-done">
+                <h3>🟢 Phase 2: Spotify Charts Top 200 Completed</h3>
+                <p>Official Spotify Top 200 charts, global rankings, heatmaps, and platform distributions are fully updated.</p>
             </div>
-            <div class="status-card ai">
+            <div class="status-card phase-pending">
+                <h3>🟡 Phase 3: Kworb Multi-Platform Suite & Benchmarks (Pending)</h3>
+                <p>Awaiting Kworb global artist rankings, multi-platform audience benchmarks, and comparison charts.</p>
+            </div>
+            <div class="status-card phase-ai">
                 <h3>🤖 Full AI Analytical Intelligence</h3>
-                <p>The comprehensive AI Insights report will be generated and published automatically as soon as all chart and global benchmark data become available.</p>
+                <p>The comprehensive AI Insights report is generated and published automatically exclusively once all 3 phases are fully synchronized, ensuring 100% analytical integrity and preventing metric conflicts.</p>
             </div>
         </div>
 
         <div class="actions">
-            <a href="Mia_Miles.html" class="btn btn-primary">View Updated Metrics in Visual Dashboard 📊</a>
-            <a href="lobby_mia_miles.html" class="btn btn-secondary">Back to Main Lobby 🏛️</a>
-            <a href="archive_hub.html" class="btn btn-secondary">Reports Archive 🗄️</a>
+            <a href="lobby_mia_miles.html" class="btn btn-primary">
+                <span>Back to Main Lobby 🏛️</span>
+                <span class="btn-subtext">view partly synced visual dashboard</span>
+            </a>
+            <a href="archive_hub.html?q=AI" class="btn btn-secondary">
+                <span>Reports Archive 🗄️</span>
+            </a>
         </div>
 
         <div class="footer-note">
-            Note: To maintain analytical integrity and prevent metric conflicts, the AI report is compiled exclusively once all multi-platform sources are fully synchronized.
+            Note: To maintain analytical integrity and prevent metric conflicts, the AI report is compiled exclusively once all 3 pipeline phases are fully synchronized.
         </div>
     </div>
 </body>

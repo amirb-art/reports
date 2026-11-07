@@ -8,5 +8,16 @@
                 cards[i].style.display = text.indexOf(q) > -1 ? 'block' : 'none';
             }
         }
+        window.addEventListener('DOMContentLoaded', function() {
+            var params = new URLSearchParams(window.location.search);
+            var qParam = params.get('q') || params.get('filter') || params.get('search');
+            if (qParam) {
+                var input = document.getElementById('search-input');
+                if (input) {
+                    input.value = qParam;
+                    filterArchive();
+                }
+            }
+        });
         </script>
         </div></body></html>
