@@ -4,6 +4,24 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>Temper City - Reports Lobby</title>
+        
+    <!-- Twemoji Country Flags Polyfill for Windows Chromium (Chrome/Edge) -->
+    <style>
+        @font-face {
+            font-family: 'Twemoji Country Flags';
+            unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+            src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2') format('woff2');
+            font-display: swap;
+        }
+        body, button, input, select, textarea, span, div, p, a, h1, h2, h3, h4, table, th, td {
+            font-family: 'Twemoji Country Flags', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+    </style>
+    <script type="module">
+        import { polyfillCountryFlagEmojis } from 'https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill/+esm';
+        try { polyfillCountryFlagEmojis(); } catch (e) {}
+    </script>
+
         <style>
             body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: white; padding: 20px; }
             .container { max-width: 800px; margin: 0 auto; }
