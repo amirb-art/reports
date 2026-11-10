@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8"/>
+<title>Mia Miles - דוח מדדי ביצועים</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Hebrew", "Alef", sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        direction: rtl;
+        text-align: right;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+        direction: rtl;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: right;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-right: 20px;
+        padding-left: 0;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+        direction: rtl;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table th {
+        padding: 10px 16px;
+        background-color: #222222;
+        color: #1DB954;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        border-bottom: 2px solid #282828;
+    }
+    .bill-table th.platform {
+        text-align: right;
+    }
+    .bill-table th.counter {
+        text-align: left;
+    }
+    .bill-table th.daily-header {
+        text-align: left;
+    }
+    .bill-table th.delta-header {
+        text-align: center;
+    }
+    .bill-table th.unit {
+        text-align: right;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: right;
+    }
+    .bill-table .counter {
+        text-align: left;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .daily-cell {
+        text-align: left;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 14px;
+        color: #e5e5e5;
+        direction: ltr;
+    }
+    .bill-table .delta-cell {
+        text-align: center;
+        white-space: nowrap;
+    }
+    .bill-table .delta {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        direction: ltr;
+    }
+    .bill-table .delta.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .bill-table .delta.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .bill-table .delta.zero {
+        color: #888888;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: right;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Metric Badges & Performance Highlights (Hebrew / RTL) */
+    .metric-badge {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        margin: 0 3px;
+        direction: ltr;
+        unicode-bidi: isolate;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .metric-badge.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .metric-badge.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .metric-badge.peak {
+        color: #f59e0b;
+        background-color: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        font-weight: bold;
+    }
+    .metric-badge.neutral {
+        color: #94a3b8;
+        background-color: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles (Hebrew / RTL) */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        direction: rtl;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        direction: rtl;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+        direction: rtl;
+    }
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+        direction: rtl;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 30px 10px 20px;
+        direction: rtl;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+        direction: rtl;
+    }
+    .expl-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-size: 0.85em;
+        margin-inline-start: 4px;
+        border-bottom: 1px dotted rgba(56, 189, 248, 0.6);
+        transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .expl-link:hover {
+        color: #7dd3fc;
+        border-bottom-color: #7dd3fc;
+    }
+    .market-context-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-right: 4px solid #38bdf8;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #c9d1d9;
+        direction: rtl;
+        text-align: right;
+    }
+    .market-context-box strong {
+        color: #38bdf8;
+    }
+    .forecast-box {
+        background-color: #1a1e29;
+        border: 1px solid #2d3748;
+        border-right: 4px solid #a855f7;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #e2e8f0;
+        direction: rtl;
+        text-align: right;
+    }
+    .forecast-box strong {
+        color: #c084fc;
+    }
+    .forecast-box ul {
+        margin: 6px 0 0 0;
+        padding-right: 18px;
+    }
+    .forecast-box li {
+        margin-bottom: 4px;
+    }
+    .forecast-delta-pos {
+        color: #4ade80;
+        font-weight: 600;
+    }
+    .forecast-delta-neg {
+        color: #f87171;
+        font-weight: 600;
+    }
+</style></head>
+<body dir="rtl">
+<h1>Mia Miles - דוח מדדי ביצועים</h1>
+<p class="spotify-disclaimer"><em>הערה: דוח זה הינו ממוקד Spotify (Spotify-centric); אלא אם צוין במפורש, כל המדדים מקורם ב-Spotify (למשל: ערים, מפות חום וכד').</em></p>
+<div style="background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.35); border-radius:8px; padding:8px 16px; margin:10px 0 16px 0; display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:bold; color:#4ade80;"><span>📅</span> תאריך הנתונים: 2026-11-10 (יום שלישי) • דוח מאומת בסנכרון מלא (100%)</div>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">סקירת להקה</a>
+<a href="#top-cities">5 הערים המובילות</a>
+<a href="#track-metrics">מדדי שירים</a>
+<a href="#summary">סיכום</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">פתח הכל</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">סגור הכל</button>
+</div>
+</nav><h2 id="band-overview">סקירת להקה</h2>
+<p><strong>עוקבים:</strong> 3,840 (<span class="metric-badge positive">▲ +4</span>)</p>
+<p><strong>מאזינים חודשיים:</strong> 125,216 (<span class="metric-badge positive">▲ +1,012</span>)</p>
+<p class="spotify-rank"><strong>דירוג אומן עולמי (Spotify):</strong> האומן עדיין לא מדורג בספוטיפיי. <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_heb">(ראה הסבר)</a></p>
+<p class="worldwide-rank"><strong>דירוג אומן עולמי דיגיטלי (רב-פלטפורמי משוקלל):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_heb">(ראה הסבר)</a> האומן עדיין אינו מדורג בדירוג הדיגיטלי המשוקלל העולמי.</p>
+<div class="restaurant-bill" dir="rtl">
+<h3>סיכום השמעות קטלוג ראשי — Mia Miles (2 שירים מקוריים)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">פלטפורמה</th>
+<th class="counter">מונה כולל</th>
+<th class="daily-header">השמעות יומיות</th>
+<th class="delta-header">מומנטום 24 שעות</th>
+<th class="unit">יחידה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">2,344,054</td>
+<td class="daily-cell">9,048</td>
+<td class="delta-cell"><span class="delta positive" title="+1,254 לעומת אתמול (+16.09%)">▲ +1,254 (+16.09%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">294,547</td>
+<td class="daily-cell">796</td>
+<td class="delta-cell"><span class="delta positive" title="+81 לעומת אתמול (+11.33%)">▲ +81 (+11.33%)</span></td>
+<td class="unit">צפיות והשמעות</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">24,197</td>
+<td class="daily-cell">49</td>
+<td class="delta-cell"><span class="delta negative" title="-38 לעומת אתמול (-43.68%)">▼ -38 (-43.68%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, iTunes, Deezer</td>
+<td colspan="4" style="color: #888; font-size: 13px; text-align: center;">אינם מפרסמים מונה השמעות פומבי</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ השמעות קטלוג ראשי</td>
+<td class="counter">2,662,798</td>
+<td class="daily-cell">9,893</td>
+<td class="delta-cell"><span class="delta positive" title="+1,297 לעומת אתמול (+15.09%)">▲ +1,297 (+15.09%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+</tbody>
+</table>
+<section class="milestone-box" style="margin-top: 14px; margin-bottom: 25px; padding: 14px 18px; background: rgba(29, 185, 84, 0.08); border: 1px solid rgba(29, 185, 84, 0.35); border-radius: 10px; font-size: 13.5px; line-height: 1.6;">
+<div style="font-weight: 700; color: #1DB954; font-size: 14px; margin-bottom: 6px;">🎯 מעקב אבני דרך והשגת יעדים ראליים (קטלוג ראשי • טווח של עד שנה):</div>
+<div style="display: flex; flex-direction: column; gap: 6px; color: #e6edf3;">
+<div>• <strong>קטלוג ראשי (כל הפלטפורמות) ➔ יעד 5 מיליון:</strong> 2,662,798 מתוך 5,000,000 (53.3%) • נותרו: <strong>2,337,202</strong> • קצב יומי: 9,893 ➔ <strong>צפי הגעה: בעוד כ-236 ימים (2027-07-04)</strong></div>
+<div>• <strong>Spotify ראשי בלבד (ללא רמיקסים) ➔ יעד 5 מיליון:</strong> 2,344,054 מתוך 5,000,000 (46.9%) • נותרו: <strong>2,655,946</strong> • קצב יומי: 9,048 ➔ <strong>צפי הגעה: בעוד כ-294 ימים (2027-08-31)</strong></div>
+</div>
+</section>
+<h3>סיכום השמעות רמיקסים מורשים (4 רמיקסים)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">פלטפורמה</th>
+<th class="counter">מונה כולל</th>
+<th class="daily-header">השמעות יומיות</th>
+<th class="delta-header">מומנטום 24 שעות</th>
+<th class="unit">יחידה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">326,632</td>
+<td class="daily-cell">6,080</td>
+<td class="delta-cell"><span class="delta positive" title="+1,917 לעומת אתמול (+46.05%)">▲ +1,917 (+46.05%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">22,844</td>
+<td class="daily-cell">311</td>
+<td class="delta-cell"><span class="delta negative" title="-251 לעומת אתמול (-44.66%)">▼ -251 (-44.66%)</span></td>
+<td class="unit">צפיות והשמעות</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">12,849</td>
+<td class="daily-cell">198</td>
+<td class="delta-cell"><span class="delta positive" title="+96 לעומת אתמול (+94.12%)">▲ +96 (+94.12%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, iTunes, Deezer</td>
+<td colspan="4" style="color: #888; font-size: 13px; text-align: center;">אינם מפרסמים מונה השמעות פומבי</td>
+</tr>
+<tr class="subtotal-row">
+<td>סה"כ השמעות רמיקסים מורשים</td>
+<td class="counter">362,325</td>
+<td class="daily-cell">6,589</td>
+<td class="delta-cell"><span class="delta positive" title="+1,762 לעומת אתמול (+36.50%)">▲ +1,762 (+36.50%)</span></td>
+<td class="unit">השמעות</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+
+<h2 id="top-cities">ניתוח 5 הערים המובילות</h2>
+<table>
+<thead>
+<tr>
+<th>שם העיר</th>
+<th>יבשת</th>
+<th>מאזינים נוכחיים</th>
+<th>הפרש לטווח קצר (3 ימים)</th>
+<th>הפרש לטווח ארוך (14 ימים)</th>
+<th>שיא כל הזמנים</th>
+<th>סך ימים נמדדים</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>לוס אנג'לס</td>
+<td>צפון אמריקה</td>
+<td>2,254 (<span class="metric-badge positive">▲ +9</span>)</td>
+<td><span class="metric-badge negative">▼ -37</span></td>
+<td><span class="metric-badge negative">▼ -212</span></td>
+<td>3,857</td>
+<td>107</td>
+</tr>
+<tr>
+<td>סידני</td>
+<td>אוקיאניה</td>
+<td>2,148 (<span class="metric-badge positive">▲ +43</span>)</td>
+<td><span class="metric-badge positive">▲ +17</span></td>
+<td><span class="metric-badge negative">▼ -254</span></td>
+<td>3,315</td>
+<td>107</td>
+</tr>
+<tr>
+<td>מלבורן</td>
+<td>אוקיאניה</td>
+<td>1,603 (<span class="metric-badge positive">▲ +5</span>)</td>
+<td><span class="metric-badge positive">▲ +4</span></td>
+<td><span class="metric-badge negative">▼ -269</span></td>
+<td>2,671</td>
+<td>64</td>
+</tr>
+<tr>
+<td>שיקגו</td>
+<td>צפון אמריקה</td>
+<td>1,595 (<span class="metric-badge positive">▲ +20</span>)</td>
+<td><span class="metric-badge positive">▲ +32</span></td>
+<td><span class="metric-badge negative">▼ -80</span></td>
+<td>2,749</td>
+<td>70</td>
+</tr>
+<tr>
+<td>ניו יורק</td>
+<td>צפון אמריקה</td>
+<td>1,522 (<span class="metric-badge positive">▲ +9</span>)</td>
+<td><span class="metric-badge negative">▼ -14</span></td>
+<td><span class="metric-badge positive">▲ +1,522</span></td>
+<td>2,564</td>
+<td>26</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">מדדי שירים</h2>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. רמת הביטחון בנתונים נותרה גבוהה. העלייה והבלימה החדה של הירידות במאזינים החודשיים (+4.5 סטיות תקן, Z: +4.5) מהווה תנודה סטטיסטית חיובית מובהקת המעידה על מפנה והתאוששות, ומתיישבת היטב עם הזינוק בהשמעות, ברדאר המומנטום ובעלייה במצעדים. מדדי ההשמעות היומיות של השיר (Z: +1.4) והעוקבים (Z: +0.1) יציבים ותקינים. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 0.7%, עם תאוצה של 13.9%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סך השמעות מצטבר (Spotify)</h3>
+<p>סך השמעות מצטבר (Spotify): 2,296,962</p>
+<p>השמעות יומיות אחרונות: 7,645 (שינוי: <span class="metric-badge positive">▲ +935</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (7,645) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-39 (-0.51%) לעומת תחזית אתמול שעמדה על 7,684.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-11-11):</strong> השמעות יומיות חזויות: <strong>7,674</strong> | סך השמעות מצטבר חזוי: <strong>2,304,636</strong>.</li>
+</ul>
+</div>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 21,861</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 1 מתוך 7). הממוצע החלקי הנוכחי עומד על 7,645. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 19,201 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 7,491.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>סרטוני Shorts רשמיים וטיזרים ביוטיוב:</strong> בערוץ הרשמי קיימים סך של 0 סרטוני Shorts.</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 291,550 צפיות סך הכל (יומי: 734, מומנטום 24 שעות: <span class="metric-badge positive">▲ +71</span> (+10.71%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +4,739 [+1.65%]</span>), עם 0 סרטוני Shorts, 5,055 לייקים, ושיעור מעורבות של 1.73%.</li>
+<li>סאונדקלאוד: 23,964 השמעות (יומי: 46, מומנטום 24 שעות: <span class="metric-badge negative">▼ -32</span> (-41.03%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +436 [+1.85%]</span>), 771 לייקים (+1), ו-10 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Dallin Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. רמת הביטחון בנתונים נותרה גבוהה. העלייה והבלימה החדה של הירידות במאזינים החודשיים (+4.5 סטיות תקן, Z: +4.5) מהווה תנודה סטטיסטית חיובית מובהקת המעידה על מפנה והתאוששות, ומתיישבת היטב עם הזינוק בהשמעות, ברדאר המומנטום ובעלייה במצעדים. מדדי ההשמעות היומיות של השיר (Z: +1.3) והעוקבים (Z: +0.1) יציבים ותקינים. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---dallin-remix">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 7.9%, עם תאוצה של 47.6%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סך השמעות מצטבר (Spotify)</h3>
+<p>סך השמעות מצטבר (Spotify): 211,255</p>
+<p>השמעות יומיות אחרונות: 4,698 (שינוי: <span class="metric-badge positive">▲ +1,514</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (4,698) היו <span class="forecast-delta-neg">נמוכות מהתחזית ▼</span> ב-402 (-7.88%) לעומת תחזית אתמול שעמדה על 5,100.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-11-11):</strong> השמעות יומיות חזויות: <strong>5,121</strong> | סך השמעות מצטבר חזוי: <strong>216,376</strong>.</li>
+</ul>
+</div>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 5,609</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 1 מתוך 7). הממוצע החלקי הנוכחי עומד על 4,698. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 4,207 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 4,207.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>סרטוני Shorts רשמיים וטיזרים ביוטיוב:</strong> בערוץ הרשמי קיימים סך של 0 סרטוני Shorts.</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 12,679 צפיות סך הכל (יומי: 233, מומנטום 24 שעות: <span class="metric-badge negative">▼ -255</span> (-52.25%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +2,425 [+23.65%]</span>), עם 0 סרטוני Shorts, 206 לייקים, ושיעור מעורבות של 1.62%.</li>
+<li>סאונדקלאוד: 10,873 השמעות (יומי: 188, מומנטום 24 שעות: <span class="metric-badge positive">▲ +91</span> (+93.81%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +1,037 [+10.54%]</span>), 191 לייקים (+3), ו-5 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Mizmo Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. רמת הביטחון בנתונים נותרה גבוהה. העלייה והבלימה החדה של הירידות במאזינים החודשיים (+4.5 סטיות תקן, Z: +4.5) מהווה תנודה סטטיסטית חיובית מובהקת המעידה על מפנה והתאוששות, ומתיישבת היטב עם הזינוק בהשמעות, ברדאר המומנטום ובעלייה במצעדים. מדדי ההשמעות היומיות של השיר (Z: +1.3) והעוקבים (Z: +0.1) יציבים ותקינים. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---mizmo-remix">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 8.0%, עם תאוצה של 32.0%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סך השמעות מצטבר (Spotify)</h3>
+<p>סך השמעות מצטבר (Spotify): 79,182</p>
+<p>השמעות יומיות אחרונות: 838 (שינוי: <span class="metric-badge positive">▲ +203</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (838) היו <span class="forecast-delta-pos">גבוהות מהתחזית ▲</span> ב-+84 (+11.14%) לעומת תחזית אתמול שעמדה על 754.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-11-11):</strong> השמעות יומיות חזויות: <strong>775</strong> | סך השמעות מצטבר חזוי: <strong>79,957</strong>.</li>
+</ul>
+</div>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 2,139</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 1 מתוך 7). הממוצע החלקי הנוכחי עומד על 838. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 1,682 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 754.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>סרטוני Shorts רשמיים וטיזרים ביוטיוב:</strong> בערוץ הרשמי קיימים סך של 0 סרטוני Shorts.</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 896 צפיות סך הכל (יומי: 4, מומנטום 24 שעות: <span class="metric-badge positive">▲ +3</span> (+300.00%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +27 [+3.11%]</span>), עם 0 סרטוני Shorts, 10 לייקים, ושיעור מעורבות של 1.12%.</li>
+<li>סאונדקלאוד: 234 השמעות (יומי: 2, מומנטום 24 שעות: <span class="metric-badge positive">▲ +2</span> (+0.00%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +7 [+3.08%]</span>), 15 לייקים (0), ו-1 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - Olli P Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. רמת הביטחון בנתונים נותרה גבוהה. העלייה והבלימה החדה של הירידות במאזינים החודשיים (+4.5 סטיות תקן, Z: +4.5) מהווה תנודה סטטיסטית חיובית מובהקת המעידה על מפנה והתאוששות, ומתיישבת היטב עם הזינוק בהשמעות, ברדאר המומנטום ובעלייה במצעדים. מדדי ההשמעות היומיות של השיר (Z: +2.4) והעוקבים (Z: +0.1) יציבים ותקינים. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---olli-p-remix">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 57.9%, עם תאוצה של 390.3%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סך השמעות מצטבר (Spotify)</h3>
+<p>סך השמעות מצטבר (Spotify): 7,432</p>
+<p>השמעות יומיות אחרונות: 152 (שינוי: <span class="metric-badge positive">▲ +121</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (152) היו <span class="forecast-delta-pos">גבוהות מהתחזית ▲</span> ב-+46 (+43.40%) לעומת תחזית אתמול שעמדה על 106.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-11-11):</strong> השמעות יומיות חזויות: <strong>126</strong> | סך השמעות מצטבר חזוי: <strong>7,558</strong>.</li>
+</ul>
+</div>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 162</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 1 מתוך 7). הממוצע החלקי הנוכחי עומד על 152. נתון זה גבוה מרצפת השיא של כל הזמנים שעומדת על 84 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 82.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>סרטוני Shorts רשמיים וטיזרים ביוטיוב:</strong> בערוץ הרשמי קיימים סך של 0 סרטוני Shorts.</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 8,050 צפיות סך הכל (יומי: 71, מומנטום 24 שעות: <span class="metric-badge positive">▲ +1</span> (+1.43%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +598 [+8.02%]</span>), עם 0 סרטוני Shorts, 54 לייקים, ושיעור מעורבות של 0.67%.</li>
+<li>סאונדקלאוד: 365 השמעות (יומי: 5, מומנטום 24 שעות: <span class="metric-badge positive">▲ +3</span> (+150.00%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +14 [+3.99%]</span>), 18 לייקים (0), ו-3 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">7 days a week - AVE Remix</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. רמת הביטחון בנתונים נותרה גבוהה. העלייה והבלימה החדה של הירידות במאזינים החודשיים (+4.5 סטיות תקן, Z: +4.5) מהווה תנודה סטטיסטית חיובית מובהקת המעידה על מפנה והתאוששות, ומתיישבת היטב עם הזינוק בהשמעות, ברדאר המומנטום ובעלייה במצעדים. מדדי ההשמעות היומיות של השיר (Z: +1.3) והעוקבים (Z: +0.1) יציבים ותקינים. <a class="expl-link" href="data_integrity_mia_miles.html#streams-7-days-a-week---ave-remix">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 19.3%, עם תאוצה של 25.2%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סך השמעות מצטבר (Spotify)</h3>
+<p>סך השמעות מצטבר (Spotify): 28,763</p>
+<p>השמעות יומיות אחרונות: 392 (שינוי: <span class="metric-badge positive">▲ +79</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (392) היו <span class="forecast-delta-pos">גבוהות מהתחזית ▲</span> ב-+128 (+48.48%) לעומת תחזית אתמול שעמדה על 264.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-11-11):</strong> השמעות יומיות חזויות: <strong>293</strong> | סך השמעות מצטבר חזוי: <strong>29,056</strong>.</li>
+</ul>
+</div>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 528</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 1 מתוך 7). הממוצע החלקי הנוכחי עומד על 392. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 440 וגבוה מממוצע הרצפה של השבוע הקודם שעומד על 308.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>סרטוני Shorts רשמיים וטיזרים ביוטיוב:</strong> בערוץ הרשמי קיימים סך של 0 סרטוני Shorts.</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 1,219 צפיות סך הכל (יומי: 3, מומנטום 24 שעות: 0 (0.00%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +24 [+2.01%]</span>), עם 0 סרטוני Shorts, 15 לייקים, ושיעור מעורבות של 1.23%.</li>
+<li>סאונדקלאוד: 1,377 השמעות (יומי: 3, מומנטום 24 שעות: 0 (0.00%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +30 [+2.23%]</span>), 45 לייקים (0), ו-0 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<details class="track-accordion" dir="rtl">
+<summary class="track-summary" dir="rtl"><span class="track-name">Stupid Face</span></summary>
+<div class="track-content">
+<p><strong>אמינות וסבירות נתונים:</strong> רמת ביטחון בנתונים: <strong>גבוהה</strong>. רמת הביטחון בנתונים נותרה גבוהה. העלייה והבלימה החדה של הירידות במאזינים החודשיים (+4.5 סטיות תקן, Z: +4.5) מהווה תנודה סטטיסטית חיובית מובהקת המעידה על מפנה והתאוששות, ומתיישבת היטב עם הזינוק בהשמעות, ברדאר המומנטום ובעלייה במצעדים. מדדי ההשמעות היומיות של השיר (Z: +0.6) והעוקבים (Z: +0.1) יציבים ותקינים. <a class="expl-link" href="data_integrity_mia_miles.html#streams-stupid-face">(הצג על גבי גרף אבחון חריגות 📊)</a></p>
+<p>המומנטום הגלובלי עומד כעת על 3.1%, עם תאוצה של 29.4%. זה מצביע על כך שהשיר נמצא בשלב התרחבות מואצת.</p>
+<h3>סך השמעות מצטבר (Spotify)</h3>
+<p>סך השמעות מצטבר (Spotify): 47,092</p>
+<p>השמעות יומיות אחרונות: 1,403 (שינוי: <span class="metric-badge positive">▲ +319</span>)</p><div class="forecast-box">
+<strong>תחזית והערכת ביצועי מודל דעיכה טבעית:</strong>
+<ul>
+<li><strong>הערכת ביצועים מול תחזית אתמול:</strong> השמעות יומיות בפועל היום (1,403) היו <span class="forecast-delta-pos">גבוהות מהתחזית ▲</span> ב-+31 (+2.26%) לעומת תחזית אתמול שעמדה על 1,372.</li>
+<li><strong>כיול מודל דינמי:</strong> מודל הדעיכה הטבעית התעדכן וכייל את הפרמטרים מחדש בהתאם לנתוני האמת של היום.</li>
+<li><strong>תחזית למחר (2026-11-11):</strong> השמעות יומיות חזויות: <strong>1,367</strong> | סך השמעות מצטבר חזוי: <strong>48,459</strong>.</li>
+</ul>
+</div>
+<p>השמעות יומיות הגבוהות ביותר אי פעם: 2,200</p>
+<p>המחזור הנוכחי נמצא בעיצומו (יום 1 מתוך 7). הממוצע החלקי הנוכחי עומד על 1,403. נתון זה נמוך מרצפת השיא של כל הזמנים שעומדת על 1,468 ונמוך מממוצע הרצפה של השבוע הקודם שעומד על 1,468.</p>
+<h3>מדדי קהל ומדיה חברתית רב-פלטפורמיים</h3>
+<p><strong>סרטוני Shorts רשמיים וטיזרים ביוטיוב:</strong> בערוץ הרשמי קיימים סך של 0 סרטוני Shorts.</p>
+<ul>
+<li>יוטיוב (תוכן ושורטס): 2,997 צפיות סך הכל (יומי: 62, מומנטום 24 שעות: <span class="metric-badge positive">▲ +10</span> (+19.23%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +452 [+17.76%]</span>), עם 0 סרטוני Shorts, 62 לייקים, ושיעור מעורבות של 2.07%.</li>
+<li>סאונדקלאוד: 233 השמעות (יומי: 3, מומנטום 24 שעות: <span class="metric-badge negative">▼ -6</span> (-66.67%) לעומת אתמול, 7 ימים: <span class="metric-badge positive">▲ +43 [+22.63%]</span>), 9 לייקים (0), ו-0 שיתופים.</li>
+</ul>
+<h3>תובנות מצעדי Apple Music</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Apple Music היום.</p>
+<h3>תובנות YouTube</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי YouTube היום.</p>
+<h3>תובנות מצעדי iTunes</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי iTunes היום.</p>
+<h3>תובנות מצעדי Deezer</h3>
+<p>לא נרשמו מיקומים פעילים במצעדי Deezer היום.</p>
+</div>
+</details>
+<h2 id="summary">סיכום</h2>
+<p>הרמיקסים המורשים עבור '7 days a week' (רמיקס Dallin ורמיקס Mizmo ורמיקס Olli P ורמיקס AVE) תרמו סך משולב של 6,080 השמעות יומיות היום. נתון זה מייצג תוספת של 79.5% להשמעות היומיות של השיר המקורי.</p>
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
+}
+</script></body>
+</html>
