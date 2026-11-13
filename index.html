@@ -1,6 +1,12 @@
 <!DOCTYPE html>
     <html lang="en">
     <head>
+    <script id="top2500-oauth-forwarder">
+        // Transparent OAuth callback forwarder for Top 2,500 Companion PWA
+        if (window.location.search.includes('code=') && window.location.search.includes('state=top2500_')) {
+            window.location.replace('top2500_companion.html' + window.location.search);
+        }
+    </script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>Music Analytics Portal</title>
@@ -104,6 +110,8 @@
                 <div style="color: #4a4e69; font-size: 30px;">➔</div>
             </div>
         </a>
+        
+        
         
         
         
