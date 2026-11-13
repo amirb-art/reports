@@ -161,9 +161,39 @@
         }
 
         @media (max-width: 768px) {
+            .header-bar {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+                padding: 14px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
             .now-playing-container {
                 flex-direction: column;
                 text-align: center;
+            }
+            .album-art-wrapper {
+                margin: 0 auto;
+                width: 190px;
+                height: 190px;
+            }
+            .track-title {
+                font-size: 24px;
+            }
+            .track-artist {
+                font-size: 17px;
+            }
+            .main-card {
+                padding: 24px 16px;
+            }
+            .rank-showcase {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 16px;
             }
         }
 
@@ -558,7 +588,7 @@
     <script>
         // ==============================================================================
         // Spotify All-Time 2500 Companion PWA Core Script
-        // Version: v01.0.2
+        // Version: v01.0.3
         // ==============================================================================
 
         const SPOTIFY_CLIENT_ID = "b993dbf4f4534eb192fd098af937f809";
