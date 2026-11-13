@@ -161,39 +161,155 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px 8px;
+                min-height: 100dvh;
+            }
+
             .header-bar {
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-                padding: 14px;
+                padding: 8px 12px;
+                margin-bottom: 10px;
+                border-radius: 12px;
             }
-            .header-actions {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
+
+            .brand-title {
+                font-size: 14px;
+                gap: 8px;
             }
-            .now-playing-container {
-                flex-direction: column;
-                text-align: center;
+
+            .spotify-dot {
+                width: 10px;
+                height: 10px;
             }
-            .album-art-wrapper {
-                margin: 0 auto;
-                width: 190px;
-                height: 190px;
+
+            .header-actions .btn {
+                padding: 6px 10px;
+                font-size: 12px;
+                border-radius: 8px;
             }
-            .track-title {
-                font-size: 24px;
-            }
-            .track-artist {
-                font-size: 17px;
-            }
+
             .main-card {
-                padding: 24px 16px;
+                padding: 14px 12px;
+                margin-bottom: 10px;
+                border-radius: 16px;
             }
-            .rank-showcase {
-                grid-template-columns: 1fr;
+
+            /* Ultra-Compact Horizontal Media Row on Mobile */
+            .now-playing-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
                 gap: 12px;
-                padding: 16px;
+                margin-bottom: 10px;
+                text-align: left;
+            }
+
+            .album-art-wrapper {
+                width: 92px;
+                height: 92px;
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
+
+            .track-details {
+                gap: 3px;
+                text-align: left;
+                overflow: hidden;
+            }
+
+            .playing-status-pill {
+                font-size: 10px;
+                padding: 2px 7px;
+                gap: 4px;
+                margin: 0;
+            }
+
+            .eq-bar {
+                width: 2px;
+            }
+
+            .track-title {
+                font-size: 16px;
+                line-height: 1.2;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .track-artist {
+                font-size: 13px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .progress-section {
+                margin-top: 4px;
+                gap: 3px;
+            }
+
+            .progress-bar-bg {
+                height: 4px;
+            }
+
+            .progress-times {
+                font-size: 10px;
+            }
+
+            /* 3 Compact Columns in ONE Single Row on Mobile */
+            .rank-showcase {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+                padding: 8px 6px;
+                border-radius: 12px;
+            }
+
+            .stat-box {
+                padding: 6px 4px;
+                border-radius: 10px;
+                text-align: center;
+                align-items: center;
+                gap: 2px;
+                overflow: hidden;
+            }
+
+            .stat-label {
+                font-size: 11px;
+                justify-content: center;
+                gap: 3px;
+                white-space: nowrap;
+            }
+
+            .stat-value {
+                font-size: clamp(13px, 3.8vw, 17px);
+                line-height: 1.2;
+            }
+
+            .billion-badge {
+                font-size: 8px;
+                padding: 2px 4px;
+                margin-top: 2px;
+                letter-spacing: 0;
+            }
+
+            .search-section {
+                margin-bottom: 8px;
+            }
+
+            .search-box {
+                padding: 8px 12px;
+                border-radius: 12px;
+            }
+
+            .search-input {
+                font-size: 13px;
+            }
+
+            .footer-note {
+                margin-top: 6px;
+                font-size: 11px;
             }
         }
 
@@ -229,12 +345,6 @@
             text-align: left;
         }
 
-        @media (max-width: 768px) {
-            .track-details {
-                text-align: center;
-            }
-        }
-
         .playing-status-pill {
             display: inline-flex;
             align-items: center;
@@ -248,12 +358,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             width: fit-content;
-        }
-
-        @media (max-width: 768px) {
-            .playing-status-pill {
-                margin: 0 auto;
-            }
         }
 
         .track-title {
@@ -588,7 +692,7 @@
     <script>
         // ==============================================================================
         // Spotify All-Time 2500 Companion PWA Core Script
-        // Version: v01.0.3
+        // Version: v01.0.4
         // ==============================================================================
 
         const SPOTIFY_CLIENT_ID = "b993dbf4f4534eb192fd098af937f809";
