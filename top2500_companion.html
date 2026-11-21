@@ -244,6 +244,13 @@
                 text-overflow: ellipsis;
             }
 
+            .track-album {
+                font-size: 11px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
             .progress-section {
                 margin-top: 4px;
                 gap: 3px;
@@ -288,11 +295,16 @@
             }
 
             .billion-badge,
-            .age-badge {
+            .age-badge,
+            .avg-badge {
                 font-size: 9px;
                 padding: 2px 5px;
                 margin-top: 2px;
                 letter-spacing: 0;
+            }
+
+            .age-value-rtl {
+                text-align: center !important;
             }
 
             .search-section {
@@ -366,6 +378,17 @@
             font-weight: 800;
             color: #fff;
             line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .track-album {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: -2px;
             word-break: break-word;
         }
 
@@ -481,6 +504,21 @@
             margin-top: 4px;
             width: fit-content;
             direction: ltr;
+        }
+
+        .avg-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: rgba(0, 212, 255, 0.12);
+            color: #7dd3fc;
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 4px;
+            width: fit-content;
+            direction: rtl;
         }
 
         /* Search & Catalog Section */
@@ -758,6 +796,7 @@
                 </div>
 
                 <h1 id="trackTitle" class="track-title">Waiting for playback...</h1>
+                <div id="trackAlbum" class="track-album" style="display:none;"></div>
                 <h2 id="trackArtist" class="track-artist">Connect your Spotify account to start</h2>
 
                 <div class="progress-section">
@@ -786,14 +825,15 @@
             </div>
 
             <div class="stat-box">
-                <div class="stat-label">📈 קצב יומי</div>
-                <div id="dailyStreamsValue" class="stat-value" style="color:var(--accent-cyan);">--</div>
+                <div class="stat-label">⏳ גיל השיר ותאריך יציאה</div>
+                <div id="trackAgeValue" class="stat-value age-value-rtl" style="color:#c4b5fd; direction:rtl; text-align:right;">--</div>
+                <div id="releaseDateBadge" class="age-badge" style="display:none;"></div>
             </div>
 
             <div class="stat-box">
-                <div class="stat-label">⏳ גיל השיר ותאריך יציאה</div>
-                <div id="trackAgeValue" class="stat-value" style="color:#c4b5fd; direction:rtl; text-align:center;">--</div>
-                <div id="releaseDateBadge" class="age-badge" style="display:none;"></div>
+                <div class="stat-label">📈 קצב יומי</div>
+                <div id="dailyStreamsValue" class="stat-value" style="color:var(--accent-cyan);">--</div>
+                <div id="lifetimeAvgBadge" class="avg-badge" style="display:none;"></div>
             </div>
         </div>
     </main>
@@ -821,7 +861,7 @@
     <script>
         // ==============================================================================
         // Spotify All-Time 2500 Companion PWA Core Script
-        // Version: v01.2.0
+        // Version: v01.3.0
         // ==============================================================================
 
         const SPOTIFY_CLIENT_ID = "b993dbf4f4534eb192fd098af937f809";
@@ -1163,6 +1203,49 @@
             }
         }
 
+        function setAlbumDisplay(albumName) {
+            const albumEl = document.getElementById('trackAlbum');
+            if (!albumEl) return;
+            if (albumName && albumName.trim()) {
+                albumEl.textContent = `💿 ${albumName.trim()}`;
+                albumEl.style.display = "flex";
+            } else {
+                albumEl.textContent = "";
+                albumEl.style.display = "none";
+            }
+        }
+
+        function setLifetimeAvgBadge(totalStreams, releaseDateStr, precision) {
+            const avgEl = document.getElementById('lifetimeAvgBadge');
+            if (!avgEl) return;
+
+            if (!totalStreams || totalStreams <= 0 || !releaseDateStr) {
+                avgEl.style.display = "none";
+                avgEl.innerHTML = "";
+                return;
+            }
+
+            const parts = releaseDateStr.split('-').map(p => parseInt(p, 10));
+            const year = parts[0];
+            if (!year || isNaN(year)) {
+                avgEl.style.display = "none";
+                return;
+            }
+
+            const effPrecision = precision || (parts.length >= 3 ? 'day' : parts.length === 2 ? 'month' : 'year');
+            // For year-only precision, approximate mid-year (July 1); for month-only, 15th of month
+            const month = parts.length >= 2 && !isNaN(parts[1]) ? parts[1] : (effPrecision === 'year' ? 7 : 1);
+            const day = parts.length >= 3 && !isNaN(parts[2]) ? parts[2] : (effPrecision === 'month' ? 15 : 1);
+
+            const relDate = new Date(year, month - 1, day);
+            const now = new Date();
+            const ageDays = Math.max(1, Math.floor((now.getTime() - relDate.getTime()) / 86400000));
+            const avgPerDay = Math.round(totalStreams / ageDays);
+
+            avgEl.innerHTML = `<span>📊 ממוצע מאז היציאה:</span> <span dir="ltr">${formatNumber(avgPerDay)}/day</span>`;
+            avgEl.style.display = "inline-flex";
+        }
+
         // Smart Polling Mechanism
         async function fetchCurrentlyPlaying() {
             const token = await getValidAccessToken();
@@ -1225,11 +1308,13 @@
             if (!spData || !spData.item) {
                 statusText.textContent = "Standby / Paused";
                 titleEl.textContent = "No Active Playback";
+                setAlbumDisplay(null);
                 artistEl.textContent = "Start listening on any device";
                 rankEl.textContent = "--";
                 totalStreamsEl.textContent = "--";
                 dailyStreamsEl.textContent = "--";
                 setReleaseCard(null, null);
+                setLifetimeAvgBadge(null, null, null);
                 milestoneBadge.style.display = "none";
                 progressFill.style.width = "0%";
                 isTrackPlaying = false;
@@ -1243,6 +1328,7 @@
 
             statusText.textContent = isTrackPlaying ? "Now Playing" : "Paused";
             titleEl.textContent = item.name;
+            setAlbumDisplay(item.album?.name);
             artistEl.textContent = (item.artists || []).map(a => a.name).join(', ');
 
             if (item.album && item.album.images && item.album.images.length > 0) {
@@ -1258,6 +1344,7 @@
                 rankEl.textContent = `#${matched.rank}`;
                 totalStreamsEl.textContent = formatNumber(matched.streams);
                 dailyStreamsEl.textContent = `+${formatNumber(matched.daily)}/day`;
+                setLifetimeAvgBadge(matched.streams, item.album?.release_date, item.album?.release_date_precision);
 
                 if (matched.streams >= 1000000000) {
                     milestoneBadge.style.display = "inline-flex";
@@ -1271,6 +1358,7 @@
                 rankEl.textContent = "2500+";
                 totalStreamsEl.textContent = "< 725M";
                 dailyStreamsEl.textContent = "--";
+                setLifetimeAvgBadge(null, null, null);
                 milestoneBadge.style.display = "none";
             }
         }
@@ -1456,9 +1544,11 @@
             document.getElementById('totalStreamsValue').textContent = formatNumber(item.streams);
             document.getElementById('dailyStreamsValue').textContent = `+${formatNumber(item.daily)}/day`;
             document.getElementById('trackTitle').textContent = item.title;
+            setAlbumDisplay(null);
             document.getElementById('trackArtist').textContent = item.artist;
             document.getElementById('playingStatusText').textContent = "Selected from Search";
             setReleaseCard(null, null);
+            setLifetimeAvgBadge(null, null, null);
 
             const milestoneBadge = document.getElementById('milestoneBadge');
             if (item.streams >= 1000000000) {
@@ -1473,7 +1563,7 @@
             searchResults.style.display = 'none';
             searchInput.value = '';
 
-            // Enrich selected search track with live Spotify Release Date, Age & Cover Art
+            // Enrich selected search track with live Spotify Release Date, Age, Album, Lifetime Avg & Cover Art
             if (item.id && localStorage.getItem('sp_refresh_token')) {
                 try {
                     const token = await getValidAccessToken();
@@ -1484,7 +1574,9 @@
                         if (res.ok) {
                             const trackData = await res.json();
                             if (trackData.album) {
+                                setAlbumDisplay(trackData.album.name);
                                 setReleaseCard(trackData.album.release_date, trackData.album.release_date_precision);
+                                setLifetimeAvgBadge(item.streams, trackData.album.release_date, trackData.album.release_date_precision);
                                 if (trackData.album.images && trackData.album.images.length > 0) {
                                     document.getElementById('albumArt').src = trackData.album.images[0].url;
                                 }
