@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Temper City - Performance Metrics Report</title>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    h1, h2, h3 {
+        color: #1DB954;
+    }
+    h1 {
+        border-bottom: 2px solid #1DB954;
+        padding-bottom: 10px;
+    }
+    h2, section, details {
+        scroll-margin-top: 80px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #181818;
+    }
+    th, td {
+        padding: 12px;
+        border: 1px solid #282828;
+        text-align: left;
+    }
+    th {
+        background-color: #282828;
+        color: #1DB954;
+    }
+    tr:nth-child(even) {
+        background-color: #151515;
+    }
+    ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+    p {
+        margin: 10px 0;
+    }
+    strong {
+        color: #1DB954;
+    }
+    .spotify-disclaimer {
+        font-size: 13px;
+        color: #FFFFFF;
+        opacity: 0.85;
+        margin: 6px 0 16px 0;
+    }
+    .restaurant-bill {
+        margin: 20px 0;
+    }
+    .bill-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 15px 0 25px 0;
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .bill-table th {
+        padding: 10px 16px;
+        background-color: #222222;
+        color: #1DB954;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        border-bottom: 2px solid #282828;
+    }
+    .bill-table th.platform {
+        text-align: left;
+    }
+    .bill-table th.counter {
+        text-align: right;
+    }
+    .bill-table th.daily-header {
+        text-align: right;
+    }
+    .bill-table th.delta-header {
+        text-align: center;
+    }
+    .bill-table th.unit {
+        text-align: left;
+    }
+    .bill-table td {
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid #282828;
+    }
+    .bill-table .platform {
+        font-weight: 500;
+        text-align: left;
+    }
+    .bill-table .counter {
+        text-align: right;
+        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 15px;
+        color: #fff;
+        direction: ltr;
+    }
+    .bill-table .daily-cell {
+        text-align: right;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        font-size: 14px;
+        color: #e5e5e5;
+        direction: ltr;
+    }
+    .bill-table .delta-cell {
+        text-align: center;
+        white-space: nowrap;
+    }
+    .bill-table .delta {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        direction: ltr;
+    }
+    .bill-table .delta.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .bill-table .delta.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .bill-table .delta.zero {
+        color: #888888;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .bill-table .unit {
+        color: #aaa;
+        font-size: 13px;
+        text-align: left;
+        width: 140px;
+    }
+    .bill-table .subtotal-row {
+        background-color: #1e1e1e;
+        border-top: 1px solid #1DB954;
+        border-bottom: 1px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+    }
+    .bill-table .subtotal-row .counter {
+        color: #1DB954;
+        font-size: 16px;
+    }
+    .bill-table .grand-row {
+        background-color: #162419;
+        border-top: 2px solid #1DB954;
+        border-bottom: 2px solid #1DB954;
+        color: #1DB954;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bill-table .grand-row .counter {
+        color: #1DB954;
+        font-size: 18px;
+    }
+
+    /* Metric Badges & Performance Highlights */
+    .metric-badge {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        margin: 0 3px;
+        direction: ltr;
+        unicode-bidi: isolate;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .metric-badge.positive {
+        color: #10b981;
+        background-color: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .metric-badge.negative {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .metric-badge.peak {
+        color: #f59e0b;
+        background-color: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        font-weight: bold;
+    }
+    .metric-badge.neutral {
+        color: #94a3b8;
+        background-color: rgba(148, 163, 184, 0.1);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Hybrid Navigation & Accordion UI Styles */
+    .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #333333;
+        padding: 12px 0;
+        margin: 15px 0 25px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background-color: #1f1f1f;
+        border: 1px solid #333333;
+        transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+        color: #000000;
+        background-color: #FFD700;
+        border-color: #FFD700;
+    }
+    .nav-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toggle-btn {
+        background-color: #222222;
+        color: #FF7A00;
+        border: 1px solid #FF7A00;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+        background-color: #FF7A00;
+        color: #000000;
+        border-color: #FF7A00;
+    }
+    .track-accordion {
+        background-color: #181818;
+        border: 1px solid #282828;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+    }
+    .track-accordion:hover {
+        border-color: #383838;
+    }
+    .track-accordion[open] {
+        border-color: #FF7A00;
+    }
+    .track-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1DB954;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #1a1a1a;
+        transition: background-color 0.2s;
+    }
+    .track-summary::-webkit-details-marker {
+        display: none;
+    }
+    .track-summary:hover {
+        background-color: #222222;
+    }
+    .track-summary::after {
+        content: '+';
+        font-size: 22px;
+        font-weight: 900;
+        color: #FF7A00;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .track-accordion[open] > .track-summary::after {
+        content: '−';
+        color: #FF7A00;
+    }
+    .track-content {
+        padding: 15px 20px;
+        border-top: 1px solid #282828;
+    }
+    .sub-accordion {
+        background-color: #141721;
+        border: 1px solid #282d3d;
+        border-radius: 6px;
+        margin: 10px 0 16px 0;
+        overflow: hidden;
+        transition: border-color 0.2s, background-color 0.2s;
+    }
+    .sub-accordion:hover {
+        border-color: #3b4258;
+    }
+    .sub-accordion[open] {
+        border-color: #0088FF;
+        background-color: #10131a;
+    }
+    .sub-summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #38bdf8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background-color: #181b24;
+        transition: background-color 0.2s;
+    }
+    .sub-summary::-webkit-details-marker {
+        display: none;
+    }
+    .sub-summary:hover {
+        background-color: #202430;
+        color: #7dd3fc;
+    }
+    .sub-summary::after {
+        content: '▼';
+        font-size: 10px;
+        color: #777e93;
+        transition: transform 0.2s ease;
+    }
+    .sub-accordion[open] > .sub-summary::after {
+        content: '▲';
+        color: #0088FF;
+    }
+    .sub-accordion ul {
+        margin: 0;
+        padding: 10px 20px 10px 30px;
+    }
+    .sub-accordion li {
+        padding: 3px 0;
+        font-size: 13px;
+        color: #cbd5e1;
+    }
+    .expl-link {
+        color: #38bdf8;
+        text-decoration: none;
+        font-size: 0.85em;
+        margin-inline-start: 4px;
+        border-bottom: 1px dotted rgba(56, 189, 248, 0.6);
+        transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .expl-link:hover {
+        color: #7dd3fc;
+        border-bottom-color: #7dd3fc;
+    }
+    .market-context-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-left: 4px solid #38bdf8;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #c9d1d9;
+    }
+    .market-context-box strong {
+        color: #38bdf8;
+    }
+    .forecast-box {
+        background-color: #1a1e29;
+        border: 1px solid #2d3748;
+        border-left: 4px solid #a855f7;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 10px 0 14px 0;
+        font-size: 13.5px;
+        line-height: 1.5;
+        color: #e2e8f0;
+    }
+    .forecast-box strong {
+        color: #c084fc;
+    }
+    .forecast-box ul {
+        margin: 6px 0 0 0;
+        padding-left: 18px;
+    }
+    .forecast-box li {
+        margin-bottom: 4px;
+    }
+    .forecast-delta-pos {
+        color: #4ade80;
+        font-weight: 600;
+    }
+    .forecast-delta-neg {
+        color: #f87171;
+        font-weight: 600;
+    }
+</style></head>
+<body>
+<h1>Temper City - Performance Metrics Report</h1>
+<p class="spotify-disclaimer"><em>Note: This report is Spotify-centric; unless explicitly stated, all metrics originate from Spotify (e.g. Cities, thermal maps, etc.)</em></p>
+<div style="background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.35); border-radius:8px; padding:8px 16px; margin:10px 0 16px 0; display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:bold; color:#4ade80;"><span>📅</span> Data Date: 2026-11-22 (Sunday) • 100% Fully Synchronized Report</div>
+<p><em>Operational Note: Today is Sunday. Drops in Western markets today are normal 'weekend dips'. The workweek in Israel/Middle East starts Sunday. Australia/Asia start Monday early. Because these Timezone Canaries are exhibiting positive momentum indicators, this is explicitly framed as a predictive indicator for a global Tuesday recovery.</em></p>
+
+<nav class="sticky-nav">
+<div class="nav-links">
+<a href="#band-overview">Band Overview</a>
+<a href="#top-cities">Top Cities</a>
+<a href="#track-metrics">Track Metrics</a>
+<a href="#summary">Summary</a>
+</div>
+<div class="nav-controls">
+<button class="toggle-btn" onclick="toggleAllTracks(true)" type="button">Expand All</button>
+<button class="toggle-btn" onclick="toggleAllTracks(false)" type="button">Collapse All</button>
+</div>
+</nav><h2 id="band-overview">Band Overview</h2>
+<p><strong>Followers:</strong> 378,490 (<span class="metric-badge positive">▲ +1,363</span>)</p>
+<p><strong>Monthly Listeners:</strong> 26,360,809 (<span class="metric-badge positive">▲ +76,966</span>)</p><div class="market-context-box"><strong>Global Market Context (Spotify Macro):</strong> Temper City's monthly listeners outperformed general platform sentiment (where 52.2% of the world's top 500 artists declined). Temper City climbing 1 spots in global rank (#291 globally, vs #292 yesterday). <a class="expl-link" href="report_self_aware.html#sec-spotify">(View Market Benchmark Chart 📊)</a> <span style="color:#94a3b8; font-size:11px; font-weight:normal;">(Comparative market benchmarks reflect previous snapshot pending Kworb refresh)</span></div>
+<p class="spotify-rank"><strong>Global Artist Rank (Spotify):</strong> #291 <a class="expl-link" href="ranking_methodology.html#spotify-global-rank_en">(see explanation)</a> (Yesterday: #292, Last Week: #298, <span class="metric-badge peak">🏆 All-Time Peak</span>: #196).</p>
+<p class="worldwide-rank"><strong>Worldwide Digital Artist Rank (Weighted All-Platform):</strong> <a class="expl-link" href="ranking_methodology.html#worldwide-digital-artist-rank_en">(see explanation)</a> #142 (Points: 317, Yesterday: #150, Last Week: #116, <span class="metric-badge peak">🏆 All-Time Peak</span>: #45).</p>
+<div class="restaurant-bill" dir="ltr">
+<h3>Core Catalog Music Streaming Summary — Temper City (3 Original Songs)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">Platform</th>
+<th class="counter">Total Counter</th>
+<th class="daily-header">Daily Streams</th>
+<th class="delta-header">24h Momentum</th>
+<th class="unit">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">686,508,125</td>
+<td class="daily-cell">2,702,593</td>
+<td class="delta-cell"><span class="delta negative" title="-18,616 vs yesterday (-0.68%)">▼ -18.6K (-0.68%)</span></td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">166,138,308</td>
+<td class="daily-cell">601,355</td>
+<td class="delta-cell"><span class="delta negative" title="-380,698 vs yesterday (-38.77%)">▼ -380.7K (-38.77%)</span></td>
+<td class="unit">views / streams</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">4,560,756</td>
+<td class="daily-cell">8,824</td>
+<td class="delta-cell"><span class="delta negative" title="-4,946 vs yesterday (-35.92%)">▼ -4,946 (-35.92%)</span></td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, iTunes, Deezer</td>
+<td colspan="4" style="color: #888; font-size: 13px; text-align: center;">do not disclose public stream counters</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Core Music Streaming</td>
+<td class="counter">857,207,189</td>
+<td class="daily-cell">3,312,772</td>
+<td class="delta-cell"><span class="delta negative" title="-404,260 vs yesterday (-10.88%)">▼ -404.3K (-10.88%)</span></td>
+<td class="unit">streams</td>
+</tr>
+</tbody>
+</table>
+<section class="milestone-box" style="margin-top: 14px; margin-bottom: 25px; padding: 14px 18px; background: rgba(29, 185, 84, 0.08); border: 1px solid rgba(29, 185, 84, 0.35); border-radius: 10px; font-size: 13.5px; line-height: 1.6;">
+<div style="font-weight: 700; color: #1DB954; font-size: 14px; margin-bottom: 6px;">🎯 Realistic Milestone Forecast (Core Catalog • 1-Year Horizon):</div>
+<div style="display: flex; flex-direction: column; gap: 6px; color: #e6edf3;">
+<div>• <strong>Core Catalog (All Platforms) ➔ 1B Target:</strong> 857,207,189 / 1,000,000,000 (85.7%) • Remaining: <strong>142,792,811</strong> • Daily Pace: 3,312,772/day ➔ <strong>Est. Arrival: ~43 days (2027-01-04)</strong></div>
+<div>• <strong>Spotify Core Only (No Remixes) ➔ 1B Target:</strong> 686,508,125 / 1,000,000,000 (68.7%) • Remaining: <strong>313,491,875</strong> • Daily Pace: 2,702,593/day ➔ <strong>Est. Arrival: ~116 days (2027-03-18)</strong></div>
+</div>
+</section>
+<h3>Licensed Remixes Streaming Summary (5 Remixes)</h3>
+<table class="bill-table">
+<thead>
+<tr>
+<th class="platform">Platform</th>
+<th class="counter">Total Counter</th>
+<th class="daily-header">Daily Streams</th>
+<th class="delta-header">24h Momentum</th>
+<th class="unit">Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="platform">Spotify</td>
+<td class="counter">220,884,151</td>
+<td class="daily-cell">1,215,709</td>
+<td class="delta-cell"><span class="delta negative" title="-125,525 vs yesterday (-9.36%)">▼ -125.5K (-9.36%)</span></td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">YouTube</td>
+<td class="counter">19,619,918</td>
+<td class="daily-cell">73,748</td>
+<td class="delta-cell"><span class="delta negative" title="-67,640 vs yesterday (-47.84%)">▼ -67.6K (-47.84%)</span></td>
+<td class="unit">views / streams</td>
+</tr>
+<tr>
+<td class="platform">SoundCloud</td>
+<td class="counter">2,295,790</td>
+<td class="daily-cell">4,750</td>
+<td class="delta-cell"><span class="delta negative" title="-2,964 vs yesterday (-38.42%)">▼ -2,964 (-38.42%)</span></td>
+<td class="unit">streams</td>
+</tr>
+<tr>
+<td class="platform">Apple Music, iTunes, Deezer</td>
+<td colspan="4" style="color: #888; font-size: 13px; text-align: center;">do not disclose public stream counters</td>
+</tr>
+<tr class="subtotal-row">
+<td>Total Remixes Streaming</td>
+<td class="counter">242,799,859</td>
+<td class="daily-cell">1,294,207</td>
+<td class="delta-cell"><span class="delta negative" title="-196,129 vs yesterday (-13.16%)">▼ -196.1K (-13.16%)</span></td>
+<td class="unit">streams</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="top-cities">Top 5 Cities Analysis</h2>
+<table>
+<thead>
+<tr>
+<th>City Name</th>
+<th>Continent</th>
+<th>Current Listeners</th>
+<th>Short-Term Diff (3d)</th>
+<th>Long-Term Diff (14d)</th>
+<th>All-Time Peak</th>
+<th>Total Measured Days</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sydney</td>
+<td>Oceania</td>
+<td>282,723 (<span class="metric-badge positive">▲ +1,504</span>)</td>
+<td><span class="metric-badge positive">▲ +2,794</span></td>
+<td><span class="metric-badge positive">▲ +9,142</span></td>
+<td>313,801</td>
+<td>210</td>
+</tr>
+<tr>
+<td>São Paulo</td>
+<td>South America</td>
+<td>270,796 (<span class="metric-badge positive">▲ +914</span>)</td>
+<td><span class="metric-badge positive">▲ +3,893</span></td>
+<td><span class="metric-badge positive">▲ +17,999</span></td>
+<td>345,916</td>
+<td>198</td>
+</tr>
+<tr>
+<td>Melbourne</td>
+<td>Oceania</td>
+<td>244,464 (<span class="metric-badge positive">▲ +1,763</span>)</td>
+<td><span class="metric-badge positive">▲ +3,157</span></td>
+<td><span class="metric-badge positive">▲ +6,235</span></td>
+<td>269,179</td>
+<td>138</td>
+</tr>
+<tr>
+<td>London</td>
+<td>Europe</td>
+<td>233,448 (<span class="metric-badge negative">▼ -1,921</span>)</td>
+<td><span class="metric-badge negative">▼ -664</span></td>
+<td><span class="metric-badge negative">▼ -15,795</span></td>
+<td>334,140</td>
+<td>241</td>
+</tr>
+<tr>
+<td>Brisbane</td>
+<td>Oceania</td>
+<td>219,598 (<span class="metric-badge positive">▲ +1,777</span>)</td>
+<td><span class="metric-badge positive">▲ +4,078</span></td>
+<td><span class="metric-badge positive">▲ +219,598</span></td>
+<td>219,598</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="track-metrics">Track Metrics</h2>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: +0.4, Listeners Z: +0.7, Followers Z: +0.2), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at 1.3%, with an Acceleration of 2.6%. This indicates the track is in a Accelerating Expansion phase.</p>
+<h3>Spotify Chart Status</h3>
+<p>In Global, the track rose from #24 to #23 (up 1 spot, day 3 of streak in Top 30). Out of 229 tracked chart days, the track has spent 76 days in the Top 10, 146 days in the Top 20, and 186 days in the Top 30 (<span class="metric-badge peak">🏆 All-time peak</span>: #5).</p>
+<details class="sub-accordion"><summary class="sub-summary">Detailed Top 10 Positions (1)</summary><ul>
+<li>Belgium: Rank #10 (No change).</li>
+</ul></details>
+<p><strong>Track Age:</strong> 277 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 665,767,525</p>
+<p><strong>Latest Daily Streams:</strong> 2,357,473 (Delta: <span class="metric-badge positive">▲ +60,051</span>)</p><div class="market-context-box"><strong>Global Market Context (Spotify Global Top 200):</strong> Self Aware exhibits strong resilience on the Spotify Global Chart (Rank #23), outperforming broader market dynamics across the Top 200. <span style="color:#94a3b8; font-size:11px; font-weight:normal;">(Comparative market benchmarks reflect previous snapshot pending Kworb refresh)</span></div><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (2,357,473) were <span class="forecast-delta-pos">HIGHER than predicted ▲</span> by +36,873 (+1.59%) compared to yesterday's forecast of 2,320,600.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>2,320,600</strong> | Projected Total Streams: <strong>668,088,125</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 3,550,611</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 2,372,489. This is lower than the all-time high floor of 3,323,146 and higher than the previous week's floor of 2,297,048.</p>
+<h3>Strong Growth — 4 countries</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (4)</summary><ul>
+<li>France: 11.1%</li>
+<li>Belgium: 9.6%</li>
+<li>Ireland: 7.7%</li>
+<li>United Arab Emirates: 5.2%</li>
+</ul></details>
+<h3>Moderate Growth — 9 countries</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (9)</summary><ul>
+<li>Netherlands: 4.3%</li>
+<li>Italy: 3.8%</li>
+<li>Luxembourg: 3.4%</li>
+<li>Sweden: 3.4%</li>
+<li>United States: 3.0%</li>
+<li>Poland: 2.5%</li>
+<li>United Kingdom: 2.3%</li>
+<li>Belarus: 2.0%</li>
+<li>Germany: 1.9%</li>
+</ul></details>
+<h3>Approaching Plateau — 4 countries</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (4)</summary><ul>
+<li>New Zealand: 0.9%</li>
+<li>Austria: -0.7%</li>
+<li>Nicaragua: -0.8%</li>
+<li>Norway: -0.8%</li>
+</ul></details>
+<h3>Contraction Phase — 9 countries</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (9)</summary><ul>
+<li>Slovakia: -2.7%</li>
+<li>Estonia: -2.9%</li>
+<li>Finland: -3.6%</li>
+<li>Saudi Arabia: -3.8%</li>
+<li>Portugal: -4.5%</li>
+<li>Hungary: -4.6%</li>
+<li>Czech Republic: -6.0%</li>
+<li>Singapore: -6.5%</li>
+<li>Israel: -13.7%</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Video Teasers:</strong> The official channel features a combined 29 Shorts videos.</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 160,972,516 total views (Daily: 557,085, 24h Momentum: -352,219 (-38.74%) vs yesterday, 7d: <span class="metric-badge positive">▲ +5,407,872 [+3.48%]</span>), with 29 Shorts, 2,309,688 likes, and an engagement rate of 1.43%.</li>
+<li>SoundCloud: 4,478,811 streams (Daily: 8,066, 24h Momentum: -4,617 (-36.40%) vs yesterday, 7d: <span class="metric-badge positive">▲ +81,758 [+1.86%]</span>), 104,757 likes (+202), and 702 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 39 charts across 39 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 190 days, reaching 71 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #1 in Yemen.</p>
+<h3>YouTube Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 65 days, reaching 28 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #2 in Austria.</p>
+<p>Best performing chart: Australia at Rank #20 (No change, Peak: #13).</p>
+<h3>iTunes Insights</h3>
+<p>Active in 12 charts across 12 countries today, with 1 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 69 days, reaching 67 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #1 in Belarus, Cyprus.</p>
+<details class="sub-accordion"><summary class="sub-summary">Detailed Top 10 Positions (1)</summary><ul>
+<li>Moldova: Rank #8 (<span class="metric-badge negative">▼ Down 3 spots</span>, Peak: #5)</li>
+</ul></details>
+<h3>Deezer Insights</h3>
+<p>Active in 21 charts across 21 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 65 days, reaching 53 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #1 in Lithuania, Poland, Slovakia.</p>
+<p>Best performing chart: Poland at Rank #15 (<span class="metric-badge positive">▲ Up 1 spots</span>, Peak: #1).</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-LUM!X</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.4, Listeners Z: +0.7, Followers Z: +0.2), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-lum-x">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -1.3%, with an Acceleration of -8.8%. This indicates the track is in a Accelerating Contraction phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 119 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 93,963,620</p>
+<p><strong>Latest Daily Streams:</strong> 495,060 (Delta: <span class="metric-badge negative">▼ -47,845</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (495,060) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -24,279 (-4.67%) compared to yesterday's forecast of 519,339.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>512,204</strong> | Projected Total Streams: <strong>94,475,824</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 773,367</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 545,161. This is lower than the all-time high floor of 620,221 and lower than the previous week's floor of 591,352.</p>
+<h3>Approaching Plateau — 1 country</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (1)</summary><ul>
+<li>Germany: -0.9%</li>
+</ul></details>
+<h3>Contraction Phase — 2 countries</h3>
+<details class="sub-accordion"><summary class="sub-summary">View Countries (2)</summary><ul>
+<li>Switzerland: -2.6%</li>
+<li>Austria: -3.1%</li>
+</ul></details>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>YouTube Content &amp; Shorts: 5,711,528 total views (Daily: 21,148, 24h Momentum: -18,081 (-46.09%) vs yesterday, 7d: <span class="metric-badge positive">▲ +216,747 [+3.94%]</span>), with 0 Shorts, 37,693 likes, and an engagement rate of 0.66%.</li>
+<li>SoundCloud: 1,460,989 streams (Daily: 1,444, 24h Momentum: -1,180 (-44.97%) vs yesterday, 7d: <span class="metric-badge positive">▲ +15,902 [+1.10%]</span>), 43,487 likes (+28), and 329 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 1 days, reaching 1 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #152 in Algeria.</p>
+<p>Best performing chart: Algeria at Rank #152 (New Entry, Peak: #152).</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 10 days, reaching 7 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #3 in Czech Republic.</p>
+<p>Best performing chart: Czech Republic at Rank #99 (New Entry, Peak: #3).</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-Ian Asher</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.4, Listeners Z: +0.7, Followers Z: +0.2), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-ian-asher">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -4.0%, with an Acceleration of -5.7%. This indicates the track is in a Accelerating Contraction phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 119 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 96,941,393</p>
+<p><strong>Latest Daily Streams:</strong> 410,470 (Delta: <span class="metric-badge negative">▼ -25,005</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (410,470) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -17,109 (-4.00%) compared to yesterday's forecast of 427,579.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>425,519</strong> | Projected Total Streams: <strong>97,366,912</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 951,713</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 434,383. This is lower than the all-time high floor of 745,493 and lower than the previous week's floor of 445,253.</p>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>YouTube Content &amp; Shorts: 8,831,669 total views (Daily: 26,903, 24h Momentum: -20,661 (-43.44%) vs yesterday, 7d: <span class="metric-badge positive">▲ +271,503 [+3.17%]</span>), with 0 Shorts, 97,592 likes, and an engagement rate of 1.11%.</li>
+<li>SoundCloud: 564,036 streams (Daily: 1,636, 24h Momentum: -1,201 (-42.33%) vs yesterday, 7d: <span class="metric-badge positive">▲ +17,049 [+3.12%]</span>), 16,484 likes (+38), and 148 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Reverse Psychology</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong style="color: #ef4444;">LOW</strong>. Status: Historical Anomaly – Awaiting Confirmation. Statistical Anomaly: Daily Stream Velocity deviated by &gt;3 standard deviations (Z = -3.0, mean = 7,138, std = 15,811). (Streams Z: -3.0, Listeners Z: +0.7, Followers Z: +0.2). Interpretations are provisional and confirmation requires the next 1-3 daily observations before any strategic conclusions should be drawn. <a class="expl-link" href="data_integrity_temper_city.html#streams-reverse-psychology">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -4.5%, with an Acceleration of -16.8%. This indicates the track is in a Accelerating Contraction phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 87 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 14,893,180</p>
+<p><strong>Latest Daily Streams:</strong> 200,862 (Delta: <span class="metric-badge negative">▼ -40,446</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (200,862) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -24,950 (-11.05%) compared to yesterday's forecast of 225,812.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>228,432</strong> | Projected Total Streams: <strong>15,121,612</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 306,958</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 217,003. This is higher than the all-time high floor of 214,023 and higher than the previous week's floor of 188,702.</p>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Video Teasers:</strong> The official channel features a combined 7 Shorts videos.</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 2,776,520 total views (Daily: 15,551, 24h Momentum: -10,457 (-40.21%) vs yesterday, 7d: <span class="metric-badge positive">▲ +155,460 [+5.93%]</span>), with 7 Shorts, 64,368 likes, and an engagement rate of 2.32%.</li>
+<li>SoundCloud: 55,639 streams (Daily: 305, 24h Momentum: -89 (-22.59%) vs yesterday, 7d: <span class="metric-badge positive">▲ +2,967 [+5.63%]</span>), 1,561 likes (+14), and 15 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 8 days, reaching 6 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #37 in Poland.</p>
+<p>Best performing chart: Egypt at Rank #115 (<span class="metric-badge negative">▼ Down 68 spots</span>, Peak: #47).</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-Gravagerz</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: +0.1, Listeners Z: +0.7, Followers Z: +0.2), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-gravagerz">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -17.1%, with an Acceleration of -5.8%. This indicates the track is in a Accelerating Contraction phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 78 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 6,409,165</p>
+<p><strong>Latest Daily Streams:</strong> 74,986 (Delta: <span class="metric-badge negative">▼ -4,634</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (74,986) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -236 (-0.31%) compared to yesterday's forecast of 75,222.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>71,112</strong> | Projected Total Streams: <strong>6,480,277</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 154,972</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 88,845. This is lower than the all-time high floor of 125,481 and lower than the previous week's floor of 106,396.</p>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>YouTube Content &amp; Shorts: 4,758,277 total views (Daily: 23,541, 24h Momentum: -27,280 (-53.68%) vs yesterday, 7d: <span class="metric-badge positive">▲ +315,116 [+7.09%]</span>), with 0 Shorts, 27,756 likes, and an engagement rate of 0.58%.</li>
+<li>SoundCloud: 98,403 streams (Daily: 1,020, 24h Momentum: -171 (-14.36%) vs yesterday, 7d: <span class="metric-badge positive">▲ +7,047 [+7.71%]</span>), 3,248 likes (+32), and 65 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>Active in 4 charts across 4 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 5 days, reaching 4 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #52 in Estonia.</p>
+<p>Best performing chart: Estonia at Rank #52 (No change, Peak: #52).</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-Ely Oaks</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong style="color: #ef4444;">LOW</strong>. Status: Historical Anomaly – Awaiting Confirmation. Statistical Anomaly: Daily Stream Velocity deviated by &gt;3 standard deviations (Z = -3.3, mean = 11,142, std = 15,332). (Streams Z: -3.3, Listeners Z: +0.7, Followers Z: +0.2). Interpretations are provisional and confirmation requires the next 1-3 daily observations before any strategic conclusions should be drawn. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-ely-oaks">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at 3.1%, with an Acceleration of -24.9%. This indicates the track is in a Decelerating Expansion phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 63 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 4,326,521</p>
+<p><strong>Latest Daily Streams:</strong> 116,913 (Delta: <span class="metric-badge negative">▼ -38,733</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (116,913) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -11,041 (-8.63%) compared to yesterday's forecast of 127,954.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>131,913</strong> | Projected Total Streams: <strong>4,458,434</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 155,646</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 118,987. This is higher than the all-time high floor of 78,024 and higher than the previous week's floor of 78,024.</p>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>YouTube Content &amp; Shorts: 82,104 total views (Daily: 1,663, 24h Momentum: -1,270 (-43.30%) vs yesterday, 7d: <span class="metric-badge positive">▲ +16,543 [+25.23%]</span>), with 0 Shorts, 1,000 likes, and an engagement rate of 1.22%.</li>
+<li>SoundCloud: 43,354 streams (Daily: 374, 24h Momentum: -261 (-41.10%) vs yesterday, 7d: <span class="metric-badge positive">▲ +4,177 [+10.66%]</span>), 1,741 likes (+10), and 19 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Self Aware-oskar med k</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -0.3, Listeners Z: +0.7, Followers Z: +0.2), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_temper_city.html#streams-self-aware-oskar-med-k">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -7.1%, with an Acceleration of -7.3%. This indicates the track is in a Accelerating Contraction phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 47 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 19,243,452</p>
+<p><strong>Latest Daily Streams:</strong> 118,280 (Delta: <span class="metric-badge negative">▼ -9,308</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (118,280) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -9,582 (-7.49%) compared to yesterday's forecast of 127,862.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>126,326</strong> | Projected Total Streams: <strong>19,369,778</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 181,164</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 129,225. This is lower than the all-time high floor of 164,905 and lower than the previous week's floor of 141,068.</p>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<ul>
+<li>YouTube Content &amp; Shorts: 236,340 total views (Daily: 493, 24h Momentum: -348 (-41.38%) vs yesterday, 7d: <span class="metric-badge positive">▲ +5,150 [+2.23%]</span>), with 0 Shorts, 4,786 likes, and an engagement rate of 2.03%.</li>
+<li>SoundCloud: 129,008 streams (Daily: 276, 24h Momentum: -151 (-35.36%) vs yesterday, 7d: <span class="metric-badge positive">▲ +2,700 [+2.14%]</span>), 4,089 likes (+11), and 92 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>No active iTunes chart positions tracked today.</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<details class="track-accordion">
+<summary class="track-summary"><span class="track-name">Sex &amp; Drugs</span></summary>
+<div class="track-content">
+<p><strong>Data Integrity &amp; Plausibility:</strong> Data Confidence: <strong>HIGH</strong>. The data relationships are stable and statistically sound (Streams Z: -1.5, Listeners Z: +0.7, Followers Z: +0.2), indicating a reliable dataset for analysis. <a class="expl-link" href="data_integrity_temper_city.html#streams-sex---drugs">(View on Diagnostic Chart 📊)</a></p>
+<p>Global Momentum is currently at -17.9%, with an Acceleration of -20.9%. This indicates the track is in a Accelerating Contraction phase.</p>
+<h3>Spotify Chart Status</h3>
+<p><strong>Track Age:</strong> 38 days</p>
+<p><strong>All-Time Cumulative Streams (Spotify):</strong> 5,847,420</p>
+<p><strong>Latest Daily Streams:</strong> 144,258 (Delta: <span class="metric-badge negative">▼ -38,221</span>)</p><div class="forecast-box">
+<strong>Dynamic Natural Decay Forecast &amp; Performance Evaluation:</strong>
+<ul>
+<li><strong>Evaluation vs Yesterday's Forecast:</strong> Actual daily streams today (144,258) were <span class="forecast-delta-neg">LOWER than predicted ▼</span> by -32,114 (-18.21%) compared to yesterday's forecast of 176,372.</li>
+<li><strong>Dynamic Recalibration:</strong> The natural exponential decay model has recalibrated incorporating today's actual performance.</li>
+<li><strong>Tomorrow's Forecast (2026-11-23):</strong> Projected Daily Streams: <strong>175,624</strong> | Projected Total Streams: <strong>6,023,044</strong>.</li>
+</ul>
+</div>
+<p><strong>Highest Daily Streams Ever:</strong> 284,216</p>
+<p>The current cycle is in progress (Day 6 of 7). The current partial average is 181,142. This is lower than the all-time high floor of 205,398 and lower than the previous week's floor of 193,820.</p>
+<h3>Multi-Platform Audience &amp; Social Reach</h3>
+<p><strong>YouTube Shorts &amp; Video Teasers:</strong> The official channel features a combined 12 Shorts videos.</p>
+<ul>
+<li>YouTube Content &amp; Shorts: 2,389,272 total views (Daily: 28,719, 24h Momentum: -18,022 (-38.56%) vs yesterday, 7d: <span class="metric-badge positive">▲ +281,601 [+13.36%]</span>), with 12 Shorts, 55,060 likes, and an engagement rate of 2.3%.</li>
+<li>SoundCloud: 26,306 streams (Daily: 453, 24h Momentum: -240 (-34.63%) vs yesterday, 7d: <span class="metric-badge positive">▲ +4,590 [+21.14%]</span>), 1,039 likes (+18), and 17 shares.</li>
+</ul>
+<h3>Apple Music Insights</h3>
+<p>No active Apple Music chart positions tracked today.</p>
+<h3>YouTube Insights</h3>
+<p>No active YouTube chart positions tracked today.</p>
+<h3>iTunes Insights</h3>
+<p>Active in 1 charts across 1 countries today, with 0 Top 10 positions (including 0 at #1). Historical anchor: Tracked for 11 days, reaching 9 countries, with an <span class="metric-badge peak">🏆 all-time peak</span> of #17 in Sweden.</p>
+<p>Best performing chart: Egypt at Rank #198 (New Entry, Peak: #198).</p>
+<h3>Deezer Insights</h3>
+<p>No active Deezer chart positions tracked today.</p>
+</div>
+</details>
+<h2 id="summary">Summary</h2>
+<p>The licensed remixes for 'Self Aware' (LUM!X and Ian Asher and Gravagerz and Ely Oaks and oskar med k) contributed a combined 1,215,709 daily streams today. This represents a 51.6% addition to the original track's daily streams.</p>
+
+<script>
+function toggleAllTracks(open) {
+    document.querySelectorAll('details.track-accordion').forEach(function(d) {
+        d.open = open;
+    });
+    if (!open) {
+        document.querySelectorAll('details.sub-accordion').forEach(function(d) {
+            d.open = false;
+        });
+    }
+}
+</script></body></html>
